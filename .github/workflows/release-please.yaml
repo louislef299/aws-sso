@@ -1,0 +1,51 @@
+---
+env:
+  GOVERSION: "1.21.4"
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  release-please:
+    environment: release-please
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+    - id: release
+      uses: google-github-actions/release-please-action@v4
+      with:
+        release-type: simple
+
+  go-release:
+    environment: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    needs: release-please
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - run: git fetch --force --tags
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '>=${{ env.GOVERSION }}'
+        check-latest: true
+    - uses: goreleaser/goreleaser-action@v5
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      with:
+        distribution: goreleaser
+        version: latest
+        args: release --clean
+
+name: Release Please
+'on':
+  push:
+    branches:
+    - main
+
+permissions:
+  contents: write
+  issues: write
+  packages: write
+  pull-requests: write

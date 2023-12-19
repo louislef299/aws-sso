@@ -1,0 +1,113 @@
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  # Used by homebrew
+  - env:
+      - CGO_ENABLED=0
+    id: "aws-sso"
+    binary: "aws-sso"
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - "amd64"
+      - "arm"
+      - "arm64"
+      - "386"
+    ldflags:
+      - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
+  
+  # Used by krew
+  - env:
+      - CGO_ENABLED=0
+    id: "kubectl-aws_sso"
+    binary: "kubectl-aws_sso"
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - "amd64"
+      - "arm"
+      - "arm64"
+      - "386"
+    flags:
+      - -tags=kube
+    ldflags:
+      - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
+      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
+      
+archives:
+  - builds:
+    - aws-sso
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    id: aws-sso
+  - builds:
+    - kubectl-aws_sso
+    name_template: >-
+      kubectl-{{ .ProjectName }}_{{ .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    id: kubectl-aws_sso
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+brews:
+- name: aws-sso
+  commit_author:
+    name: Louis Lefebvre
+    email: louislefebvre1999@gmail.com
+  commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+  homepage: "https://github.com/louislef299/aws-sso"
+  ids: 
+  - aws-sso
+  repository:
+    owner: louislef299
+    name: homebrew-aws-sso
+    branch: main
+    token: "{{ .Env.GITHUB_TOKEN }}"
+
+krews:
+- name: aws-sso
+  ids:
+  - kubectl-aws_sso
+  commit_author:
+    name: Louis Lefebvre
+    email: louislefebvre1999@gmail.com
+  commit_msg_template: "chore: Krew plugin update for {{ .ProjectName }} version {{ .Tag }}"
+  description: "A simplified AWS SSO manager to make authenticating to EKS and ECR easier."
+  short_description: "A simplified AWS SSO manager."
+  repository:
+      owner: louislef299
+      name: aws-sso
+      branch: release-krew
+      pull_request:
+        enabled: true
