@@ -37,16 +37,17 @@ var (
 var accountCmd = &cobra.Command{
 	Use:     "account",
 	Aliases: []string{"acct"},
-	Short:   "A central spot to control your known AWS accounts",
-	Long: `You can associate AWS account IDs to a common name. This
-gives you the advantage of running the login command
-using the common name.`,
+	Short:   "Manage AWS account aliases.",
+	Long: `You can associate AWS account IDs to an alias that is
+used by the login command. These values are stored
+in your config file.`,
 }
 
 // accountAddCmd represents the account command
 var accountAddCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Associate a common name to an AWS account ID",
+	Use:     "add",
+	Short:   "Associate an alias to an AWS account ID.",
+	Example: "  aws-sso account add --name env1 --number 000000000",
 	Run: func(cmd *cobra.Command, args []string) {
 		viperAddAccount(accountName, accountNumber)
 		err := viper.WriteConfig()
@@ -61,7 +62,9 @@ var accountAddCmd = &cobra.Command{
 var accountListCmd = &cobra.Command{
 	Use:     "list",
 	Aliases: []string{"ls"},
-	Short:   "List the AWS account mappings",
+	Short:   "List the local AWS account mappings.",
+	Long: `Lists the local AWS account alias mapping and AWS name
+profiles found.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		listAccounts()
 	},
@@ -70,7 +73,7 @@ var accountListCmd = &cobra.Command{
 // accountPluralCmd represents the account command
 var accountPluralCmd = &cobra.Command{
 	Use:    "accounts",
-	Short:  "List the AWS account mappings",
+	Short:  "List the AWS account mappings.",
 	Hidden: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		listAccounts()
