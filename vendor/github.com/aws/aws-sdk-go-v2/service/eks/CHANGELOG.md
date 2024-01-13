@@ -1,3 +1,15 @@
+# v1.37.1 (2024-01-04)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.37.0 (2023-12-20)
+
+* **Feature**: Add support for cluster insights, new EKS capability that surfaces potentially upgrade impacting issues.
+
+# v1.36.0 (2023-12-18)
+
+* **Feature**: Add support for EKS Cluster Access Management.
+
 # v1.35.5 (2023-12-08)
 
 * **Bug Fix**: Reinstate presence of default Retryer in functional options, but still respect max attempts set therein.
