@@ -48,7 +48,9 @@ The access token issued will be used to fetch short-term
 credentials for the assigned roles in the AWS account.
 
 If the account has an EKS cluster, authenticates with
-the cluster and logs you into you ECR in your account.`,
+the cluster and logs you into you ECR in your account.
+EKS and ECR auth can be disabled with configuration
+updates.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// validate that config values are set
 		user := viper.GetString("name")

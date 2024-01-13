@@ -23,14 +23,16 @@ const (
 var tokenCmd = &cobra.Command{
 	Use:     "token",
 	Aliases: []string{"tok", "to", "ken"},
-	Short:   "Manage multiple tokens at once",
+	Short:   "Manage multiple SSO access tokens.",
+	Long: `Manages multiple cached SSO tokens for reuse. Beneficial
+when dealing with multiple AWS accounts.`,
 }
 
 // tokensCmd represents the list command
 var tokensCmd = &cobra.Command{
 	Use:    "tokens",
 	Hidden: true,
-	Short:  "List your tokens",
+	Short:  "List your tokens.",
 	Run: func(cmd *cobra.Command, args []string) {
 		listTokens()
 	},
@@ -49,7 +51,7 @@ var tokenListCmd = &cobra.Command{
 // tokenAddCmd represents the add command
 var tokenAddCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Add a token",
+	Short: "Add a token.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		addToken(args[0])
@@ -61,7 +63,7 @@ var tokenAddCmd = &cobra.Command{
 var tokenCurrentCmd = &cobra.Command{
 	Use:     "current",
 	Aliases: []string{"cur", "curr"},
-	Short:   "The current token",
+	Short:   "List the current token.",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Println("the current token is", getCurrentToken())
 	},
@@ -71,7 +73,7 @@ var tokenCurrentCmd = &cobra.Command{
 var tokenRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm"},
-	Short:   "Remove a token",
+	Short:   "Remove a token.",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		t := getToken(args[0])
@@ -90,7 +92,7 @@ var tokenRemoveCmd = &cobra.Command{
 // tokenUseCmd represents the use command
 var tokenUseCmd = &cobra.Command{
 	Use:   "use",
-	Short: "Use a token",
+	Short: "Use a token.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if !doesTokenExist(args[0]) {
