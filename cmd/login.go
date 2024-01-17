@@ -28,9 +28,10 @@ import (
 )
 
 var (
-	clusterName, role, startUrl, output, token string
-	disableEKSLogin, disableECRLogin           bool
-	private, refresh                           bool
+	role, startUrl, output, token    string
+	clusterName, clusterRegion       string
+	disableEKSLogin, disableECRLogin bool
+	private, refresh                 bool
 
 	ErrKeyDoesNotExist     = errors.New("the provided key doesn't exist")
 	ErrClusterDoesNotExist = errors.New("the provided cluster does not exist in this environment")
@@ -80,7 +81,8 @@ updates.`,
 			checkToken()
 		}
 		log.Println("using token", getCurrentToken())
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile)
+
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile, clusterRegion)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
 		}
@@ -150,6 +152,7 @@ func init() {
 
 	loginCmd.Flags().BoolVar(&disableEKSLogin, "disableEKSLogin", false, "Disables automatic detection and login for EKS")
 	loginCmd.Flags().BoolVar(&disableECRLogin, "disableECRLogin", true, "Disables automatic detection and login for ECR")
+	loginCmd.Flags().StringVar(&clusterRegion, "clusterRegion", "", "The region the cluster is located in (default is --region flag)")
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
 	loginCmd.Flags().StringVarP(&token, "token", "t", "", "The token to use when logging in. To be used when managing multiple session tokens at once(shorthand '-' for default token)")
@@ -187,12 +190,13 @@ func fuzzyCluster(clusters []string) string {
 	return clusters[indexChoice]
 }
 
-func getAWSConfig(ctx context.Context, profile string) (*aws.Config, error) {
+func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, error) {
 	region, err := laws.GetRegion()
 	if err != nil {
 		return nil, err
 	}
 	deepSet(SESSION_REGION, region)
+	log.Println("using region", region, "to login")
 
 	// check if referencing a local profile
 	lc, err := isLocalConfig(profile)
@@ -226,7 +230,10 @@ func getAWSConfig(ctx context.Context, profile string) (*aws.Config, error) {
 	}
 	deepSet(SESSION_PROFILE, p)
 
-	log.Println("loading up new config", p)
+	if clusterRegion != "" {
+		region = clusterRegion
+	}
+	log.Println("loading up new config", p, "with region", region)
 	// Start up new config with newly configured profile
 	cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(region), config.WithSharedConfigProfile(p))
 	if err != nil {
