@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/louislef299/aws-sso/compare/v1.0.0...v1.0.1) (2024-01-17)
+
+
+### Bug Fixes
+
+* Allow for auth with diff region than cluster auth ([#6](https://github.com/louislef299/aws-sso/issues/6)) ([4807df8](https://github.com/louislef299/aws-sso/commit/4807df8a9b6a1013774062bd1539feac32d39336))
+
 ## 1.0.0 (2023-12-19)
 
 
