@@ -69,7 +69,6 @@ Issues below. 🤗
 
 ### Known Issues
 
-- Alternative region authentication is broken
 - Disable EKS default config
 - Delete old access tokens using `token rm`
 - On-board additional operating systems and browsers for private flag
