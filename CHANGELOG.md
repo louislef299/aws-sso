@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/louislef299/aws-sso/compare/v1.0.1...v1.0.2) (2024-01-19)
+
+
+### Bug Fixes
+
+* Remove known issue for EU ([#9](https://github.com/louislef299/aws-sso/issues/9)) ([635d81f](https://github.com/louislef299/aws-sso/commit/635d81f8dd45c489fce58e697462ab33408a9b71))
+
 ## [1.0.1](https://github.com/louislef299/aws-sso/compare/v1.0.0...v1.0.1) (2024-01-17)
 
 
