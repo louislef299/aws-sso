@@ -49,6 +49,8 @@ var (
 	ErrRegionNotFound = errors.New("could not find a region in the system")
 )
 
+const LastUsageLocation = "/.aws/sso/cache/last-usage.json"
+
 type LastUsageInformation struct {
 	AccountId   string `json:"account_id"`
 	AccountName string `json:"account_name"`
@@ -129,7 +131,7 @@ func SaveUsageInformation(accountInfo *types.AccountInfo, roleInfo *types.RoleIn
 		return err
 	}
 
-	target := homeDir + "/.aws/sso/cache/last-usage.json"
+	target := homeDir + LastUsageLocation
 	usageInformation := LastUsageInformation{
 		AccountId:   *accountInfo.AccountId,
 		AccountName: *accountInfo.AccountName,
