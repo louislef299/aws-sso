@@ -198,11 +198,13 @@ func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, 
 	deepSet(SESSION_REGION, region)
 	log.Println("using region", region, "to login")
 
+	log.Println("is local config?")
 	// check if referencing a local profile
 	lc, err := isLocalConfig(profile)
 	if err != nil {
 		return nil, err
 	}
+	log.Println("it is")
 
 	if lc {
 		log.Println("using existing configuration profile", profile)

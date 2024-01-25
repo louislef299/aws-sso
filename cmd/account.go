@@ -110,6 +110,7 @@ func getAccountID(profile string) string {
 	return id
 }
 
+// ADD TEST HERE
 func getAWSConfigSections(filename string) ([]string, error) {
 	cfg, err := ini.Load(filename)
 	if err != nil {
