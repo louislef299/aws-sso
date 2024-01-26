@@ -25,13 +25,18 @@ var _ = Describe("Sts", func() {
 			err := os.Mkdir(testFolder, 0744)
 			Expect(err).ShouldNot(HaveOccurred())
 
+			home := os.Getenv("HOME")
 			pwd, err := os.Getwd()
 			Expect(err).ShouldNot(HaveOccurred())
+
 			err = os.Setenv("HOME", path.Join(pwd, testFolder))
 			Expect(err).ShouldNot(HaveOccurred())
 
 			DeferCleanup(func() {
 				err := os.RemoveAll(testFolder)
+				Expect(err).ShouldNot(HaveOccurred())
+
+				err = os.Setenv("HOME", home)
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})

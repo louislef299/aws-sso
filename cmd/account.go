@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
@@ -31,6 +32,7 @@ var (
 	accountName   string
 
 	ErrNoAccountFound = errors.New("no account found")
+	ErrFileNotFound   = errors.New("the provided file could not be found")
 )
 
 // accountCmd represents the account command
@@ -110,14 +112,20 @@ func getAccountID(profile string) string {
 	return id
 }
 
-// ADD TEST HERE
 func getAWSConfigSections(filename string) ([]string, error) {
+	exists, err := los.IsFileOrFolderExisting(filename)
+	if err != nil {
+		return nil, err
+	} else if !exists {
+		return nil, ErrFileNotFound
+	}
+
 	cfg, err := ini.Load(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	r, err := regexp.Compile(profileRegex)
+	profr, err := regexp.Compile(profileRegex)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +133,7 @@ func getAWSConfigSections(filename string) ([]string, error) {
 	sections := cfg.SectionStrings()
 	var validSections []string
 	for _, s := range sections {
-		if r.MatchString(s) {
+		if profr.MatchString(s) {
 			validSections = append(validSections, getAWSProfileName(s))
 		}
 	}
