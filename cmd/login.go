@@ -320,7 +320,7 @@ func getURL() string {
 }
 
 func isLocalConfig(profile string) (bool, error) {
-	profiles, err := getAWSProfiles()
+	profiles, err := laws.GetAWSProfiles()
 	if err != nil {
 		return false, err
 	}

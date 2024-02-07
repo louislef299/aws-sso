@@ -7,16 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"regexp"
 	"slices"
-	"sort"
-	"strings"
 
-	"github.com/aws/aws-sdk-go-v2/config"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/ini.v1"
 )
 
 const (
@@ -24,7 +19,6 @@ const (
 	ROLE_ARN_KEY  = "role_arn"
 
 	accountIDRegex = `\d{12}`
-	profileRegex   = `^profile .*$`
 )
 
 var (
@@ -32,7 +26,6 @@ var (
 	accountName   string
 
 	ErrNoAccountFound = errors.New("no account found")
-	ErrFileNotFound   = errors.New("the provided file could not be found")
 )
 
 // accountCmd represents the account command
@@ -112,57 +105,6 @@ func getAccountID(profile string) string {
 	return id
 }
 
-func getAWSConfigSections(filename string) ([]string, error) {
-	exists, err := los.IsFileOrFolderExisting(filename)
-	if err != nil {
-		return nil, err
-	} else if !exists {
-		return nil, ErrFileNotFound
-	}
-
-	cfg, err := ini.Load(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	profr, err := regexp.Compile(profileRegex)
-	if err != nil {
-		return nil, err
-	}
-
-	sections := cfg.SectionStrings()
-	var validSections []string
-	for _, s := range sections {
-		if profr.MatchString(s) {
-			validSections = append(validSections, getAWSProfileName(s))
-		}
-	}
-	return validSections, nil
-}
-
-func getAWSProfiles() ([]string, error) {
-	files := []string{
-		config.DefaultSharedConfigFilename(),
-		config.DefaultSharedCredentialsFilename(),
-	}
-
-	var profiles []string
-	for _, f := range files {
-		p, err := getAWSConfigSections(f)
-		if err != nil {
-			return nil, err
-		}
-		profiles = append(profiles, p...)
-	}
-
-	sort.Strings(profiles)
-	return profiles, nil
-}
-
-func getAWSProfileName(profile string) string {
-	return strings.TrimSpace(strings.TrimLeft(profile, "profile"))
-}
-
 func listAccounts() {
 	accts := viper.Sub(ACCOUNT_GROUP)
 	if accts == nil {
@@ -179,7 +121,7 @@ func listAccounts() {
 
 	fmt.Printf("\nAWS Configs:\n")
 
-	sections, err := getAWSProfiles()
+	sections, err := laws.GetAWSProfiles()
 	if err != nil {
 		log.Fatal(err)
 	}
