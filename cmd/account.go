@@ -17,8 +17,6 @@ import (
 const (
 	ACCOUNT_GROUP = "account"
 	ROLE_ARN_KEY  = "role_arn"
-
-	accountIDRegex = `\d{12}`
 )
 
 var (
