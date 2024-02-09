@@ -33,29 +33,34 @@ const (
 // ClientInfoFileDestination finds local AWS configuration settings. Users can
 // optionally input their own home directory location.
 func ClientInfoFileDestination(configDir ...string) (string, error) {
-	var configLocation string
-	if len(configDir) == 0 {
-		h, err := os.UserHomeDir()
-		if err != nil {
-			return "", err
-		}
-		configLocation = path.Join(h, AWS_TOKEN_PATH, GetAccessToken())
-	} else if len(configDir) > 1 {
-		return "", ErrMoreThanOneLocation
-	} else {
-		cache := path.Join(configDir[0], AWS_TOKEN_PATH)
-		err := os.MkdirAll(cache, 0755)
-		if err != nil {
-			return "", err
-		}
-		configLocation = path.Join(configDir[0], AWS_TOKEN_PATH, GetAccessToken())
-	}
+	var targetConfigDir string
+	var err error
 
+	if len(configDir) > 1 {
+		return "", ErrMoreThanOneLocation
+	} else if len(configDir) == 0 {
+		targetConfigDir, err = os.UserHomeDir()
+		if err != nil {
+			return "", err
+		}
+	} else {
+		targetConfigDir = configDir[0]
+	}
+	targetConfigDir = path.Join(targetConfigDir, AWS_TOKEN_PATH)
+
+	err = os.MkdirAll(targetConfigDir, 0755)
+	if err != nil {
+		return "", err
+	}
+	configLocation := path.Join(targetConfigDir, GetAccessToken())
+
+	log.Println("checking config location", configLocation)
 	exists, err := los.IsFileOrFolderExisting(configLocation)
 	if err != nil {
 		return "", err
 	}
 	if !exists {
+		log.Println("creating", configLocation)
 		f, err := os.Create(configLocation)
 		if err != nil {
 			return "", err

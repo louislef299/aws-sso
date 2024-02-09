@@ -26,12 +26,12 @@ cache, sends an API call to the IAM Identity Center service
 to invalidate the corresponding server-side IAM Identity 
 Center sign in session, and removes the token locally.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !isProfileConfigured() && !force {
+		if !laws.IsProfileConfigured() && !force {
 			log.Println("local profile not found, nothing to do")
 			return
 		}
 
-		profile := CurrentProfile()
+		profile := laws.CurrentProfile()
 		// Start up new config
 		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region), config.WithSharedConfigProfile(profile))
 		if err != nil {
@@ -39,7 +39,7 @@ Center sign in session, and removes the token locally.`,
 		}
 
 		// if session.profile is set, coming from a session
-		if isProfileConfigured() && !viper.GetBool(CORE_DISABLE_ECR_LOGIN) {
+		if laws.IsProfileConfigured() && !viper.GetBool(CORE_DISABLE_ECR_LOGIN) {
 			// clean docker configs
 			registry, err := laws.GetECRRegistryName(cmd.Context(), &cfg)
 			if err != nil {

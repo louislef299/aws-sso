@@ -9,7 +9,9 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/spf13/viper"
 
+	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/louislef299/aws-sso/pkg/v1/aws"
 )
 
@@ -74,6 +76,26 @@ var _ = Describe("Clientinfo", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(clientInfo.IsExpired()).To(Equal(true))
+		})
+	})
+
+	Context("When accessing the AWS token", Ordered, func() {
+		It("Should return the default token when session token is empty", func() {
+			viper.Set(envs.SESSION_TOKEN, "")
+			token := aws.GetAccessToken()
+			Expect(token).To(Equal(aws.DEFAULT_ACCESS_TOKEN))
+		})
+
+		It("Should return the default token when the current session token is the default token", func() {
+			viper.Set(envs.SESSION_TOKEN, aws.DEFAULT_ACCESS_TOKEN)
+			token := aws.GetAccessToken()
+			Expect(token).To(Equal(aws.DEFAULT_ACCESS_TOKEN))
+		})
+
+		It("Should not return the default token when the session token is something else", func() {
+			viper.Set(envs.SESSION_TOKEN, "test")
+			token := aws.GetAccessToken()
+			Expect(token).ToNot(Equal(aws.DEFAULT_ACCESS_TOKEN))
 		})
 	})
 })

@@ -7,23 +7,16 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"regexp"
 	"slices"
-	"sort"
-	"strings"
 
-	"github.com/aws/aws-sdk-go-v2/config"
+	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gopkg.in/ini.v1"
 )
 
 const (
 	ACCOUNT_GROUP = "account"
 	ROLE_ARN_KEY  = "role_arn"
-
-	accountIDRegex = `\d{12}`
-	profileRegex   = `^profile .*$`
 )
 
 var (
@@ -110,50 +103,6 @@ func getAccountID(profile string) string {
 	return id
 }
 
-func getAWSConfigSections(filename string) ([]string, error) {
-	cfg, err := ini.Load(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	r, err := regexp.Compile(profileRegex)
-	if err != nil {
-		return nil, err
-	}
-
-	sections := cfg.SectionStrings()
-	var validSections []string
-	for _, s := range sections {
-		if r.MatchString(s) {
-			validSections = append(validSections, getAWSProfileName(s))
-		}
-	}
-	return validSections, nil
-}
-
-func getAWSProfiles() ([]string, error) {
-	files := []string{
-		config.DefaultSharedConfigFilename(),
-		config.DefaultSharedCredentialsFilename(),
-	}
-
-	var profiles []string
-	for _, f := range files {
-		p, err := getAWSConfigSections(f)
-		if err != nil {
-			return nil, err
-		}
-		profiles = append(profiles, p...)
-	}
-
-	sort.Strings(profiles)
-	return profiles, nil
-}
-
-func getAWSProfileName(profile string) string {
-	return strings.TrimSpace(strings.TrimLeft(profile, "profile"))
-}
-
 func listAccounts() {
 	accts := viper.Sub(ACCOUNT_GROUP)
 	if accts == nil {
@@ -170,7 +119,7 @@ func listAccounts() {
 
 	fmt.Printf("\nAWS Configs:\n")
 
-	sections, err := getAWSProfiles()
+	sections, err := laws.GetAWSProfiles()
 	if err != nil {
 		log.Fatal(err)
 	}

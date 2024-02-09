@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	. "github.com/louislef299/aws-sso/internal/envs"
@@ -67,7 +66,7 @@ func (c *ClientInformation) IsExpired() bool {
 
 func GetAccessToken() string {
 	t := viper.GetString(SESSION_TOKEN)
-	if strings.Compare(t, DEFAULT_TOKEN_NAME) == 0 {
+	if t == DEFAULT_ACCESS_TOKEN || t == "" {
 		return DEFAULT_ACCESS_TOKEN
 	}
 	return fmt.Sprintf("%s%s", t, ACCESS_TOKEN_FILE)

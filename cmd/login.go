@@ -199,9 +199,9 @@ func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, 
 	log.Println("using region", region, "to login")
 
 	// check if referencing a local profile
-	lc, err := isLocalConfig(profile)
+	lc, err := laws.IsLocalConfig(profile)
 	if err != nil {
-		return nil, err
+		log.Println("couldn't find predefined AWS configurations:", err)
 	}
 
 	if lc {
@@ -317,20 +317,6 @@ func getURL() string {
 	return url
 }
 
-func isLocalConfig(profile string) (bool, error) {
-	profiles, err := getAWSProfiles()
-	if err != nil {
-		return false, err
-	}
-
-	for _, s := range profiles {
-		if strings.Compare(profile, s) == 0 {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
 func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string) (string, error) {
 	u := getURL()
 	deepSet(SESSION_URL, u)
@@ -369,7 +355,7 @@ func loginEKS(ctx context.Context, cfg aws.Config, cluster string) {
 	}
 
 	log.Printf("configuring kubernetes configuration cluster access for %s\n", cluster)
-	err = lk8s.ConfigureCluster(clusterInfo, region, CurrentProfile())
+	err = lk8s.ConfigureCluster(clusterInfo, region, laws.CurrentProfile())
 	if err != nil {
 		log.Fatal("could not update kubeconfig: ", err)
 	}
