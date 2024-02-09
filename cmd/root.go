@@ -7,10 +7,8 @@ import (
 	"log"
 	"os"
 	"path"
-	"strings"
 	"time"
 
-	. "github.com/louislef299/aws-sso/internal/envs"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -83,22 +81,4 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err != nil {
 		panic(err)
 	}
-}
-
-func CurrentProfile() string {
-	e := viper.GetString(SESSION_PROFILE)
-	if e == "" {
-		return ""
-	}
-
-	lc, _ := isLocalConfig(e)
-	if lc {
-		return e
-	}
-	return los.GetProfile(e)
-}
-
-// isProfileConfigured returns true if profile is configured, false otherwise.
-func isProfileConfigured() bool {
-	return strings.Compare(CurrentProfile(), "") != 0
 }

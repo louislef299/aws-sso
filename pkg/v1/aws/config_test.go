@@ -5,9 +5,12 @@ import (
 	"path"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/louislef299/aws-sso/internal/envs"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
+	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/spf13/viper"
 )
 
 var _ = Describe("Account", Ordered, func() {
@@ -60,6 +63,17 @@ var _ = Describe("Account", Ordered, func() {
 		It("should create AWS config files when they don't exist", func() {
 			_, err := laws.GetAWSProfiles()
 			Expect(err).ShouldNot(HaveOccurred())
+		})
+	})
+})
+
+var _ = Describe("Config", Ordered, func() {
+	Context("When gathering the current profile", func() {
+		It("should return the correct profile", func() {
+			profileName := "test"
+			viper.Set(envs.SESSION_PROFILE, profileName)
+			p := laws.CurrentProfile()
+			Expect(p).Should(Equal(los.GetProfile(profileName)))
 		})
 	})
 })

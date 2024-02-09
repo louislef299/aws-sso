@@ -43,17 +43,16 @@ func ClientInfoFileDestination(configDir ...string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-	} else if len(configDir) > 1 {
-		return "", ErrMoreThanOneLocation
 	} else {
-		targetConfigDir = path.Join(configDir[0], AWS_TOKEN_PATH)
+		targetConfigDir = configDir[0]
 	}
+	targetConfigDir = path.Join(targetConfigDir, AWS_TOKEN_PATH)
 
 	err = os.MkdirAll(targetConfigDir, 0755)
 	if err != nil {
 		return "", err
 	}
-	configLocation := path.Join(targetConfigDir, AWS_TOKEN_PATH, GetAccessToken())
+	configLocation := path.Join(targetConfigDir, GetAccessToken())
 
 	log.Println("checking config location", configLocation)
 	exists, err := los.IsFileOrFolderExisting(configLocation)

@@ -9,7 +9,9 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	. "github.com/louislef299/aws-sso/internal/envs"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
 )
 
@@ -43,6 +45,38 @@ func checkAWSFiles(files []string) error {
 		}
 	}
 	return nil
+}
+
+func CurrentProfile() string {
+	e := viper.GetString(SESSION_PROFILE)
+	if e == "" {
+		return ""
+	}
+
+	lc, _ := IsLocalConfig(e)
+	if lc {
+		return e
+	}
+	return los.GetProfile(e)
+}
+
+func IsLocalConfig(profile string) (bool, error) {
+	profiles, err := GetAWSProfiles()
+	if err != nil {
+		return false, err
+	}
+
+	for _, s := range profiles {
+		if strings.Compare(profile, s) == 0 {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+// IsProfileConfigured returns true if profile is configured, false otherwise.
+func IsProfileConfigured() bool {
+	return strings.Compare(CurrentProfile(), "") != 0
 }
 
 func GetAWSConfigSections(filename string) ([]string, error) {

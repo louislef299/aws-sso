@@ -30,11 +30,11 @@ gather cluster information.
 Similar to running:
 aws sts get-caller-identity`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !viper.IsSet(SESSION_PROFILE) || !isProfileConfigured() {
+		if !viper.IsSet(SESSION_PROFILE) || !laws.IsProfileConfigured() {
 			log.Println("not currently signed in")
 			return
 		} else {
-			fmt.Println("using profile", CurrentProfile())
+			fmt.Println("using profile", laws.CurrentProfile())
 		}
 
 		region, err := laws.GetRegion()
@@ -42,7 +42,7 @@ aws sts get-caller-identity`,
 			log.Fatal("couldn't find region:", err)
 		}
 
-		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region), config.WithSharedConfigProfile(CurrentProfile()))
+		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region), config.WithSharedConfigProfile(laws.CurrentProfile()))
 		if err != nil {
 			log.Fatal("couldn't load new config:", err)
 		}
