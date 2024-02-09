@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/louislef299/aws-sso/compare/v1.0.2...v1.0.3) (2024-02-09)
+
+
+### Bug Fixes
+
+* Config file not found ([#12](https://github.com/louislef299/aws-sso/issues/12)) ([8a93f5f](https://github.com/louislef299/aws-sso/commit/8a93f5f54129fb2185b37586749e920db943f5e3))
+
 ## [1.0.2](https://github.com/louislef299/aws-sso/compare/v1.0.1...v1.0.2) (2024-01-19)
 
 
