@@ -21,6 +21,10 @@ type Browser interface {
 
 func GetBrowser(browserName string, private bool) Browser {
 	switch strings.ToLower(browserName) {
+	case "chrome":
+		return &Chrome{
+			private: private,
+		}
 	case "firefox":
 		return &Firefox{
 			private: private,
