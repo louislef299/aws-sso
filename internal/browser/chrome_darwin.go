@@ -7,7 +7,7 @@ import (
 	"context"
 )
 
-const macosPath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+const macosChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 type Chrome struct {
 	private bool
@@ -15,9 +15,9 @@ type Chrome struct {
 
 func (f *Chrome) OpenURL(ctx context.Context, url string) error {
 	if f.private {
-		return open(ctx, macosPath, "-incognito", url)
+		return open(ctx, macosChromePath, "-incognito", url)
 	}
-	return open(ctx, macosPath, url)
+	return open(ctx, macosChromePath, url)
 }
 
 func (f *Chrome) Type() string { return "chrome" }
