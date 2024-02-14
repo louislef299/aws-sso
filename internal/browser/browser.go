@@ -14,6 +14,9 @@ var (
 	ErrPrivateNotSupported  = errors.New("private call not supported for browser")
 )
 
+// reference for additional browser options:
+// https://github.com/common-fate/granted/blob/main/pkg/browser/browsers.go
+
 type Browser interface {
 	OpenURL(ctx context.Context, url string) error
 	Type() string
@@ -21,6 +24,14 @@ type Browser interface {
 
 func GetBrowser(browserName string, private bool) Browser {
 	switch strings.ToLower(browserName) {
+	case "brave":
+		return &Brave{
+			private: private,
+		}
+	case "chrome":
+		return &Chrome{
+			private: private,
+		}
 	case "firefox":
 		return &Firefox{
 			private: private,
