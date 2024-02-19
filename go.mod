@@ -7,7 +7,7 @@ toolchain go1.21.6
 require (
 	github.com/aws/aws-sdk-go-v2 v1.25.0
 	github.com/aws/aws-sdk-go-v2/config v1.26.6
-	github.com/aws/aws-sdk-go-v2/service/ecr v1.24.7
+	github.com/aws/aws-sdk-go-v2/service/ecr v1.26.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.37.1
 	github.com/aws/aws-sdk-go-v2/service/sso v1.19.0
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.21.7
