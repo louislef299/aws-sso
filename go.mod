@@ -24,7 +24,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.18.2
 	gopkg.in/ini.v1 v1.67.0
-	k8s.io/cli-runtime v0.29.1
+	k8s.io/cli-runtime v0.29.2
 	k8s.io/client-go v0.29.2
 )
 
