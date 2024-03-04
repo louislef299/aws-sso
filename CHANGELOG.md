@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/louislef299/aws-sso/compare/v1.0.3...v1.1.0) (2024-03-04)
+
+
+### Features
+
+* Add browser support on macOS ([#24](https://github.com/louislef299/aws-sso/issues/24)) ([91f3a2c](https://github.com/louislef299/aws-sso/commit/91f3a2cf851400ffc484d6edfb2cebea1ec92f00))
+
 ## [1.0.3](https://github.com/louislef299/aws-sso/compare/v1.0.2...v1.0.3) (2024-02-09)
 
 
