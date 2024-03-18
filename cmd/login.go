@@ -53,13 +53,6 @@ the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// validate that config values are set
-		user := viper.GetString("name")
-		email := viper.GetString("email")
-		if user == "" || email == "" {
-			interactive()
-		}
-
 		var requestProfile string
 		// find out if an account profile is being requested
 		if len(args) == 1 {
@@ -82,7 +75,7 @@ updates.`,
 		}
 		log.Println("using token", getCurrentToken())
 
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile, clusterRegion)
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
 		}
@@ -161,36 +154,13 @@ func init() {
 	loginCmd.Flags().StringVarP(&output, "output", "o", "json", "The output format for sso")
 }
 
-func interactive() {
-	fmt.Printf("enter your full name(first last): ")
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("An error occurred while reading input: ", err)
-	}
-	input = strings.TrimSuffix(input, "\n")
-	viper.Set("name", input)
-
-	fmt.Printf("enter your email: ")
-	input, err = reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("An error occurred while reading input: ", err)
-	}
-	input = strings.TrimSuffix(input, "\n")
-	viper.Set("email", input)
-
-	if err := viper.WriteConfig(); err != nil {
-		log.Fatal("could not write to config file:", err)
-	}
-}
-
 func fuzzyCluster(clusters []string) string {
 	indexChoice, _ := prompt.Select("Select your cluster", clusters, prompt.FuzzySearchWithPrefixAnchor(clusters))
 	log.Printf("Selected cluster %s", clusters[indexChoice])
 	return clusters[indexChoice]
 }
 
-func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, error) {
+func getAWSConfig(ctx context.Context, profile string) (*aws.Config, error) {
 	region, err := laws.GetRegion()
 	if err != nil {
 		return nil, err
