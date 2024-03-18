@@ -53,18 +53,13 @@ the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// validate that config values are set
-		user := viper.GetString("name")
-		email := viper.GetString("email")
-		if user == "" || email == "" {
-			interactive()
-		}
-
 		var requestProfile string
 		// find out if an account profile is being requested
 		if len(args) == 1 {
 			requestProfile = args[0]
 		}
+
+		newAuth := false
 		if requestProfile == "" {
 			fmt.Printf("please enter a prefix alias for this context(ex: env1): ")
 			reader := bufio.NewReader(os.Stdin)
@@ -73,6 +68,7 @@ updates.`,
 				log.Fatal("An error occurred while reading input: ", err)
 			}
 			requestProfile = strings.TrimSuffix(alias, "\n")
+			newAuth = true
 		}
 
 		if token != "" {
@@ -82,7 +78,7 @@ updates.`,
 		}
 		log.Println("using token", getCurrentToken())
 
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile, clusterRegion)
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
 		}
@@ -161,36 +157,13 @@ func init() {
 	loginCmd.Flags().StringVarP(&output, "output", "o", "json", "The output format for sso")
 }
 
-func interactive() {
-	fmt.Printf("enter your full name(first last): ")
-	reader := bufio.NewReader(os.Stdin)
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("An error occurred while reading input: ", err)
-	}
-	input = strings.TrimSuffix(input, "\n")
-	viper.Set("name", input)
-
-	fmt.Printf("enter your email: ")
-	input, err = reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("An error occurred while reading input: ", err)
-	}
-	input = strings.TrimSuffix(input, "\n")
-	viper.Set("email", input)
-
-	if err := viper.WriteConfig(); err != nil {
-		log.Fatal("could not write to config file:", err)
-	}
-}
-
 func fuzzyCluster(clusters []string) string {
 	indexChoice, _ := prompt.Select("Select your cluster", clusters, prompt.FuzzySearchWithPrefixAnchor(clusters))
 	log.Printf("Selected cluster %s", clusters[indexChoice])
 	return clusters[indexChoice]
 }
 
-func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, error) {
+func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Config, error) {
 	region, err := laws.GetRegion()
 	if err != nil {
 		return nil, err
@@ -224,7 +197,7 @@ func getAWSConfig(ctx context.Context, profile, awsRegion string) (*aws.Config, 
 		return nil, err
 	}
 
-	p, err := loginAWS(ctx, cfg, acctID, profile)
+	p, err := loginAWS(ctx, cfg, acctID, profile, newProfile)
 	if err != nil {
 		log.Fatal("couldn't log into AWS: ", err)
 	}
@@ -317,7 +290,7 @@ func getURL() string {
 	return url
 }
 
-func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string) (string, error) {
+func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newProfile bool) (string, error) {
 	u := getURL()
 	deepSet(SESSION_URL, u)
 
@@ -342,6 +315,14 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string) (stri
 	err = laws.SaveUsageInformation(account, &role)
 	if err != nil {
 		return "", err
+	}
+
+	// set the new profile in account config
+	if newProfile {
+		err = addAccount(profile, acctID)
+		if err != nil {
+			log.Println("WARNING: couldn't write to configuration file:", err)
+		}
 	}
 
 	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)
