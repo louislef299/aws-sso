@@ -137,7 +137,11 @@ func checkToken() {
 }
 
 // Returns the current session token
-func addToken(name string)            { deepSet(fmt.Sprintf("%s.%s", TOKEN_HEADER, name), ACTIVE_TOKEN_ID) }
+func addToken(name string) {
+	deepSet(fmt.Sprintf("%s.%s", TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
+	setToken(name)
+}
+
 func getCurrentToken() string         { return viper.GetString(SESSION_TOKEN) }
 func doesTokenExist(name string) bool { return !(getToken(name) == "") }
 func getToken(name string) string     { return viper.GetString(fmt.Sprintf("%s.%s", TOKEN_HEADER, name)) }

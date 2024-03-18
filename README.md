@@ -77,14 +77,6 @@ Issues below. 🤗
 - Allow assuming another rule with the existing credentials
 - SAML integration
 - Add account at login
-- Fails on files no found => Test needs to be added for getAWSConfigSections and
-  possibly other cmd functions. This was the error:
-
-  ```bash
-  2024/01/25 15:24:14 login.go:83: using token default
-  2024/01/25 15:24:14 login.go:199: using region us-east-1 to login
-  2024/01/25 15:24:14 login.go:87: could not generate AWS config: open /Users/user/.aws/config: no such file or directory
-  ```
 
 [AWS SSO Start URL]: https://docs.aws.amazon.com/signin/latest/userguide/iam-id-center-sign-in-tutorial.html
 [homebrew]: https://brew.sh/
