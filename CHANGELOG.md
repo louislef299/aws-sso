@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/louislef299/aws-sso/compare/v1.1.0...v1.1.1) (2024-03-18)
+
+
+### Bug Fixes
+
+* Add Browser support for linux and windows operating systems ([#51](https://github.com/louislef299/aws-sso/issues/51)) ([dd7395e](https://github.com/louislef299/aws-sso/commit/dd7395e39f6dee3f069c95ed5f5aeeaa28711e3e))
+* Shift active token on creation ([#44](https://github.com/louislef299/aws-sso/issues/44)) ([ff33ba4](https://github.com/louislef299/aws-sso/commit/ff33ba4583543ed1c76cbc1c99bd9ade28eba6b1))
+* unknown acct flow ([#52](https://github.com/louislef299/aws-sso/issues/52)) ([8c1663a](https://github.com/louislef299/aws-sso/commit/8c1663a26e3e3f8ea3c17d9ba83f2cdaf36f74da))
+
 ## [1.1.0](https://github.com/louislef299/aws-sso/compare/v1.0.3...v1.1.0) (2024-03-04)
 
 
