@@ -58,6 +58,8 @@ updates.`,
 		if len(args) == 1 {
 			requestProfile = args[0]
 		}
+
+		newAuth := false
 		if requestProfile == "" {
 			fmt.Printf("please enter a prefix alias for this context(ex: env1): ")
 			reader := bufio.NewReader(os.Stdin)
@@ -66,6 +68,7 @@ updates.`,
 				log.Fatal("An error occurred while reading input: ", err)
 			}
 			requestProfile = strings.TrimSuffix(alias, "\n")
+			newAuth = true
 		}
 
 		if token != "" {
@@ -75,7 +78,7 @@ updates.`,
 		}
 		log.Println("using token", getCurrentToken())
 
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile)
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
 		}
@@ -160,7 +163,7 @@ func fuzzyCluster(clusters []string) string {
 	return clusters[indexChoice]
 }
 
-func getAWSConfig(ctx context.Context, profile string) (*aws.Config, error) {
+func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Config, error) {
 	region, err := laws.GetRegion()
 	if err != nil {
 		return nil, err
@@ -194,7 +197,7 @@ func getAWSConfig(ctx context.Context, profile string) (*aws.Config, error) {
 		return nil, err
 	}
 
-	p, err := loginAWS(ctx, cfg, acctID, profile)
+	p, err := loginAWS(ctx, cfg, acctID, profile, newProfile)
 	if err != nil {
 		log.Fatal("couldn't log into AWS: ", err)
 	}
@@ -287,7 +290,7 @@ func getURL() string {
 	return url
 }
 
-func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string) (string, error) {
+func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newProfile bool) (string, error) {
 	u := getURL()
 	deepSet(SESSION_URL, u)
 
@@ -312,6 +315,14 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string) (stri
 	err = laws.SaveUsageInformation(account, &role)
 	if err != nil {
 		return "", err
+	}
+
+	// set the new profile in account config
+	if newProfile {
+		err = addAccount(profile, acctID)
+		if err != nil {
+			log.Println("WARNING: couldn't write to configuration file:", err)
+		}
 	}
 
 	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)

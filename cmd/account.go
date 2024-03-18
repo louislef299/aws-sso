@@ -42,8 +42,7 @@ var accountAddCmd = &cobra.Command{
 	Short:   "Associate an alias to an AWS account ID.",
 	Example: "  aws-sso account add --name env1 --number 000000000",
 	Run: func(cmd *cobra.Command, args []string) {
-		viperAddAccount(accountName, accountNumber)
-		err := viper.WriteConfig()
+		err := addAccount(accountName, accountNumber)
 		if err != nil {
 			log.Fatal("couldn't write to configuration file:", err)
 		}
@@ -88,6 +87,11 @@ func init() {
 	if err := accountAddCmd.MarkFlagRequired("number"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
 	}
+}
+
+func addAccount(name, id string) error {
+	viperAddAccount(name, id)
+	return viper.WriteConfig()
 }
 
 // Sets account value in Viper. Does not write to config
