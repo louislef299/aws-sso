@@ -12,6 +12,7 @@ import (
 var (
 	ErrBrowserUnimplemented = errors.New("browser type unimplemented for your OS")
 	ErrPrivateNotSupported  = errors.New("private call not supported for browser")
+	ErrCouldNotFindBrowser  = errors.New("could not find browser path")
 )
 
 // reference for additional browser options:
