@@ -42,7 +42,7 @@ var (
 var loginCmd = &cobra.Command{
 	Use:     "login",
 	Example: "  aws-sso login env1",
-	Short:   "Retrieve short-living credentials via AWS SSO & SSOOIDC",
+	Short:   "Retrieve short-lived credentials via AWS SSO & SSOOIDC",
 	Args:    cobra.MaximumNArgs(1),
 	Long: `Creates and returns an access token for the authorized client. 
 The access token issued will be used to fetch short-term 
@@ -151,7 +151,7 @@ func init() {
 	loginCmd.Flags().StringVar(&clusterRegion, "clusterRegion", "", "The region the cluster is located in (default is --region flag)")
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
-	loginCmd.Flags().StringVarP(&token, "token", "t", "", "The token to use when logging in. To be used when managing multiple session tokens at once(shorthand '-' for default token)")
+	loginCmd.Flags().StringVarP(&token, "token", "t", "", "The token to use when logging in. To be used when managing multiple session tokens at once (shorthand '-' for default token)")
 
 	loginCmd.Flags().StringVarP(&clusterName, "cluster", "c", "", "The cluster you would like to target when logging in")
 	loginCmd.Flags().StringVarP(&output, "output", "o", "json", "The output format for sso")

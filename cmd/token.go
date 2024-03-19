@@ -23,7 +23,7 @@ const (
 var tokenCmd = &cobra.Command{
 	Use:     "token",
 	Aliases: []string{"tok", "to", "ken"},
-	Short:   "Manage multiple SSO access tokens.",
+	Short:   "Manage multiple SSO access tokens",
 	Long: `Manages multiple cached SSO tokens for reuse. Beneficial
 when dealing with multiple AWS accounts.`,
 }
@@ -153,7 +153,7 @@ func listTokens() {
 	if tokens == nil {
 		// The default token will always exist
 		setToken(DEFAULT_TOKEN_NAME)
-		fmt.Println(DEFAULT_TOKEN_NAME)
+		fmt.Printf("* %s\n", DEFAULT_TOKEN_NAME)
 		return
 	}
 

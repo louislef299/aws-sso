@@ -30,7 +30,7 @@ var (
 var configCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"conf"},
-	Short:   "Local configuration used for aws-sso.",
+	Short:   "Local configuration used for aws-sso",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Using config file", viper.ConfigFileUsed())
 	},
@@ -139,7 +139,7 @@ func init() {
 	addConfigValue(CORE_URL, "The default sso start url used when logging in")
 	addConfigValue(CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
 	addConfigValue(CORE_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
-	addConfigValue(CORE_BROWSER, "The default browser to use. Required for advanced features like opening in a private browser")
+	addConfigValue(CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
 }
 
 // BindConfigValue will bind the Viper config value to the provided pflag

@@ -20,7 +20,7 @@ var force, cleanToken bool
 // logoutCmd represents the logout command
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
-	Short: "Logs you out of your sso session",
+	Short: "Logs you out of your SSO session",
 	Long: `Removes the locally stored SSO tokens from the client-side 
 cache, sends an API call to the IAM Identity Center service 
 to invalidate the corresponding server-side IAM Identity 
