@@ -30,7 +30,7 @@ var (
 var accountCmd = &cobra.Command{
 	Use:     "account",
 	Aliases: []string{"acct"},
-	Short:   "Manage AWS account aliases.",
+	Short:   "Manage AWS account aliases",
 	Long: `You can associate AWS account IDs to an alias that is
 used by the login command. These values are stored
 in your config file.`,
@@ -64,9 +64,10 @@ profiles found.`,
 
 // accountPluralCmd represents the account command
 var accountPluralCmd = &cobra.Command{
-	Use:    "accounts",
-	Short:  "List the AWS account mappings.",
-	Hidden: true,
+	Use:     "accounts",
+	Short:   "List the AWS account mappings.",
+	Aliases: []string{"accts"},
+	Hidden:  true,
 	Run: func(cmd *cobra.Command, args []string) {
 		listAccounts()
 	},
