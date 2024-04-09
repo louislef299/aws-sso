@@ -1,3 +1,15 @@
+# v1.42.1 (2024-03-29)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.42.0 (2024-03-28)
+
+* **Feature**: Add multiple customer error code to handle customer caused failure when managing EKS node groups
+
+# v1.41.2 (2024-03-18)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
 # v1.41.1 (2024-03-07)
 
 * **Bug Fix**: Remove dependency on go-cmp.
