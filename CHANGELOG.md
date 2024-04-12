@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/louislef299/aws-sso/compare/v1.1.1...v1.1.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* Documentation wording and Browser docs ([#54](https://github.com/louislef299/aws-sso/issues/54)) ([cbfb8d5](https://github.com/louislef299/aws-sso/commit/cbfb8d54a3a38cdcc97f6db49ac9dab8a4dfed95))
+
 ## [1.1.1](https://github.com/louislef299/aws-sso/compare/v1.1.0...v1.1.1) (2024-03-18)
 
 
