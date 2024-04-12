@@ -10,6 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	"github.com/louislef299/aws-sso/pkg/v1/os"
 )
 
@@ -20,7 +21,7 @@ func GetECRRegistryName(ctx context.Context, cfg *aws.Config) (string, error) {
 		return "", fmt.Errorf("could not get caller identity: %v", err)
 	}
 
-	r, err := GetRegion()
+	r, err := lregion.GetRegion(lregion.ECR)
 	if err != nil {
 		return "", err
 	}

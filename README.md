@@ -27,14 +27,20 @@ following information:
 - Name and Email
 - Environment Alias(for future logins)
 - [AWS SSO Start URL][]
+- AWS SSO Region
 
-With that information, just run `aws-sso login`. Initial configuration will be
-triggered and will follow a similar workflow:
+With that information, first set your default SSO region(example sets to
+us-east-1):
+
+```bash
+aws-sso config set core.ssoregion us-east-1
+```
+
+Next, just run `aws-sso login` and the initial configuration will be triggered
+and will follow a similar workflow:
 
 ```bash
 louislef299 ~ % aws-sso login
-enter your full name(first last): Louis Lefebvre
-enter your email: louislefebvre1999@gmail.com
 please enter a prefix alias for this context(ex: env1): env1
 2024/01/12 16:25:36 login.go:80: using token default
 2024/01/12 16:25:36 account.go:105: couldn't find an account ID matching profile env1, using empty default...
@@ -71,12 +77,9 @@ Issues below. 🤗
 
 - Disable EKS default config
 - Delete old access tokens using `token rm`
-- On-board additional operating systems and browsers for private flag
 - Remove kube config context when logging out with `-c`
 - Allow for impersonation with kubeconfig
-- Allow assuming another rule with the existing credentials
-- SAML integration
-- Add account at login
+- Make kubeconfig namespace and other settings immutable
 
 [AWS SSO Start URL]: https://docs.aws.amazon.com/signin/latest/userguide/iam-id-center-sign-in-tutorial.html
 [homebrew]: https://brew.sh/
