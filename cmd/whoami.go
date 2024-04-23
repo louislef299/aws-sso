@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	. "github.com/louislef299/aws-sso/internal/envs"
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -37,7 +38,7 @@ aws sts get-caller-identity`,
 			fmt.Println("using profile", laws.CurrentProfile())
 		}
 
-		region, err := laws.GetRegion()
+		region, err := lregion.GetRegion(lregion.EKS)
 		if err != nil {
 			log.Fatal("couldn't find region:", err)
 		}

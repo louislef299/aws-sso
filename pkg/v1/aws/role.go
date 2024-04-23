@@ -102,6 +102,5 @@ func saveCredentials(profile, region, output string, roleCredentials *sso.GetRol
 	default:
 		return "", fmt.Errorf("os not supported")
 	}
-	viper.Set(CORE_REGION, region)
-	return custom_profile, viper.WriteConfig()
+	return custom_profile, nil
 }

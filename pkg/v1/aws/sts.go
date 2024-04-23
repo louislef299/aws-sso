@@ -5,14 +5,12 @@ import (
 	"errors"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -63,56 +61,8 @@ func GetCallerIdentity(ctx context.Context, cfg *aws.Config) (*sts.GetCallerIden
 	return svc.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 }
 
-// Returns the region in precedence of environment
-// region, config region and finally default region.
-func GetRegion() (string, error) {
-	var r string
-	checkOutput := func(r string) error {
-		if r != "" && validRegion(r) {
-			return nil
-		}
-		if r == "" {
-			return ErrEmptyResponse
-		}
-		if !validRegion(r) {
-			return ErrRegionInvalid
-		}
-		return ErrRegionNotFound
-	}
-
-	r = os.Getenv("AWS_REGION")
-	if err := checkOutput(r); err == nil {
-		return r, nil
-	} else if err == ErrRegionInvalid {
-		return "", err
-	}
-
-	r = os.Getenv("AWS_DEFAULT_REGION")
-	if err := checkOutput(r); err == nil {
-		return r, nil
-	} else if err == ErrRegionInvalid {
-		return "", err
-	}
-
-	r = viper.GetString(SESSION_REGION)
-	if err := checkOutput(r); err == nil {
-		return r, nil
-	} else if err == ErrRegionInvalid {
-		return "", err
-	}
-
-	r = viper.GetString(CORE_REGION)
-	if err := checkOutput(r); err == nil {
-		return r, nil
-	} else if err == ErrRegionInvalid {
-		return "", err
-	}
-
-	return "", ErrRegionNotFound
-}
-
 func GetURL() (string, error) {
-	r, err := GetRegion()
+	r, err := lregion.GetRegion(lregion.STS)
 	if err != nil {
 		return "", err
 	}
@@ -139,13 +89,4 @@ func SaveUsageInformation(accountInfo *types.AccountInfo, roleInfo *types.RoleIn
 	}
 	log.Printf("saving data to %s", target)
 	return los.WriteStructToFile(usageInformation, target)
-}
-
-func validRegion(region string) bool {
-	for _, r := range AwsRegions {
-		if strings.Compare(r, strings.TrimSpace(region)) == 0 {
-			return true
-		}
-	}
-	return false
 }

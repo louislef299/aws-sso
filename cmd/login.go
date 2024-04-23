@@ -19,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/browser"
 	. "github.com/louislef299/aws-sso/internal/envs"
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	ldocker "github.com/louislef299/aws-sso/pkg/v1/docker"
 	lk8s "github.com/louislef299/aws-sso/pkg/v1/kube"
@@ -29,7 +30,7 @@ import (
 
 var (
 	role, startUrl, output, token    string
-	clusterName, clusterRegion       string
+	clusterName                      string
 	disableEKSLogin, disableECRLogin bool
 	private, refresh                 bool
 
@@ -148,7 +149,6 @@ func init() {
 
 	loginCmd.Flags().BoolVar(&disableEKSLogin, "disableEKSLogin", false, "Disables automatic detection and login for EKS")
 	loginCmd.Flags().BoolVar(&disableECRLogin, "disableECRLogin", true, "Disables automatic detection and login for ECR")
-	loginCmd.Flags().StringVar(&clusterRegion, "clusterRegion", "", "The region the cluster is located in (default is --region flag)")
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
 	loginCmd.Flags().StringVarP(&token, "token", "t", "", "The token to use when logging in. To be used when managing multiple session tokens at once (shorthand '-' for default token)")
@@ -164,13 +164,6 @@ func fuzzyCluster(clusters []string) string {
 }
 
 func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Config, error) {
-	region, err := laws.GetRegion()
-	if err != nil {
-		return nil, err
-	}
-	deepSet(SESSION_REGION, region)
-	log.Println("using region", region, "to login")
-
 	// check if referencing a local profile
 	lc, err := laws.IsLocalConfig(profile)
 	if err != nil {
@@ -191,8 +184,14 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 		return &cfg, nil
 	}
 
+	ssoRegion, err := lregion.GetRegion(lregion.STS)
+	if err != nil {
+		log.Fatal("could not gather sso region:", err)
+	}
+	log.Println("using sso region", ssoRegion, "to login")
+
 	acctID := getAccountID(profile)
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(region))
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(ssoRegion))
 	if err != nil {
 		return nil, err
 	}
@@ -203,9 +202,6 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 	}
 	deepSet(SESSION_PROFILE, p)
 
-	if clusterRegion != "" {
-		region = clusterRegion
-	}
 	log.Println("loading up new config", p, "with region", region)
 	// Start up new config with newly configured profile
 	cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(region), config.WithSharedConfigProfile(p))
@@ -324,7 +320,6 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 			log.Println("WARNING: couldn't write to configuration file:", err)
 		}
 	}
-
 	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)
 }
 

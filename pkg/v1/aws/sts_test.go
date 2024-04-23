@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
 )
@@ -93,7 +94,7 @@ var _ = Describe("Sts", func() {
 				err := os.Setenv("AWS_REGION", r)
 				Expect(err).NotTo(HaveOccurred())
 
-				region, err := laws.GetRegion()
+				region, err := lregion.GetRegion(lregion.STS)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(region).To(Equal(r))
 			}
@@ -105,7 +106,7 @@ var _ = Describe("Sts", func() {
 				err := os.Setenv("AWS_REGION", r)
 				Expect(err).NotTo(HaveOccurred())
 
-				region, err := laws.GetRegion()
+				region, err := lregion.GetRegion(lregion.STS)
 				Expect(region).To(BeEmpty())
 				Expect(err).To(Equal(laws.ErrRegionInvalid))
 			}
@@ -117,7 +118,7 @@ var _ = Describe("Sts", func() {
 			err = os.Unsetenv("AWS_DEFAULT_REGION")
 			Expect(err).NotTo(HaveOccurred())
 
-			region, err := laws.GetRegion()
+			region, err := lregion.GetRegion(lregion.STS)
 			Expect(region).To(BeEmpty())
 			Expect(err).To(Equal(laws.ErrRegionNotFound))
 		})
