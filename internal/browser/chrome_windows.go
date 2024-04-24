@@ -34,5 +34,3 @@ func (f *Chrome) OpenURL(ctx context.Context, url string) error {
 	}
 	return open(ctx, windowsPath, url)
 }
-
-func (f *Chrome) Type() string { return "chrome" }

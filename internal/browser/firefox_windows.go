@@ -19,5 +19,3 @@ func (f *Firefox) OpenURL(ctx context.Context, url string) error {
 	}
 	return open(ctx, macosFirefoxPath, url)
 }
-
-func (f *Firefox) Type() string { return "firefox" }

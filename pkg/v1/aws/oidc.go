@@ -102,7 +102,7 @@ func GatherClientInformation(ctx context.Context, cfg *aws.Config, startUrl stri
 		log.Println("please verify your client request: " + *resp.VerificationUriComplete)
 		err = b.OpenURL(ctx, *resp.VerificationUriComplete)
 		if err != nil {
-			return nil, fmt.Errorf("issue opening url for browser type %s: %v", b.Type(), err)
+			return nil, err
 		}
 
 		clientInfo.DeviceCode = *resp.DeviceCode
@@ -136,7 +136,7 @@ func RegisterClient(ctx context.Context, cfg *aws.Config, startUrl string, b bro
 
 	log.Println("user validation code:", *output.UserCode)
 	if err = b.OpenURL(ctx, *output.VerificationUriComplete); err != nil {
-		return nil, fmt.Errorf("issue opening url for browser type %s: %v", b.Type(), err)
+		return nil, err
 	}
 
 	return &ClientInformation{
