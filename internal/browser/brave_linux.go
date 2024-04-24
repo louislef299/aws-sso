@@ -34,5 +34,3 @@ func (f *Brave) OpenURL(ctx context.Context, url string) error {
 	}
 	return open(ctx, linuxPath, url)
 }
-
-func (f *Brave) Type() string { return "brave" }

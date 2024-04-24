@@ -20,7 +20,6 @@ var (
 
 type Browser interface {
 	OpenURL(ctx context.Context, url string) error
-	Type() string
 }
 
 func GetBrowser(browserName string, private bool) Browser {
@@ -54,5 +53,3 @@ func (d *Default) OpenURL(ctx context.Context, url string) error {
 	}
 	return b.OpenURL(url)
 }
-
-func (d *Default) Type() string { return "default" }

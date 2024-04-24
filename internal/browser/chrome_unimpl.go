@@ -14,5 +14,3 @@ type Chrome struct {
 func (f *Chrome) OpenURL(ctx context.Context, url string) error {
 	return ErrBrowserUnimplemented
 }
-
-func (f *Chrome) Type() string { return "unimplemented" }
