@@ -20,4 +20,14 @@ var _ = Describe("Config", func() {
 			Expect(configPath).To(Equal(home + pluginos.AWS_LOGIN_PATH))
 		})
 	})
+
+	Context("When checking for managed profiles", func() {
+		It("Should return true for managed profiles", func() {
+			Expect(pluginos.IsManagedProfile("profile-aws-sso")).To(BeTrue())
+		})
+
+		It("Should return false for unmanaged profiles", func() {
+			Expect(pluginos.IsManagedProfile("profile")).To(BeFalse())
+		})
+	})
 })

@@ -9,7 +9,9 @@ import (
 	"log"
 	"slices"
 
+	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
+	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -22,6 +24,7 @@ const (
 var (
 	accountNumber string
 	accountName   string
+	accountRegion string
 
 	ErrNoAccountFound = errors.New("no account found")
 )
@@ -44,10 +47,18 @@ in your config file.`,
 // accountAddCmd represents the account command
 var accountAddCmd = &cobra.Command{
 	Use:     "add",
-	Short:   "Associate an alias to an AWS account ID.",
-	Example: "  aws-sso account add --name env1 --number 000000000",
+	Short:   "Associate an alias to an AWS account ID and default region.",
+	Example: "  aws-sso account add --name env1 --number 000000000 --region us-west-2",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := addAccount(accountName, accountNumber)
+		var err error
+		if region == "" {
+			region, err = lregion.GetRegion(lregion.EKS)
+			if err != nil {
+				log.Fatal("couldn't get default region:", err)
+			}
+		}
+
+		err = addAccount(accountName, accountNumber, region)
 		if err != nil {
 			log.Fatal("couldn't write to configuration file:", err)
 		}
@@ -85,6 +96,7 @@ func init() {
 	accountCmd.AddCommand(accountListCmd)
 	accountCmd.AddCommand(accountAddCmd)
 
+	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
 	if err := accountAddCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
@@ -95,14 +107,14 @@ func init() {
 	}
 }
 
-func addAccount(name, id string) error {
-	viperAddAccount(name, id)
+func addAccount(name, id, region string) error {
+	viperAddAccount(name, Account{ID: id, Region: region})
 	return viper.WriteConfig()
 }
 
 // Sets account value in Viper. Does not write to config
-func viperAddAccount(name, id string) {
-	viper.Set(fmt.Sprintf("account.%s", name), id)
+func viperAddAccount(name string, acct Account) {
+	viper.Set(fmt.Sprintf("account.%s", name), acct)
 }
 
 func getAccountID(profile string) string {
@@ -123,6 +135,7 @@ func listAccounts() {
 	fmt.Println("Account mapping:")
 	acctList := accts.AllKeys()
 	slices.Sort(acctList)
+	log.Println("here is the account list:", acctList)
 	for _, a := range acctList {
 		fmt.Printf("%s: %s\n", a, accts.GetString(a))
 	}
@@ -134,6 +147,8 @@ func listAccounts() {
 		log.Fatal(err)
 	}
 	for _, s := range sections {
-		fmt.Println(s)
+		if !los.IsManagedProfile(s) {
+			fmt.Println(s)
+		}
 	}
 }

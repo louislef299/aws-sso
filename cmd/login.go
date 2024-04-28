@@ -315,7 +315,7 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 
 	// set the new profile in account config
 	if newProfile {
-		err = addAccount(profile, acctID)
+		err = addAccount(profile, acctID, cfg.Region)
 		if err != nil {
 			log.Println("WARNING: couldn't write to configuration file:", err)
 		}
