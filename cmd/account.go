@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"slices"
+	"strings"
 
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
@@ -27,6 +28,7 @@ var (
 	accountRegion string
 
 	ErrNoAccountFound = errors.New("no account found")
+	ErrAccountsToFix  = errors.New("accounts need to be fixed")
 )
 
 type Account struct {
@@ -133,15 +135,24 @@ func listAccounts() {
 	}
 
 	fmt.Println("Account mapping:")
-	acctList := accts.AllKeys()
+	acctKeys := accts.AllKeys()
+	var acctList []string
+	for _, k := range acctKeys {
+		acctList = append(acctList, trimSuffixes(k))
+	}
+	acctList = slices.Compact(acctList)
+
 	slices.Sort(acctList)
 	log.Println("here is the account list:", acctList)
+	var account Account
 	for _, a := range acctList {
-		fmt.Printf("%s: %s\n", a, accts.GetString(a))
+		err := accts.UnmarshalKey(a, &account)
+		if err == nil {
+			fmt.Printf("%s:\n  ID: %s\n  Region: %s\n", a, account.ID, account.Region)
+		}
 	}
 
 	fmt.Printf("\nAWS Configs:\n")
-
 	sections, err := laws.GetAWSProfiles()
 	if err != nil {
 		log.Fatal(err)
@@ -151,4 +162,55 @@ func listAccounts() {
 			fmt.Println(s)
 		}
 	}
+}
+
+func trimSuffixes(s string) string {
+	suffixes := []string{"id", "region"}
+	for _, suff := range suffixes {
+		s = strings.TrimSuffix(s, fmt.Sprintf(".%s", suff))
+	}
+	return s
+}
+
+// fixAccounts is a temporary function to fix the account structures of the
+// existing name: id string configuration.
+func fixAccounts(check bool) error {
+	accts := viper.Sub(ACCOUNT_GROUP)
+	if accts == nil {
+		return nil
+	}
+
+	acctKeys := accts.AllKeys()
+	var acctList []string
+	for _, k := range acctKeys {
+		acctList = append(acctList, trimSuffixes(k))
+	}
+	acctList = slices.Compact(acctList)
+
+	slices.Sort(acctList)
+	count := 0
+	defaultRegion, err := lregion.GetRegion(lregion.EKS)
+	if err != nil {
+		return err
+	}
+
+	var account Account
+	for _, a := range acctList {
+		err := accts.UnmarshalKey(a, &account)
+		if err != nil {
+			if !check {
+				fmt.Printf("reformatting profile %s to new structure...\n", a)
+				viperAddAccount(a, Account{ID: accts.GetString(a), Region: defaultRegion})
+			}
+			count++
+		}
+	}
+	if count == 0 {
+		fmt.Println("no accounts to reformat!")
+		return nil
+	} else if check {
+		return ErrAccountsToFix
+	}
+
+	return viper.WriteConfig()
 }
