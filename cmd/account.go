@@ -26,6 +26,11 @@ var (
 	ErrNoAccountFound = errors.New("no account found")
 )
 
+type Account struct {
+	ID     string
+	Region string
+}
+
 // accountCmd represents the account command
 var accountCmd = &cobra.Command{
 	Use:     "account",
