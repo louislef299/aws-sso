@@ -28,6 +28,9 @@ func ConfigureCluster(info *eks.DescribeClusterOutput, region, profile string) e
 
 	log.Println("setting kube config values for cluster", *info.Cluster.Arn)
 
+	// must set this value to change the kube context
+	kubeConfig.CurrentContext = profile
+
 	// The name of the cluster must be the AWS cluster ARN, otherwise there will be config errors
 	kubeConfig.Clusters[profile] = &api.Cluster{
 		LocationOfOrigin:         *info.Cluster.Endpoint,
@@ -35,8 +38,9 @@ func ConfigureCluster(info *eks.DescribeClusterOutput, region, profile string) e
 		CertificateAuthorityData: data,
 	}
 	kubeConfig.Contexts[profile] = &api.Context{
-		Cluster:  profile,
-		AuthInfo: profile,
+		Cluster:   profile,
+		AuthInfo:  profile,
+		Namespace: GetNamespace(kubeConfig),
 	}
 	kubeConfig.AuthInfos[profile] = &api.AuthInfo{
 		Exec: &api.ExecConfig{
@@ -60,15 +64,16 @@ func ConfigureCluster(info *eks.DescribeClusterOutput, region, profile string) e
 		},
 	}
 
-	// must set this value to change the kube context
-	kubeConfig.CurrentContext = profile
-
 	return clientcmd.WriteToFile(*kubeConfig, filepath)
 }
 
 // Returns default configuration filepath for kubectl
 func GetDefaultConfig() string {
 	return clientcmd.NewDefaultPathOptions().GetDefaultFilename()
+}
+
+func GetNamespace(c *api.Config) string {
+	return c.Contexts[c.CurrentContext].Namespace
 }
 
 // Validates that config file exists, otherwise configures new one
