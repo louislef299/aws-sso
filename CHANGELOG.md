@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/louislef299/aws-sso/compare/v1.1.2...v1.2.0) (2024-04-29)
+
+
+### Features
+
+* Associate persistent region to account alias ([#86](https://github.com/louislef299/aws-sso/issues/86)) ([3db01ab](https://github.com/louislef299/aws-sso/commit/3db01abc06f7a92578c1d688474b11f701999cfd))
+
+
+### Bug Fixes
+
+* Allow for static SSO region and dynamic --region flag with session ([#80](https://github.com/louislef299/aws-sso/issues/80)) ([41f60e1](https://github.com/louislef299/aws-sso/commit/41f60e1060634079ecbc9d62702f27e63dbbce76))
+* Persist namespace when switching contexts ([#85](https://github.com/louislef299/aws-sso/issues/85)) ([6d441f9](https://github.com/louislef299/aws-sso/commit/6d441f96beba94d68643cd261f23bee05e1a9a0b))
+
 ## [1.1.2](https://github.com/louislef299/aws-sso/compare/v1.1.1...v1.1.2) (2024-04-10)
 
 
