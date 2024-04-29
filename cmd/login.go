@@ -32,7 +32,7 @@ var (
 	role, startUrl, output, token    string
 	clusterName                      string
 	disableEKSLogin, disableECRLogin bool
-	private, refresh                 bool
+	private, refresh, skipDefaults   bool
 
 	ErrKeyDoesNotExist     = errors.New("the provided key doesn't exist")
 	ErrClusterDoesNotExist = errors.New("the provided cluster does not exist in this environment")
@@ -53,7 +53,7 @@ If the account has an EKS cluster, authenticates with
 the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PreRun: func(cmd *cobra.Command, args []string) {
 		// Required for migration from v1.1.2 => v1.2.0
 		// TODO: Remove in v1.3.0
 		err := fixAccounts(true)
@@ -165,6 +165,7 @@ func init() {
 	loginCmd.Flags().BoolVar(&disableECRLogin, "disableECRLogin", true, "Disables automatic detection and login for ECR")
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
+	loginCmd.Flags().BoolVar(&skipDefaults, "skipDefaults", false, "Skip the default login values and use prompt selection")
 	loginCmd.Flags().StringVarP(&token, "token", "t", "", "The token to use when logging in. To be used when managing multiple session tokens at once (shorthand '-' for default token)")
 
 	loginCmd.Flags().StringVarP(&clusterName, "cluster", "c", "", "The cluster you would like to target when logging in")
@@ -234,6 +235,10 @@ func getClusterName(ctx context.Context, cfg *aws.Config, skipFuzzy bool) (strin
 
 	if len(clusters) == 0 {
 		return "", ErrClustersDoNotExist
+	}
+
+	if skipDefaults {
+		return fuzzyCluster(clusters), nil
 	}
 
 	var cluster string
@@ -315,7 +320,7 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 	}
 	acctID = *account.AccountId
 
-	role, err := laws.RetrieveRoleInfo(ctx, &cfg, account.AccountId, &clientInfo.AccessToken)
+	role, err := laws.RetrieveRoleInfo(ctx, &cfg, *account.AccountId, clientInfo.AccessToken, skipDefaults)
 	if err != nil {
 		return "", err
 	}
