@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"slices"
 	"strings"
 	"text/tabwriter"
@@ -24,6 +25,11 @@ type ConfigValue struct {
 
 var (
 	currentConfigValues []*ConfigValue
+
+	acctGroupRegex    = `^account\.*`
+	sessionGroupRegex = `^session\.*`
+
+	allConfigValues bool
 )
 
 // configCmd represents the config command
@@ -60,10 +66,15 @@ var configListCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Current config values:")
 		keys := viper.AllKeys()
+		acctRegex, sessRegex := regexp.MustCompile(acctGroupRegex), regexp.MustCompile(sessionGroupRegex)
 		slices.Sort(keys)
 		for _, k := range keys {
+			if (acctRegex.MatchString(k) || sessRegex.MatchString(k)) && !allConfigValues {
+				continue
+			}
+
 			value := viper.Get(k)
-			if value == "" {
+			if value == "" && !allConfigValues {
 				continue
 			}
 			fmt.Printf("%s=%v\n", k, value)
@@ -127,6 +138,8 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 
 	configCmd.AddCommand(configListCmd)
+	configListCmd.Flags().BoolVarP(&allConfigValues, "all", "a", false, "List all configuration values, including tool internal values")
+
 	configCmd.AddCommand(configSetCmd)
 	configCmd.AddCommand(configUnsetCmd)
 	configCmd.AddCommand(configGetCmd)
