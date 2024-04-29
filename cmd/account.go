@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 
+	lenv "github.com/louislef299/aws-sso/internal/envs"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
@@ -18,14 +19,17 @@ import (
 )
 
 const (
-	ACCOUNT_GROUP = "account"
-	ROLE_ARN_KEY  = "role_arn"
+	ACCOUNT_GROUP  = "account"
+	ACCOUNT_REGION = "region"
+	ACCOUNT_ID     = "id"
+	ROLE_ARN_KEY   = "role_arn"
 )
 
 var (
 	accountNumber string
 	accountName   string
 	accountRegion string
+	allAccounts   bool
 
 	ErrNoAccountFound = errors.New("no account found")
 	ErrAccountsToFix  = errors.New("accounts need to be fixed")
@@ -76,7 +80,33 @@ var accountListCmd = &cobra.Command{
 	Long: `Lists the local AWS account alias mapping and AWS name
 profiles found.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		listAccounts()
+		listAccounts(allAccounts)
+	},
+}
+
+// accountSetCmd represents the account command
+var accountSetCmd = &cobra.Command{
+	Use:     "set",
+	Short:   "Set the AWS account profile values.",
+	Args:    cobra.ExactArgs(1),
+	Example: `  aws-sso account set env1 --number 000000000 --region us-west-2`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if accountNumber == "" && accountRegion == "" {
+			log.Fatal("no values to set! use --number or --region flags to set values.")
+		}
+		if accountNumber == "" {
+			accountNumber = getAccountID(args[0])
+		}
+		if accountRegion == "" {
+			accountRegion = getAccountRegion(args[0])
+		}
+
+		viperSetAccount(args[0], Account{ID: accountNumber, Region: accountRegion})
+		err := viper.WriteConfig()
+		if err != nil {
+			log.Fatal("couldn't write to configuration file:", err)
+		}
+		fmt.Printf("account values have been set for %s\n", args[0])
 	},
 }
 
@@ -104,7 +134,7 @@ var accountPluralCmd = &cobra.Command{
 	Aliases: []string{"accts"},
 	Hidden:  true,
 	Run: func(cmd *cobra.Command, args []string) {
-		listAccounts()
+		listAccounts(allAccounts)
 	},
 }
 
@@ -115,6 +145,10 @@ func init() {
 	accountCmd.AddCommand(accountListCmd)
 	accountCmd.AddCommand(accountAddCmd)
 	accountCmd.AddCommand(accountFixupCmd)
+	accountCmd.AddCommand(accountSetCmd)
+
+	accountPluralCmd.Flags().BoolVarP(&allAccounts, "all", "a", false, "List all accounts, including AWS config profiles")
+	accountListCmd.Flags().BoolVarP(&allAccounts, "all", "a", false, "List all accounts, including AWS config profiles")
 
 	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
@@ -125,27 +159,43 @@ func init() {
 	if err := accountAddCmd.MarkFlagRequired("number"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
 	}
+
+	accountSetCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
+	accountSetCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
 }
 
 func addAccount(name, id, region string) error {
-	viperAddAccount(name, Account{ID: id, Region: region})
+	viperSetAccount(name, Account{ID: id, Region: region})
 	return viper.WriteConfig()
 }
 
 // Sets account value in Viper. Does not write to config
-func viperAddAccount(name string, acct Account) {
+func viperSetAccount(name string, acct Account) {
 	viper.Set(fmt.Sprintf("account.%s", name), acct)
 }
 
 func getAccountID(profile string) string {
-	id := viper.GetString(fmt.Sprintf("%s.%s", ACCOUNT_GROUP, profile))
+	id := viper.GetString(fmt.Sprintf("%s.%s.%s", ACCOUNT_GROUP, profile, ACCOUNT_ID))
 	if id == "" {
 		log.Printf("couldn't find an account ID matching profile %s, using empty default...\n", profile)
 	}
 	return id
 }
 
-func listAccounts() {
+func getAccountRegion(profile string) string {
+	var err error
+	r := viper.GetString(fmt.Sprintf("%s.%s.%s", ACCOUNT_GROUP, profile, ACCOUNT_REGION))
+	if r == "" {
+		log.Printf("couldn't find an account region matching profile %s, using local default...\n", profile)
+		r, err = lregion.GetRegion(lregion.EKS)
+		if err != nil {
+			log.Fatal("couldn't get default region:", err)
+		}
+	}
+	return r
+}
+
+func listAccounts(all bool) {
 	accts := viper.Sub(ACCOUNT_GROUP)
 	if accts == nil {
 		log.Println("no accounts configured! use the 'account add' command to create new mappings")
@@ -169,16 +219,27 @@ func listAccounts() {
 		}
 	}
 
-	fmt.Printf("\nAWS Configs:\n")
-	sections, err := laws.GetAWSProfiles()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, s := range sections {
-		if !los.IsManagedProfile(s) {
-			fmt.Println(s)
+	if all {
+		fmt.Printf("\nAWS Configs:\n")
+		sections, err := laws.GetAWSProfiles()
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, s := range sections {
+			if !los.IsManagedProfile(s) {
+				fmt.Println(s)
+			}
 		}
 	}
+}
+
+func syncAccountRegionSession(profile, region string) (string, error) {
+	if region == "" {
+		region = getAccountRegion(profile)
+	}
+	viper.Set(lenv.SESSION_REGION, region)
+	err := viper.WriteConfig()
+	return region, err
 }
 
 func trimSuffixes(s string) string {
@@ -217,7 +278,7 @@ func fixAccounts(check bool) error {
 		if err != nil {
 			if !check {
 				fmt.Printf("reformatting profile %s to new structure...\n", a)
-				viperAddAccount(a, Account{ID: accts.GetString(a), Region: defaultRegion})
+				viperSetAccount(a, Account{ID: accts.GetString(a), Region: defaultRegion})
 			}
 			count++
 		}

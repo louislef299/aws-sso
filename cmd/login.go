@@ -63,6 +63,7 @@ updates.`,
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		var requestProfile string
+		var err error
 		// find out if an account profile is being requested
 		if len(args) == 1 {
 			requestProfile = args[0]
@@ -86,6 +87,11 @@ updates.`,
 			checkToken()
 		}
 		log.Println("using token", getCurrentToken())
+
+		region, err = syncAccountRegionSession(requestProfile, region)
+		if err != nil {
+			log.Fatal("could not sync account session:", err)
+		}
 
 		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
 		if err != nil {
@@ -146,7 +152,7 @@ updates.`,
 
 func init() {
 	rootCmd.AddCommand(loginCmd)
-	loginCmd.Flags().StringVarP(&region, "region", "r", "us-east-1", "The region you would like to use at login")
+	loginCmd.Flags().StringVarP(&region, "region", "r", "", "The region you would like to use at login")
 	BindConfigValue(SESSION_REGION, loginCmd.Flags().Lookup("region"))
 
 	loginCmd.Flags().StringVarP(&startUrl, "url", "u", "", "The AWS SSO start url")
