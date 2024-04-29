@@ -90,7 +90,7 @@ var _ = Describe("Sts", func() {
 
 	Context("When gathering the region", func() {
 		It("Should gather the proper region for all expected region inputs", func() {
-			for _, r := range laws.AwsRegions {
+			for _, r := range lregion.AwsRegions {
 				err := os.Setenv("AWS_REGION", r)
 				Expect(err).NotTo(HaveOccurred())
 
@@ -108,7 +108,7 @@ var _ = Describe("Sts", func() {
 
 				region, err := lregion.GetRegion(lregion.STS)
 				Expect(region).To(BeEmpty())
-				Expect(err).To(Equal(laws.ErrRegionInvalid))
+				Expect(err).To(Equal(lregion.ErrRegionInvalid))
 			}
 		})
 
@@ -120,7 +120,7 @@ var _ = Describe("Sts", func() {
 
 			region, err := lregion.GetRegion(lregion.STS)
 			Expect(region).To(BeEmpty())
-			Expect(err).To(Equal(laws.ErrRegionNotFound))
+			Expect(err).To(Equal(lregion.ErrRegionNotFound))
 		})
 	})
 
@@ -157,7 +157,7 @@ var _ = Describe("Sts", func() {
 
 				url, err := laws.GetURL()
 				Expect(url).To(BeEmpty())
-				Expect(err).To(Equal(laws.ErrRegionInvalid))
+				Expect(err).To(Equal(lregion.ErrRegionInvalid))
 			}
 		})
 	})

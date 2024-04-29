@@ -12,7 +12,7 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-// Removes all sections that have the AWS_LOGIN_PREFIX in the name
+// Removes all sections that have the AWS_LOGIN_SUFFIX in the name
 func Logout(ctx context.Context, cfg *aws.Config, cleanToken bool) error {
 	var (
 		clientinfo string
@@ -48,7 +48,7 @@ func Logout(ctx context.Context, cfg *aws.Config, cleanToken bool) error {
 	return nil
 }
 
-// Cleans the provided file with AWS_LOGIN_PREFIX
+// Cleans the provided file with AWS_LOGIN_SUFFIX
 func clean(file string) error {
 	exists, err := los.IsFileOrFolderExisting(file)
 	if err != nil {
@@ -57,7 +57,7 @@ func clean(file string) error {
 	if !exists {
 		return fmt.Errorf("%s does not exist", file)
 	}
-	return deleteSections(file, los.AWS_LOGIN_PREFIX)
+	return deleteSections(file, los.AWS_LOGIN_SUFFIX)
 }
 
 // Cleans the config file
