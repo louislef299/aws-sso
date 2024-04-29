@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -18,8 +19,19 @@ import (
 )
 
 func contains(l []types.RoleInfo, s string) int {
+	skipRoleRegex := false
+	roleRegex, err := regexp.Compile(s)
+	if err != nil {
+		log.Printf("error compiling regex: %v", err)
+		skipRoleRegex = true
+	}
+
 	for i, v := range l {
 		if strings.Compare(*v.RoleName, s) == 0 {
+			return i
+		}
+
+		if !skipRoleRegex && roleRegex.MatchString(*v.RoleName) {
 			return i
 		}
 	}
@@ -43,25 +55,26 @@ func GetAndSaveRoleCredentials(ctx context.Context, cfg *aws.Config, accountID, 
 	return saveCredentials(accountName, region, "json", roleCreds)
 }
 
-func RetrieveRoleInfo(ctx context.Context, cfg *aws.Config, accountID, accessToken *string) (types.RoleInfo, error) {
+func RetrieveRoleInfo(ctx context.Context, cfg *aws.Config, accountID, accessToken string, skipDefault bool) (types.RoleInfo, error) {
 	client := sso.NewFromConfig(*cfg)
 	roles, err := client.ListAccountRoles(ctx, &sso.ListAccountRolesInput{
-		AccountId:   accountID,
-		AccessToken: accessToken,
+		AccountId:   &accountID,
+		AccessToken: &accessToken,
 	})
 	if err != nil {
 		return types.RoleInfo{}, fmt.Errorf("couldn't gather account roles: %v", err)
 	}
 
-	r := getConfiguredRole()
-	if i := contains(roles.RoleList, r); i >= 0 {
-		log.Printf("found role in configuration: %s", r)
-		return roles.RoleList[i], nil
-	} else if len(roles.RoleList) == 1 {
-		log.Printf("only one role available, using role: %s\n", *roles.RoleList[0].RoleName)
-		return roles.RoleList[0], nil
-	} else {
-		log.Println("HINT: if you would like to reuse a specific iam profile, you can set core.defaultRole to your iam profile.")
+	if !skipDefault {
+		r := getConfiguredRole()
+		log.Printf("matching role against configured role: %s", r)
+		if i := contains(roles.RoleList, r); i >= 0 {
+			return roles.RoleList[i], nil
+		} else if len(roles.RoleList) == 1 {
+			return roles.RoleList[0], nil
+		} else {
+			log.Println("HINT: if you would like to reuse a specific iam profile, you can set core.defaultRole to your iam profile.")
+		}
 	}
 
 	var rolesToSelect []string
@@ -76,10 +89,6 @@ func RetrieveRoleInfo(ctx context.Context, cfg *aws.Config, accountID, accessTok
 }
 
 func getConfiguredRole() string {
-	r := viper.GetString(SESSION_ROLE)
-	if r != "" {
-		return r
-	}
 	return viper.GetString(CORE_DEFAULT_ROLE)
 }
 

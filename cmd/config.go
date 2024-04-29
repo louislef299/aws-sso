@@ -147,7 +147,7 @@ func init() {
 
 	// Space saved for config values not bound to flags
 	addConfigValue(CORE_DEFAULT_CLUSTER, "The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)")
-	addConfigValue(CORE_DEFAULT_ROLE, "The default iam role to use when logging in")
+	addConfigValue(CORE_DEFAULT_ROLE, "The default iam role to use when logging in, supports go regex expressions(golang.org/s/re2syntax)")
 	addConfigValue(CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
 	addConfigValue(CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
 	addConfigValue(CORE_URL, "The default sso start url used when logging in")

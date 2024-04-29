@@ -75,11 +75,9 @@ Issues below. 🤗
 
 ### Known Issues
 
-- Disable EKS default config
 - Delete old access tokens using `token rm`
 - Remove kube config context when logging out with `-c`
 - Allow for impersonation with kubeconfig
-- Make kubeconfig namespace and other settings immutable
 
 [AWS SSO Start URL]: https://docs.aws.amazon.com/signin/latest/userguide/iam-id-center-sign-in-tutorial.html
 [homebrew]: https://brew.sh/

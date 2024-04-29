@@ -284,7 +284,6 @@ func fixAccounts(check bool) error {
 		}
 	}
 	if count == 0 {
-		fmt.Println("no accounts to reformat!")
 		return nil
 	} else if check {
 		return ErrAccountsToFix
