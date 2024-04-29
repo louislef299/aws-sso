@@ -53,6 +53,14 @@ If the account has an EKS cluster, authenticates with
 the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		// Required for migration from v1.1.2 => v1.2.0
+		// TODO: Remove in v1.3.0
+		err := fixAccounts(true)
+		if err == ErrAccountsToFix {
+			log.Fatal("Some account profiles need to be reformatted. Please run `aws-sso account fixup`")
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		var requestProfile string
 		// find out if an account profile is being requested

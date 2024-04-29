@@ -26,12 +26,6 @@ var rootCmd = &cobra.Command{
 	Long:  `An AWS login helper to make authentication easier`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-
-		err := fixAccounts(true)
-		if err == ErrAccountsToFix {
-			log.Fatal("Some account profiles need to be reformatted. Please run `aws-sso account fixup`")
-		}
-
 		return nil
 	},
 }

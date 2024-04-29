@@ -80,6 +80,23 @@ profiles found.`,
 	},
 }
 
+// accountFixupCmd represents the account command
+var accountFixupCmd = &cobra.Command{
+	Use:   "fixup",
+	Short: "Reformats any account profiles using deprecated pattern.",
+	Long: `Fixup reformats any account profiles using deprecated pattern.
+The reformatting will move from simply associating a profile to 
+an account ID to a more structured account with an ID and 
+region.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		err := fixAccounts(false)
+		if err != nil {
+			log.Fatal("couldn't fix accounts:", err)
+		}
+		log.Println("accounts have been reformatted!")
+	},
+}
+
 // accountPluralCmd represents the account command
 var accountPluralCmd = &cobra.Command{
 	Use:     "accounts",
@@ -97,6 +114,7 @@ func init() {
 
 	accountCmd.AddCommand(accountListCmd)
 	accountCmd.AddCommand(accountAddCmd)
+	accountCmd.AddCommand(accountFixupCmd)
 
 	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
@@ -140,10 +158,9 @@ func listAccounts() {
 	for _, k := range acctKeys {
 		acctList = append(acctList, trimSuffixes(k))
 	}
+	slices.Sort(acctList)
 	acctList = slices.Compact(acctList)
 
-	slices.Sort(acctList)
-	log.Println("here is the account list:", acctList)
 	var account Account
 	for _, a := range acctList {
 		err := accts.UnmarshalKey(a, &account)
