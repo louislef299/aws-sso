@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/louislef299/aws-sso/compare/v1.2.0...v1.2.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* Enable role regex searching ([#92](https://github.com/louislef299/aws-sso/issues/92)) ([cd7841c](https://github.com/louislef299/aws-sso/commit/cd7841c3f98b5a0d71825f1e8521df7c869cbc3e))
+* Only print user-desired configs with plain list ([#89](https://github.com/louislef299/aws-sso/issues/89)) ([6d50481](https://github.com/louislef299/aws-sso/commit/6d504810c3e80a566776991517c299aca991546b))
+
 ## [1.2.0](https://github.com/louislef299/aws-sso/compare/v1.1.2...v1.2.0) (2024-04-29)
 
 
