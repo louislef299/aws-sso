@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/louislef299/aws-sso/compare/v1.2.1...v1.2.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* SEGFAULT on empty ns ([#97](https://github.com/louislef299/aws-sso/issues/97)) ([5c8f820](https://github.com/louislef299/aws-sso/commit/5c8f8209af5cd5ac6aece5206633aeda55d32918))
+
 ## [1.2.1](https://github.com/louislef299/aws-sso/compare/v1.2.0...v1.2.1) (2024-04-29)
 
 
