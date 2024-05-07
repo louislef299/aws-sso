@@ -1,22 +1,21 @@
-## aws-sso account add
+## aws-sso account set
 
-Associate an alias to an AWS account ID and default region.
+Set the AWS account profile values.
 
 ```
-aws-sso account add [flags]
+aws-sso account set [flags]
 ```
 
 ### Examples
 
 ```
-  aws-sso account add --name env1 --number 000000000 --region us-west-2
+  aws-sso account set env1 --number 000000000 --region us-west-2
 ```
 
 ### Options
 
 ```
-  -h, --help            help for add
-      --name string     The logical name of the account being added
+  -h, --help            help for set
       --number string   The account number of the account associated to the account name
   -r, --region string   The default region to associate to the account
 ```
