@@ -73,7 +73,11 @@ func GetDefaultConfig() string {
 }
 
 func GetNamespace(c *api.Config) string {
-	return c.Contexts[c.CurrentContext].Namespace
+	_, ok := c.Contexts[c.CurrentContext]
+	if ok {
+		return c.Contexts[c.CurrentContext].Namespace
+	}
+	return "default"
 }
 
 // Validates that config file exists, otherwise configures new one
