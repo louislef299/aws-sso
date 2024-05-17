@@ -349,8 +349,16 @@ func loginEKS(ctx context.Context, cfg aws.Config, cluster string) {
 		log.Fatal("couldn't gather cluster information:", err)
 	}
 
+	options := []lk8s.ClusterOptionsFunc{
+		lk8s.WithCluster(clusterInfo.Cluster),
+		lk8s.WithProfile(laws.CurrentProfile()),
+		lk8s.WithRegion(region),
+	}
+
+	// check for impersonation flags(kube or aws)
+
 	log.Printf("configuring kubernetes configuration cluster access for %s\n", cluster)
-	err = lk8s.ConfigureCluster(clusterInfo, region, laws.CurrentProfile())
+	err = lk8s.ConfigureCluster(ctx, options...)
 	if err != nil {
 		log.Fatal("could not update kubeconfig: ", err)
 	}
