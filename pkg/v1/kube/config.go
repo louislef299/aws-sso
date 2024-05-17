@@ -16,7 +16,10 @@ import (
 func ConfigureCluster(ctx context.Context, optFns ...ClusterOptionsFunc) error {
 	var option ClusterOptions
 	for _, fn := range optFns {
-		fn(&option)
+		err := fn(&option)
+		if err != nil {
+			return err
+		}
 	}
 
 	filepath := GetDefaultConfig()
