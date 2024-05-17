@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.3](https://github.com/louislef299/aws-sso/compare/v1.2.2...v1.2.3) (2024-05-17)
+
+
+### Bug Fixes
+
+* Bump github.com/aws/aws-sdk-go-v2/config from 1.27.11 to 1.27.13 ([#109](https://github.com/louislef299/aws-sso/issues/109)) ([b7d0c9f](https://github.com/louislef299/aws-sso/commit/b7d0c9f7fd32ff8fab64ef6434adf7b39417be98))
+* Bump github.com/aws/aws-sdk-go-v2/service/eks from 1.42.1 to 1.42.2 ([#107](https://github.com/louislef299/aws-sso/issues/107)) ([419a060](https://github.com/louislef299/aws-sso/commit/419a06053596450ee69e2ef5f82129f6f78cc780))
+* Bump github.com/docker/cli ([#108](https://github.com/louislef299/aws-sso/issues/108)) ([e2455b5](https://github.com/louislef299/aws-sso/commit/e2455b578d01515980aadd5af875eb21e04a9597))
+* Bump github.com/onsi/ginkgo/v2 from 2.17.2 to 2.17.3 ([#102](https://github.com/louislef299/aws-sso/issues/102)) ([ae77a4b](https://github.com/louislef299/aws-sso/commit/ae77a4b1b1054b4fd170f11a8f48e326b82d6205))
+* Update token hash ([#110](https://github.com/louislef299/aws-sso/issues/110)) ([bbe7373](https://github.com/louislef299/aws-sso/commit/bbe737396d2c963fedab474a1afdf3517859e3ba))
+
 ## [1.2.2](https://github.com/louislef299/aws-sso/compare/v1.2.1...v1.2.2) (2024-05-07)
 
 
