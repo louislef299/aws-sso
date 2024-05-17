@@ -69,15 +69,26 @@ settings][].
 
 ## Contributing
 
-Myself and this project are relatively young, so be patient. Feel free to open
-up Issues or Feature Requests, add documentation or tackle one of the Known
-Issues below. 🤗
+Feel free to open up Issues or Feature Requests, add documentation or tackle one
+of the Known Issues below.
 
 ### Known Issues
 
 - Delete old access tokens using `token rm`
 - Remove kube config context when logging out with `-c`
 - Allow for impersonation with kubeconfig
+
+https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/credentials/ssocreds
+```go
+ba, _ := json.Marshal(map[string]string{
+  "region":       ssoRegion,
+  "scopes":       ssoScope,
+  "session_name": sessionName,
+  "startUrl":     startURL,
+  "tool":         "botocore",
+})
+path, e := ssocreds.StandardCachedTokenFilepath(string(ba))
+```
 
 [AWS SSO Start URL]: https://docs.aws.amazon.com/signin/latest/userguide/iam-id-center-sign-in-tutorial.html
 [homebrew]: https://brew.sh/
