@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials/ssocreds"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/ssooidc"
 	"github.com/aws/aws-sdk-go-v2/service/ssooidc/types"
@@ -33,41 +34,44 @@ const (
 // ClientInfoFileDestination finds local AWS configuration settings. Users can
 // optionally input their own home directory location.
 func ClientInfoFileDestination(configDir ...string) (string, error) {
-	var targetConfigDir string
+	var configPath string
 	var err error
 
+	atok := GetAccessToken()
 	if len(configDir) > 1 {
 		return "", ErrMoreThanOneLocation
 	} else if len(configDir) == 0 {
-		targetConfigDir, err = os.UserHomeDir()
+		configPath, err = ssocreds.StandardCachedTokenFilepath(atok)
 		if err != nil {
 			return "", err
 		}
 	} else {
-		targetConfigDir = configDir[0]
+		atokHash, err := GetTokenHash(atok)
+		if err != nil {
+			return "", err
+		}
+		configPath = path.Join(configDir[0], AWS_TOKEN_PATH, atokHash)
 	}
-	targetConfigDir = path.Join(targetConfigDir, AWS_TOKEN_PATH)
 
-	err = os.MkdirAll(targetConfigDir, 0755)
+	err = os.MkdirAll(path.Dir(configPath), 0755)
 	if err != nil {
 		return "", err
 	}
-	configLocation := path.Join(targetConfigDir, GetAccessToken())
 
-	log.Println("checking config location", configLocation)
-	exists, err := los.IsFileOrFolderExisting(configLocation)
+	log.Println("checking config location", configPath)
+	exists, err := los.IsFileOrFolderExisting(configPath)
 	if err != nil {
 		return "", err
 	}
 	if !exists {
-		log.Println("creating", configLocation)
-		f, err := os.Create(configLocation)
+		log.Println("creating", configPath)
+		f, err := os.Create(configPath)
 		if err != nil {
 			return "", err
 		}
 		defer f.Close()
 	}
-	return configLocation, nil
+	return configPath, nil
 }
 
 // Attempts to gather current client information. If it doesn't exist, creates new information for the client
@@ -116,6 +120,14 @@ func GatherClientInformation(ctx context.Context, cfg *aws.Config, startUrl stri
 		return nil, err
 	}
 	return clientInfo, nil
+}
+
+func GetTokenHash(token string) (string, error) {
+	p, err := ssocreds.StandardCachedTokenFilepath(token)
+	if err != nil {
+		return "", err
+	}
+	return path.Base(p), nil
 }
 
 // Registers a client with AWS OIDC and return the client information

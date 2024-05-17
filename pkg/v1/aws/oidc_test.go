@@ -28,7 +28,9 @@ var _ = Describe("Oidc", func() {
 				Expect(err).NotTo(HaveOccurred())
 			})
 
-			Expect(returnedLocation).To(Equal(path.Join(configDir, aws.AWS_TOKEN_PATH, aws.GetAccessToken())))
+			atok, err := aws.GetTokenHash(aws.GetAccessToken())
+			Expect(err).NotTo(HaveOccurred())
+			Expect(returnedLocation).To(Equal(path.Join(configDir, aws.AWS_TOKEN_PATH, atok)))
 		})
 	})
 })
