@@ -15,5 +15,5 @@ func init() {
 		Impersonate:      utilpointer.To[string](""),
 		ImpersonateGroup: &impersonateGroup,
 	}
-	kc.AddFlags(rootCmd.Flags())
+	kc.AddFlags(rootCmd.PersistentFlags())
 }

@@ -2,6 +2,7 @@ package kube
 
 import (
 	"github.com/aws/aws-sdk-go-v2/service/eks/types"
+	"github.com/louislef299/aws-sso/internal/region"
 )
 
 type ClusterOptions struct {
@@ -15,6 +16,17 @@ type ClusterOptions struct {
 }
 
 type ClusterOptionsFunc func(*ClusterOptions) error
+
+func NewClusterOption() (*ClusterOptions, error) {
+	r, err := region.GetRegion(region.EKS)
+	if err != nil {
+		return nil, err
+	}
+	return &ClusterOptions{
+		Region:  r,
+		Profile: "default",
+	}, nil
+}
 
 func WithCluster(c *types.Cluster) ClusterOptionsFunc {
 	return func(o *ClusterOptions) error {

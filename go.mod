@@ -25,8 +25,9 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.18.2
 	gopkg.in/ini.v1 v1.67.0
-	k8s.io/cli-runtime v0.30.1
-	k8s.io/client-go v0.30.1
+	k8s.io/cli-runtime v0.30.0
+	k8s.io/client-go v0.30.0
+	k8s.io/utils v0.0.0-20240102154912-e7106e64919e
 )
 
 require (
@@ -129,7 +130,6 @@ require (
 	k8s.io/apimachinery v0.30.1 // indirect
 	k8s.io/klog/v2 v2.120.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20240228011516-70dd3763d340 // indirect
-	k8s.io/utils v0.0.0-20240102154912-e7106e64919e // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/kustomize/api v0.16.0 // indirect
 	sigs.k8s.io/kustomize/kyaml v0.16.0 // indirect

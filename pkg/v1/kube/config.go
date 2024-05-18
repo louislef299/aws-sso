@@ -7,23 +7,32 @@ import (
 	"log"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/service/eks/types"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/tools/clientcmd/api"
 )
 
 // Look at following link:
 // https://github.com/kubernetes/client-go/blob/f457a57d6d2564ff06461d22ada3ff5ca6fec9c4/tools/clientcmd/config.go#L166
-func ConfigureCluster(ctx context.Context, optFns ...ClusterOptionsFunc) error {
-	var option ClusterOptions
+func ConfigureCluster(ctx context.Context, c *types.Cluster, optFns ...ClusterOptionsFunc) error {
+	return Config(ctx, append(optFns, WithCluster(c))...)
+}
+
+func Config(ctx context.Context, optFns ...ClusterOptionsFunc) error {
+	option, err := NewClusterOption()
+	if err != nil {
+		return err
+	}
+
 	for _, fn := range optFns {
-		err := fn(&option)
+		err := fn(option)
 		if err != nil {
 			return err
 		}
 	}
 
-	filepath := GetDefaultConfig()
-	kubeConfig, err := GetKubeConfig(filepath)
+	filepath := getDefaultConfig()
+	kubeConfig, err := getKubeConfig(filepath)
 	if err != nil {
 		return fmt.Errorf("could not read in kubectl config: %v", err)
 	}
@@ -31,7 +40,7 @@ func ConfigureCluster(ctx context.Context, optFns ...ClusterOptionsFunc) error {
 
 	// must set this value to change the kube context
 	kubeConfig.CurrentContext = option.Profile
-
+	log.Println("current context is", option.Profile)
 	cluster, err := option.GetCluster()
 	if err != nil {
 		return err
@@ -54,7 +63,7 @@ func ConfigureCluster(ctx context.Context, optFns ...ClusterOptionsFunc) error {
 }
 
 // Returns default configuration filepath for kubectl
-func GetDefaultConfig() string {
+func getDefaultConfig() string {
 	return clientcmd.NewDefaultPathOptions().GetDefaultFilename()
 }
 
@@ -74,6 +83,6 @@ func readConfig(filepath string) (*api.Config, error) {
 	return clientcmd.LoadFromFile(filepath)
 }
 
-func GetKubeConfig(filepath string) (*api.Config, error) {
+func getKubeConfig(filepath string) (*api.Config, error) {
 	return readConfig(filepath)
 }
