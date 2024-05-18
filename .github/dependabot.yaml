@@ -1,15 +1,18 @@
 # Configure version updates for both dependencies defined in manifests and vendored dependencies
-
+---
 version: 2
 updates:
-  - package-ecosystem: "gomod"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: fix
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
+- package-ecosystem: gomod
+  directory: /
+  schedule:
+    day: friday
+    interval: weekly
+  commit-message:
+    prefix: fix
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    day: friday
+    interval: weekly
+  commit-message:
+    prefix: chore
