@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.4](https://github.com/louislef299/aws-sso/compare/v1.2.3...v1.2.4) (2024-05-25)
+
+
+### Bug Fixes
+
+* Bump github.com/aws/aws-sdk-go-v2/config from 1.27.13 to 1.27.15 ([#114](https://github.com/louislef299/aws-sso/issues/114)) ([2f51a2c](https://github.com/louislef299/aws-sso/commit/2f51a2c327a062507787f03313bbd7a34b3904f6))
+* Bump github.com/aws/aws-sdk-go-v2/config from 1.27.15 to 1.27.16 ([#122](https://github.com/louislef299/aws-sso/issues/122)) ([0724bf0](https://github.com/louislef299/aws-sso/commit/0724bf062d48ba935297c609aca2a28a97314c16))
+* Bump github.com/aws/aws-sdk-go-v2/credentials ([#124](https://github.com/louislef299/aws-sso/issues/124)) ([5e0619f](https://github.com/louislef299/aws-sso/commit/5e0619f3d4468396458e7e5c328dd6eb826a0820))
+* Bump github.com/aws/aws-sdk-go-v2/service/eks from 1.42.2 to 1.42.4 ([#116](https://github.com/louislef299/aws-sso/issues/116)) ([c58ccc8](https://github.com/louislef299/aws-sso/commit/c58ccc8f5adec134e51d2cc6bb4b56dfdb7fd7f8))
+* Bump github.com/aws/aws-sdk-go-v2/service/eks from 1.42.4 to 1.42.5 ([#123](https://github.com/louislef299/aws-sso/issues/123)) ([61e29d6](https://github.com/louislef299/aws-sso/commit/61e29d60bbc1caa10f0ddc19487241f765e8d7f4))
+* Bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#120](https://github.com/louislef299/aws-sso/issues/120)) ([b6c5d9d](https://github.com/louislef299/aws-sso/commit/b6c5d9d3372397b6a34eb5a76c9e25daa0f97a71))
+* Bump github.com/aws/aws-sdk-go-v2/service/sts from 1.28.7 to 1.28.9 ([#115](https://github.com/louislef299/aws-sso/issues/115)) ([cc58db4](https://github.com/louislef299/aws-sso/commit/cc58db442c7cabed301da42040d0f2aaa17b16a2))
+* Bump github.com/docker/cli ([#121](https://github.com/louislef299/aws-sso/issues/121)) ([805a965](https://github.com/louislef299/aws-sso/commit/805a9651c305011ca080d1f23f2126a3796e81db))
+* Bump k8s.io/cli-runtime from 0.30.0 to 0.30.1 ([#117](https://github.com/louislef299/aws-sso/issues/117)) ([223b358](https://github.com/louislef299/aws-sso/commit/223b358d4f0d4869ecb74b747b7aff0217378d90))
+* Bump k8s.io/client-go from 0.30.0 to 0.30.1 ([#118](https://github.com/louislef299/aws-sso/issues/118)) ([844440f](https://github.com/louislef299/aws-sso/commit/844440fd239e38e90a2da960d3aa479249a2f5ba))
+
 ## [1.2.3](https://github.com/louislef299/aws-sso/compare/v1.2.2...v1.2.3) (2024-05-17)
 
 
