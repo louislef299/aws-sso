@@ -3,7 +3,6 @@ package kube
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 
@@ -31,10 +30,9 @@ func Config(ctx context.Context, optFns ...ClusterOptionsFunc) error {
 		}
 	}
 
-	filepath := getDefaultConfig()
-	kubeConfig, err := getKubeConfig(filepath)
+	kubeConfig, filepath, err := GetAPIConfig()
 	if err != nil {
-		return fmt.Errorf("could not read in kubectl config: %v", err)
+		return err
 	}
 	log.Println("setting kube config values for cluster", *option.Cluster.Arn)
 
@@ -85,4 +83,13 @@ func readConfig(filepath string) (*api.Config, error) {
 
 func getKubeConfig(filepath string) (*api.Config, error) {
 	return readConfig(filepath)
+}
+
+func GetAPIConfig() (*api.Config, string, error) {
+	filepath := getDefaultConfig()
+	api, err := getKubeConfig(filepath)
+	if err != nil {
+		return nil, "", err
+	}
+	return api, filepath, nil
 }

@@ -15,6 +15,7 @@ import (
 	. "github.com/louislef299/aws-sso/internal/envs"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
+	lk8s "github.com/louislef299/aws-sso/pkg/v1/kube"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -67,6 +68,22 @@ aws sts get-caller-identity`,
 			err = printClusterInfo(cmd.Context(), &cfg, cluster, os.Stdout)
 			if err != nil {
 				log.Fatal("couldn't print cluster information:", err)
+			}
+
+			kubeapi, filepath, err := lk8s.GetAPIConfig()
+			if err != nil {
+				log.Fatal("couldn't gather kube config information:", err)
+			}
+			cc := kubeapi.CurrentContext
+			fmt.Printf("Local Kube Config:\n\tUsing Config File: %s\n\tCurrent Context: %s\n",
+				filepath,
+				cc,
+			)
+			if i := kubeapi.AuthInfos[cc].Impersonate; i != "" {
+				fmt.Printf("\tImpersonating User: %s\n", i)
+			}
+			if g := kubeapi.AuthInfos[cc].ImpersonateGroups; g != nil {
+				fmt.Printf("\tImpersonating Groups: %v\n", g)
 			}
 		}
 	},
