@@ -1,3 +1,20 @@
+# v1.28.3 (2024-05-23)
+
+* No change notes available for this release.
+
+# v1.28.2 (2024-05-16)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.28.1 (2024-05-15)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.28.0 (2024-05-08)
+
+* **Feature**: This release adds pull through cache rules support for GitLab container registry in Amazon ECR.
+* **Bug Fix**: GoDoc improvement
+
 # v1.27.4 (2024-03-29)
 
 * **Dependency Update**: Updated to the latest SDK module versions
