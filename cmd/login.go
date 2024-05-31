@@ -93,6 +93,28 @@ updates.`,
 			log.Fatal("could not sync account session:", err)
 		}
 
+		// Configure cluster options before gathering token
+		options := []lk8s.ClusterOptionsFunc{
+			lk8s.WithProfile(laws.CurrentProfile()),
+			lk8s.WithRegion(region),
+		}
+		log.Println("Set profile to", laws.CurrentProfile())
+		imp, err := cmd.Flags().GetString("as")
+		if err != nil {
+			log.Println(err)
+		}
+		impG, err := cmd.Flags().GetStringArray("as-group")
+		if err != nil {
+			log.Println(err)
+		}
+		// check for impersonation flags(kube or aws)
+		if imp != "" && len(impG) > 0 {
+			log.Printf("impersonating user %s in group %s\n", imp, impG)
+			options = append(options, lk8s.WithImpersonation(imp, impG))
+		} else if imp != "" && len(impG) <= 0 {
+			log.Fatal("when impersonating, must provide both a Username and a Group(use --as & --as-group)")
+		}
+
 		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
@@ -140,9 +162,9 @@ updates.`,
 					log.Printf("could not gather cluster information: %v\n", err)
 					return
 				}
-
 				log.Println("using cluster", cluster)
-				loginEKS(cmd.Context(), *cfg, cluster)
+
+				loginEKS(cmd.Context(), *cfg, cluster, options...)
 			}()
 		}
 
@@ -342,7 +364,7 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)
 }
 
-func loginEKS(ctx context.Context, cfg aws.Config, cluster string) {
+func loginEKS(ctx context.Context, cfg aws.Config, cluster string, optFns ...lk8s.ClusterOptionsFunc) {
 	// configure kubernetes credentials
 	clusterInfo, err := laws.GetClusterInfo(ctx, &cfg, cluster)
 	if err != nil {
@@ -350,7 +372,7 @@ func loginEKS(ctx context.Context, cfg aws.Config, cluster string) {
 	}
 
 	log.Printf("configuring kubernetes configuration cluster access for %s\n", cluster)
-	err = lk8s.ConfigureCluster(clusterInfo, region, laws.CurrentProfile())
+	err = lk8s.ConfigureCluster(ctx, clusterInfo.Cluster, optFns...)
 	if err != nil {
 		log.Fatal("could not update kubeconfig: ", err)
 	}
