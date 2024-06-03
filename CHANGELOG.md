@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.5](https://github.com/louislef299/aws-sso/compare/v1.2.4...v1.2.5) (2024-05-31)
+
+
+### Bug Fixes
+
+* Bump github.com/onsi/ginkgo/v2 from 2.17.3 to 2.19.0 ([#129](https://github.com/louislef299/aws-sso/issues/129)) ([755ceba](https://github.com/louislef299/aws-sso/commit/755ceba0024f3d0591ae045eae3aef3c590cd596))
+* Update k8s impersonation ([#126](https://github.com/louislef299/aws-sso/issues/126)) ([15316bf](https://github.com/louislef299/aws-sso/commit/15316bf9998aac3a96bc0bbab99177f0e608aaa5))
+
 ## [1.2.4](https://github.com/louislef299/aws-sso/compare/v1.2.3...v1.2.4) (2024-05-25)
 
 
