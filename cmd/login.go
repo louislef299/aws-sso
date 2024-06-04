@@ -23,6 +23,7 @@ import (
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	ldocker "github.com/louislef299/aws-sso/pkg/v1/docker"
 	lk8s "github.com/louislef299/aws-sso/pkg/v1/kube"
+	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/louislef299/aws-sso/pkg/v1/prompt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -95,10 +96,10 @@ updates.`,
 
 		// Configure cluster options before gathering token
 		options := []lk8s.ClusterOptionsFunc{
-			lk8s.WithProfile(laws.CurrentProfile()),
+			lk8s.WithProfile(los.GetProfile(requestProfile)),
 			lk8s.WithRegion(region),
 		}
-		log.Println("Set profile to", laws.CurrentProfile())
+		log.Println("Set profile to", los.GetProfile(requestProfile))
 		imp, err := cmd.Flags().GetString("as")
 		if err != nil {
 			log.Println(err)
