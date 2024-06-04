@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.6](https://github.com/louislef299/aws-sso/compare/v1.2.5...v1.2.6) (2024-06-04)
+
+
+### Bug Fixes
+
+* Profile usage with auth flow ([#132](https://github.com/louislef299/aws-sso/issues/132)) ([60e7e04](https://github.com/louislef299/aws-sso/commit/60e7e049b84baa730fb760b60c711d6f92540ebc))
+
 ## [1.2.5](https://github.com/louislef299/aws-sso/compare/v1.2.4...v1.2.5) (2024-05-31)
 
 
