@@ -30,7 +30,7 @@ jobs:
       with:
         go-version: '>=${{ env.GOVERSION }}'
         check-latest: true
-    - uses: goreleaser/goreleaser-action@v5
+    - uses: goreleaser/goreleaser-action@v6
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       with:
