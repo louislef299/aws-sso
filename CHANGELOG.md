@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.2.7](https://github.com/louislef299/aws-sso/compare/v1.2.6...v1.2.7) (2024-06-22)
+
+
+### Bug Fixes
+
+* Bump github.com/aws/aws-sdk-go-v2/config from 1.27.16 to 1.27.19 ([#151](https://github.com/louislef299/aws-sso/issues/151)) ([dad4c5e](https://github.com/louislef299/aws-sso/commit/dad4c5e9310ab032598fd0310ec0a52888acb2e2))
+* Bump github.com/aws/aws-sdk-go-v2/credentials ([#143](https://github.com/louislef299/aws-sso/issues/143)) ([62ee20e](https://github.com/louislef299/aws-sso/commit/62ee20ed1c56cb2c8e60c3fd5f0468f07772104b))
+* Bump github.com/aws/aws-sdk-go-v2/service/eks from 1.42.5 to 1.43.2 ([#152](https://github.com/louislef299/aws-sso/issues/152)) ([e6009ba](https://github.com/louislef299/aws-sso/commit/e6009ba88691f09844262ee17816948bcc206ca7))
+* Bump github.com/aws/aws-sdk-go-v2/service/eks from 1.43.2 to 1.44.1 ([#155](https://github.com/louislef299/aws-sso/issues/155)) ([73efb45](https://github.com/louislef299/aws-sso/commit/73efb45a9bc5c3c62fa834b84137151cf7309dcb))
+* Bump github.com/aws/aws-sdk-go-v2/service/sso ([#141](https://github.com/louislef299/aws-sso/issues/141)) ([08b29ad](https://github.com/louislef299/aws-sso/commit/08b29ad09d3bacd0fd3acd1ad14b4bba22874ec0))
+* Bump github.com/aws/aws-sdk-go-v2/service/sso ([#157](https://github.com/louislef299/aws-sso/issues/157)) ([d899402](https://github.com/louislef299/aws-sso/commit/d89940273baf3c86da7c6117a37a677272e52785))
+* Bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#144](https://github.com/louislef299/aws-sso/issues/144)) ([0fbd285](https://github.com/louislef299/aws-sso/commit/0fbd285c524f1aaf62190e02ffef52c2558f8909))
+* Bump github.com/aws/aws-sdk-go-v2/service/sts ([#145](https://github.com/louislef299/aws-sso/issues/145)) ([21b36ff](https://github.com/louislef299/aws-sso/commit/21b36ff896f8744a0d03871e3bd80278b44b5618))
+* Bump github.com/aws/aws-sdk-go-v2/service/sts ([#153](https://github.com/louislef299/aws-sso/issues/153)) ([7c32634](https://github.com/louislef299/aws-sso/commit/7c326347e340c69bf6327a2055c21fc75544840f))
+* Bump github.com/briandowns/spinner from 1.23.0 to 1.23.1 ([#154](https://github.com/louislef299/aws-sso/issues/154)) ([a074887](https://github.com/louislef299/aws-sso/commit/a074887c56ca6fe3e27b1f32dcfe5965ca1c701c))
+* Bump github.com/docker/cli ([#138](https://github.com/louislef299/aws-sso/issues/138)) ([0ffdf50](https://github.com/louislef299/aws-sso/commit/0ffdf504ffd4be4eb804f3835498ee017e29b8cf))
+* Bump github.com/docker/docker ([#150](https://github.com/louislef299/aws-sso/issues/150)) ([c26c59b](https://github.com/louislef299/aws-sso/commit/c26c59b83df3963db32aced13621e701b72eb6da))
+* Bump github.com/spf13/cobra from 1.8.0 to 1.8.1 ([#156](https://github.com/louislef299/aws-sso/issues/156)) ([45db546](https://github.com/louislef299/aws-sso/commit/45db546008a0a94349bcb37ebe53eb5fce5a5e9c))
+* Bump github.com/spf13/viper from 1.18.2 to 1.19.0 ([#148](https://github.com/louislef299/aws-sso/issues/148)) ([63c91c3](https://github.com/louislef299/aws-sso/commit/63c91c32f4e46224cfed3f861e40cbac10ac8559))
+* Bump k8s.io/cli-runtime from 0.30.1 to 0.30.2 ([#149](https://github.com/louislef299/aws-sso/issues/149)) ([05b0380](https://github.com/louislef299/aws-sso/commit/05b038071a68e31434290faf544a674ed704d5c4))
+
 ## [1.2.6](https://github.com/louislef299/aws-sso/compare/v1.2.5...v1.2.6) (2024-06-04)
 
 
