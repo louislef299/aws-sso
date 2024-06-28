@@ -135,6 +135,12 @@ func (c *Client) addOperationDescribeRepositoriesMiddlewares(stack *middleware.S
 	if err = addSetLegacyContextSigningOptionsMiddleware(stack); err != nil {
 		return err
 	}
+	if err = addTimeOffsetBuild(stack, c); err != nil {
+		return err
+	}
+	if err = addUserAgentRetryMode(stack, options); err != nil {
+		return err
+	}
 	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeRepositories(options.Region), middleware.Before); err != nil {
 		return err
 	}
@@ -155,14 +161,6 @@ func (c *Client) addOperationDescribeRepositoriesMiddlewares(stack *middleware.S
 	}
 	return nil
 }
-
-// DescribeRepositoriesAPIClient is a client that implements the
-// DescribeRepositories operation.
-type DescribeRepositoriesAPIClient interface {
-	DescribeRepositories(context.Context, *DescribeRepositoriesInput, ...func(*Options)) (*DescribeRepositoriesOutput, error)
-}
-
-var _ DescribeRepositoriesAPIClient = (*Client)(nil)
 
 // DescribeRepositoriesPaginatorOptions is the paginator options for
 // DescribeRepositories
@@ -236,6 +234,9 @@ func (p *DescribeRepositoriesPaginator) NextPage(ctx context.Context, optFns ...
 	}
 	params.MaxResults = limit
 
+	optFns = append([]func(*Options){
+		addIsPaginatorUserAgent,
+	}, optFns...)
 	result, err := p.client.DescribeRepositories(ctx, &params, optFns...)
 	if err != nil {
 		return nil, err
@@ -254,6 +255,14 @@ func (p *DescribeRepositoriesPaginator) NextPage(ctx context.Context, optFns ...
 
 	return result, nil
 }
+
+// DescribeRepositoriesAPIClient is a client that implements the
+// DescribeRepositories operation.
+type DescribeRepositoriesAPIClient interface {
+	DescribeRepositories(context.Context, *DescribeRepositoriesInput, ...func(*Options)) (*DescribeRepositoriesOutput, error)
+}
+
+var _ DescribeRepositoriesAPIClient = (*Client)(nil)
 
 func newServiceMetadataMiddleware_opDescribeRepositories(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
