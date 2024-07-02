@@ -76,8 +76,9 @@ item from the Backlog below.
 
 - Delete old access tokens using `token rm`
 - Remove kube config context when logging out with `-c`
-- Allow for impersonation with kubeconfig
 - Documentation website
+- Add sso-section to config file so aws cli understands token hash
+- Can modify sso url to add `?env=prod` to generate a new hash for prod
 
 [AWS SSO Start URL]: https://docs.aws.amazon.com/signin/latest/userguide/iam-id-center-sign-in-tutorial.html
 [homebrew]: https://brew.sh/
