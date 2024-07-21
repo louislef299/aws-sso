@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/louislef299/aws-sso/compare/v1.2.7...v1.3.0) (2024-07-21)
+
+
+### Features
+
+* Add Trivy security CI ([#176](https://github.com/louislef299/aws-sso/issues/176)) ([1f5b090](https://github.com/louislef299/aws-sso/commit/1f5b090f4de9e47031eb7ad3f3bcf37d0b5a938f))
+
+
+### Bug Fixes
+
+* Bump github.com/aws/aws-sdk-go-v2/config from 1.27.19 to 1.27.27 ([#173](https://github.com/louislef299/aws-sso/issues/173)) ([f341ba1](https://github.com/louislef299/aws-sso/commit/f341ba15abdbb84521a57ddc36f4cc71d9d46f5d))
+* Bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.28.3 to 1.30.3 ([#171](https://github.com/louislef299/aws-sso/issues/171)) ([9a269e4](https://github.com/louislef299/aws-sso/commit/9a269e45ae11d5ec7d45dc3eb59913bb1f94e28b))
+* Bump github.com/docker/cli ([#167](https://github.com/louislef299/aws-sso/issues/167)) ([eeb9a24](https://github.com/louislef299/aws-sso/commit/eeb9a24ff494c2fe231da5a917a51ef815a42caa))
+* Goreleaser config to v2 ([#177](https://github.com/louislef299/aws-sso/issues/177)) ([f5424b2](https://github.com/louislef299/aws-sso/commit/f5424b2365c24b1509df3ca89b88813b63e6b949))
+* Release process ([#174](https://github.com/louislef299/aws-sso/issues/174)) ([4aae3bb](https://github.com/louislef299/aws-sso/commit/4aae3bbe8214094c1c415691e59e90097d8a3522))
+
 ## [1.2.7](https://github.com/louislef299/aws-sso/compare/v1.2.6...v1.2.7) (2024-06-22)
 
 
