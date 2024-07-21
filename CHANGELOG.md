@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.1](https://github.com/louislef299/aws-sso/compare/v1.3.0...v1.3.1) (2024-07-21)
+
+
+### Bug Fixes
+
+* Licence formatting ([#183](https://github.com/louislef299/aws-sso/issues/183)) ([7b3bc21](https://github.com/louislef299/aws-sso/commit/7b3bc21f3ed343796ff26765079fa3bdd1ff7a61))
+* Release secret permissions ([#180](https://github.com/louislef299/aws-sso/issues/180)) ([d45daff](https://github.com/louislef299/aws-sso/commit/d45daff758ea36b32ac534d2d602dd0e6a6bdce3))
+* Update release please action to googleapis/release-please-action ([#178](https://github.com/louislef299/aws-sso/issues/178)) ([0fa4df0](https://github.com/louislef299/aws-sso/commit/0fa4df0c5703e678a5cd163c4f6423f549cfd5e0))
+
 ## [1.3.0](https://github.com/louislef299/aws-sso/compare/v1.2.7...v1.3.0) (2024-07-21)
 
 
