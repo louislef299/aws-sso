@@ -15,11 +15,15 @@ jobs:
       uses: google-github-actions/release-please-action@v4
       with:
         release-type: simple
+        token: ${{ secrets.RELEASE_TOKEN }}
 
   go-release:
     environment: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     needs: release-please
+    permissions:
+      contents: write
+      packages: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +36,7 @@ jobs:
         check-latest: true
     - uses: goreleaser/goreleaser-action@v6
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         distribution: goreleaser
         version: latest
@@ -43,9 +47,3 @@ name: Release Please
   push:
     branches:
     - main
-
-permissions:
-  contents: write
-  issues: write
-  packages: write
-  pull-requests: write
