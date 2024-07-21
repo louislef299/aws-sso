@@ -60,6 +60,7 @@ jobs:
     needs: [test, golangci, check-goreleaser]
     name: Validate Binary Builds
     runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'release-please--branches--main')
     steps:
     - uses: actions/checkout@v4
       with:
