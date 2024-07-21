@@ -21,9 +21,6 @@ jobs:
     environment: release-please
     if: ${{ needs.release-please.outputs.release_created }}
     needs: release-please
-    permissions:
-      contents: write
-      packages: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -36,7 +33,7 @@ jobs:
         check-latest: true
     - uses: goreleaser/goreleaser-action@v6
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GORELEASER_SECRET }}
       with:
         distribution: goreleaser
         version: latest
