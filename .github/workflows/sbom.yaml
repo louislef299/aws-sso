@@ -1,0 +1,63 @@
+---
+name: Validate Binaries
+on:
+  pull_request:
+    branches: [ "*" ]
+
+env:
+    GOVERSION: "1.22.1"
+
+permissions:
+    contents: write
+
+jobs:
+  goreleaser-build:
+    name: GoReleaser Build & Scan
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'release-please--branches--main')
+    steps:
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '>=${{ env.GOVERSION }}'
+        check-latest: true
+        cache-dependency-path: '**/go.sum'
+    - name: Check out code
+      uses: actions/checkout@v4
+    - name: Restore Goreleaser Binaries from cache
+      id: goreleaser-cache
+      uses: actions/cache/restore@v4.0.2
+      with:
+        path: dist/
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+    - name: Build Binaries with GoReleaser
+      uses: goreleaser/goreleaser-action@v6
+      with:
+        distribution: goreleaser
+        version: "~> v2"
+        args: build --snapshot --timeout 90m --clean
+    # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
+    - name: Run Trivy SBOM mode and submit results to Dependency Graph
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        scan-type: 'rootfs'
+        scan-ref: '.'
+        hide-progress: true
+        format: 'github'
+        output: 'dependency-results.sbom.json'
+        exit-code: '1'
+        severity: 'CRITICAL,HIGH'
+        scanners: vuln,secret
+        github-pat: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: trivy-sbom-${{ github.sha }}
+        path: dependency-results.sbom.json
+        if-no-files-found: error
+        retention-days: 90
+    - name: Cache binaries
+      uses: actions/cache/save@v4.0.2
+      if: always()
+      with:
+        path: dist/
+        key: ${{ steps.goreleaser-cache.outputs.cache-primary-key }}

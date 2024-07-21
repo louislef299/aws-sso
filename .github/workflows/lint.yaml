@@ -1,4 +1,9 @@
 ---
+name: Lint & Test
+on:
+  pull_request:
+    branches: [ "*" ]
+
 env:
   GOVERSION: "1.21.4"
 
@@ -55,28 +60,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: webiny/action-conventional-commits@v1.3.0
-
-  validate-binaries:
-    needs: [test, golangci, check-goreleaser]
-    name: Validate Binary Builds
-    runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'release-please--branches--main')
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - run: git fetch --force --tags
-    - uses: actions/setup-go@v5
-      with:
-        go-version: '>=${{ env.GOVERSION }}'
-    - uses: goreleaser/goreleaser-action@v6
-      with:
-        distribution: goreleaser
-        version: latest
-        args: build --clean --skip=validate --snapshot
-
-name: Lint & Test
-
-on:
-  pull_request:
-    branches: [ "*" ]

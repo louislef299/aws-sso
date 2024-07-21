@@ -1,0 +1,27 @@
+---
+name: Scan Vulnerabilities
+on:
+  schedule:
+  - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  build:
+    name: Scan Go Vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.1.6
+    - name: Run Trivy Vulnerability Scanner and Create GitHub Issues
+      uses: knqyf263/trivy-issue-action@v0.0.6
+      with:
+        assignee: 'louislef299'
+        severity: CRITICAL,HIGH
+        skip-dirs: integration,examples,pkg
+        label: kind/security
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
