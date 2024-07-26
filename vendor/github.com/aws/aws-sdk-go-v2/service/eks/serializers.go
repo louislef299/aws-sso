@@ -633,6 +633,11 @@ func awsRestjson1_serializeOpDocumentCreateClusterInput(v *CreateClusterInput, v
 		}
 	}
 
+	if v.BootstrapSelfManagedAddons != nil {
+		ok := object.Key("bootstrapSelfManagedAddons")
+		ok.Boolean(*v.BootstrapSelfManagedAddons)
+	}
+
 	if v.ClientRequestToken != nil {
 		ok := object.Key("clientRequestToken")
 		ok.String(*v.ClientRequestToken)
@@ -686,6 +691,13 @@ func awsRestjson1_serializeOpDocumentCreateClusterInput(v *CreateClusterInput, v
 	if v.Tags != nil {
 		ok := object.Key("tags")
 		if err := awsRestjson1_serializeDocumentTagMap(v.Tags, ok); err != nil {
+			return err
+		}
+	}
+
+	if v.UpgradePolicy != nil {
+		ok := object.Key("upgradePolicy")
+		if err := awsRestjson1_serializeDocumentUpgradePolicyRequest(v.UpgradePolicy, ok); err != nil {
 			return err
 		}
 	}
@@ -4445,6 +4457,13 @@ func awsRestjson1_serializeOpDocumentUpdateClusterConfigInput(v *UpdateClusterCo
 		}
 	}
 
+	if v.UpgradePolicy != nil {
+		ok := object.Key("upgradePolicy")
+		if err := awsRestjson1_serializeDocumentUpgradePolicyRequest(v.UpgradePolicy, ok); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -5616,6 +5635,18 @@ func awsRestjson1_serializeDocumentUpdateTaintsPayload(v *types.UpdateTaintsPayl
 		if err := awsRestjson1_serializeDocumentTaintsList(v.RemoveTaints, ok); err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func awsRestjson1_serializeDocumentUpgradePolicyRequest(v *types.UpgradePolicyRequest, value smithyjson.Value) error {
+	object := value.Object()
+	defer object.Close()
+
+	if len(v.SupportType) > 0 {
+		ok := object.Key("supportType")
+		ok.String(string(v.SupportType))
 	}
 
 	return nil

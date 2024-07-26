@@ -98,6 +98,15 @@ type CreateClusterInput struct {
 	// The access configuration for the cluster.
 	AccessConfig *types.CreateAccessConfigRequest
 
+	// If you set this value to False when creating a cluster, the default networking
+	// add-ons will not be installed.
+	//
+	// The default networking addons include vpc-cni, coredns, and kube-proxy.
+	//
+	// Use this option when you plan to install third-party alternative add-ons or
+	// self-manage the default networking add-ons.
+	BootstrapSelfManagedAddons *bool
+
 	// A unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
 	ClientRequestToken *string
@@ -131,6 +140,10 @@ type CreateClusterInput struct {
 	// of a key and an optional value. You define both. Tags don't propagate to any
 	// other cluster or Amazon Web Services resources.
 	Tags map[string]string
+
+	// New clusters, by default, have extended support enabled. You can disable
+	// extended support when creating a cluster by setting this value to STANDARD .
+	UpgradePolicy *types.UpgradePolicyRequest
 
 	// The desired Kubernetes version for your cluster. If you don't specify a value
 	// here, the default version available in Amazon EKS is used.
