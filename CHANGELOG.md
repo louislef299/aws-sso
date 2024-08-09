@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.3](https://github.com/louislef299/aws-sso/compare/v1.3.2...v1.3.3) (2024-08-09)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.31.0 to 1.32.0 ([#196](https://github.com/louislef299/aws-sso/issues/196)) ([545f40c](https://github.com/louislef299/aws-sso/commit/545f40c4c66b16c7d4f7fa9b20be7444f459175a))
+* bump github.com/onsi/ginkgo/v2 from 2.19.1 to 2.20.0 ([#197](https://github.com/louislef299/aws-sso/issues/197)) ([90fde59](https://github.com/louislef299/aws-sso/commit/90fde5917beed42ea18d07ed2a3495d6a65aab0a))
+
 ## [1.3.2](https://github.com/louislef299/aws-sso/compare/v1.3.1...v1.3.2) (2024-08-02)
 
 
