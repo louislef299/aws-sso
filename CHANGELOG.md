@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.4.0](https://github.com/louislef299/aws-sso/compare/v1.3.2...v1.4.0) (2024-08-19)
+
+
+### Features
+
+* Add persistence for token and private flags ([#205](https://github.com/louislef299/aws-sso/issues/205)) ([a40aa21](https://github.com/louislef299/aws-sso/commit/a40aa21a3f2db3f995284baff47d06d792d98b0a))
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.27.27 to 1.27.28 ([#199](https://github.com/louislef299/aws-sso/issues/199)) ([8904922](https://github.com/louislef299/aws-sso/commit/8904922a8cbd69061e901608ae19905c3452e01f))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.31.0 to 1.32.0 ([#196](https://github.com/louislef299/aws-sso/issues/196)) ([545f40c](https://github.com/louislef299/aws-sso/commit/545f40c4c66b16c7d4f7fa9b20be7444f459175a))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.32.0 to 1.32.1 ([#203](https://github.com/louislef299/aws-sso/issues/203)) ([fb20eb5](https://github.com/louislef299/aws-sso/commit/fb20eb5f2d2c8cc545bd85e28de3170ad093663f))
+* bump github.com/docker/cli ([#201](https://github.com/louislef299/aws-sso/issues/201)) ([519866d](https://github.com/louislef299/aws-sso/commit/519866d1bf9a7c6f02150b528459881184d9162b))
+* bump github.com/onsi/ginkgo/v2 from 2.19.1 to 2.20.0 ([#197](https://github.com/louislef299/aws-sso/issues/197)) ([90fde59](https://github.com/louislef299/aws-sso/commit/90fde5917beed42ea18d07ed2a3495d6a65aab0a))
+* bump k8s.io/client-go from 0.30.3 to 0.31.0 ([#200](https://github.com/louislef299/aws-sso/issues/200)) ([6f9ebfa](https://github.com/louislef299/aws-sso/commit/6f9ebfa8eec473b91a46a7d8df537ae4ab4983b5))
+* Existing profile flow ([#206](https://github.com/louislef299/aws-sso/issues/206)) ([378d31e](https://github.com/louislef299/aws-sso/commit/378d31e06764833bd676b4c03a8c8f38686e01ba))
+* Update GoReleaser snapshot spec ([#204](https://github.com/louislef299/aws-sso/issues/204)) ([01a45e9](https://github.com/louislef299/aws-sso/commit/01a45e93b706bce9a74ca165eb4acdf9dc3340e6))
+
 ## [1.3.2](https://github.com/louislef299/aws-sso/compare/v1.3.1...v1.3.2) (2024-08-02)
 
 
