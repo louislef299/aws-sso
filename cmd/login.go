@@ -54,14 +54,6 @@ If the account has an EKS cluster, authenticates with
 the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
-	PreRun: func(cmd *cobra.Command, args []string) {
-		// Required for migration from v1.1.2 => v1.2.0
-		// TODO: Remove in v1.3.0
-		err := fixAccounts(true)
-		if err == ErrAccountsToFix {
-			log.Fatal("Some account profiles need to be reformatted. Please run `aws-sso account fixup`")
-		}
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		var requestProfile string
 		var err error
@@ -82,8 +74,14 @@ updates.`,
 			newAuth = true
 		}
 
+		if !private {
+			private = getAccountPrivate(requestProfile)
+		}
+
 		if token != "" {
 			setToken(token)
+		} else if t := getAccountToken(requestProfile); t != "" {
+			setToken(t)
 		} else {
 			checkToken()
 		}
@@ -298,6 +296,11 @@ func getClusterName(ctx context.Context, cfg *aws.Config, skipFuzzy bool) (strin
 }
 
 func getBrowser() browser.Browser {
+	if private {
+		log.Println("browser set to open incognito(no cookies)")
+	} else {
+		log.Println("browser set to default(use cookies)")
+	}
 	return browser.GetBrowser(viper.GetString(CORE_BROWSER), private)
 }
 
@@ -357,7 +360,12 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 
 	// set the new profile in account config
 	if newProfile {
-		err = addAccount(profile, acctID, cfg.Region)
+		err = addAccount(profile, &Account{
+			ID:      acctID,
+			Region:  cfg.Region,
+			Private: private,
+			Token:   getCurrentToken(),
+		})
 		if err != nil {
 			log.Println("WARNING: couldn't write to configuration file:", err)
 		}

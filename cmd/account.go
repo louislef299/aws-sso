@@ -26,18 +26,22 @@ const (
 )
 
 var (
-	accountNumber string
-	accountName   string
-	accountRegion string
-	allAccounts   bool
+	accountNumber  string
+	accountName    string
+	accountRegion  string
+	accountToken   string
+	accountPrivate bool
+	allAccounts    bool
 
 	ErrNoAccountFound = errors.New("no account found")
 	ErrAccountsToFix  = errors.New("accounts need to be fixed")
 )
 
 type Account struct {
-	ID     string
-	Region string
+	ID      string
+	Region  string
+	Private bool
+	Token   string
 }
 
 // accountCmd represents the account command
@@ -64,7 +68,12 @@ var accountAddCmd = &cobra.Command{
 			}
 		}
 
-		err = addAccount(accountName, accountNumber, region)
+		err = addAccount(accountName, &Account{
+			ID:      accountNumber,
+			Region:  accountRegion,
+			Private: accountPrivate,
+			Token:   accountToken,
+		})
 		if err != nil {
 			log.Fatal("couldn't write to configuration file:", err)
 		}
@@ -89,11 +98,8 @@ var accountSetCmd = &cobra.Command{
 	Use:     "set",
 	Short:   "Set the AWS account profile values.",
 	Args:    cobra.ExactArgs(1),
-	Example: `  aws-sso account set env1 --number 000000000 --region us-west-2`,
+	Example: `  aws-sso account set env1 --number 000000000 --region us-west-2 --token dev --private`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if accountNumber == "" && accountRegion == "" {
-			log.Fatal("no values to set! use --number or --region flags to set values.")
-		}
 		if accountNumber == "" {
 			accountNumber = getAccountID(args[0])
 		}
@@ -101,29 +107,17 @@ var accountSetCmd = &cobra.Command{
 			accountRegion = getAccountRegion(args[0])
 		}
 
-		viperSetAccount(args[0], Account{ID: accountNumber, Region: accountRegion})
+		viperSetAccount(args[0], Account{
+			ID:      accountNumber,
+			Region:  accountRegion,
+			Private: accountPrivate,
+			Token:   accountToken,
+		})
 		err := viper.WriteConfig()
 		if err != nil {
 			log.Fatal("couldn't write to configuration file:", err)
 		}
 		fmt.Printf("account values have been set for %s\n", args[0])
-	},
-}
-
-// accountFixupCmd represents the account command
-var accountFixupCmd = &cobra.Command{
-	Use:   "fixup",
-	Short: "Reformats any account profiles using deprecated pattern.",
-	Long: `Fixup reformats any account profiles using deprecated pattern.
-The reformatting will move from simply associating a profile to 
-an account ID to a more structured account with an ID and 
-region.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		err := fixAccounts(false)
-		if err != nil {
-			log.Fatal("couldn't fix accounts:", err)
-		}
-		log.Println("accounts have been reformatted!")
 	},
 }
 
@@ -144,13 +138,14 @@ func init() {
 
 	accountCmd.AddCommand(accountListCmd)
 	accountCmd.AddCommand(accountAddCmd)
-	accountCmd.AddCommand(accountFixupCmd)
 	accountCmd.AddCommand(accountSetCmd)
 
 	accountPluralCmd.Flags().BoolVarP(&allAccounts, "all", "a", false, "List all accounts, including AWS config profiles")
 	accountListCmd.Flags().BoolVarP(&allAccounts, "all", "a", false, "List all accounts, including AWS config profiles")
 
 	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
+	accountAddCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
+	accountAddCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
 	if err := accountAddCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
@@ -162,10 +157,12 @@ func init() {
 
 	accountSetCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountSetCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
+	accountSetCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
+	accountSetCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 }
 
-func addAccount(name, id, region string) error {
-	viperSetAccount(name, Account{ID: id, Region: region})
+func addAccount(name string, account *Account) error {
+	viperSetAccount(name, *account)
 	return viper.WriteConfig()
 }
 
@@ -195,6 +192,18 @@ func getAccountRegion(profile string) string {
 	return r
 }
 
+func getAccountToken(profile string) string {
+	t := viper.GetString(fmt.Sprintf("%s.%s.%s", ACCOUNT_GROUP, profile, "token"))
+	if t == "" {
+		return "default"
+	}
+	return t
+}
+
+func getAccountPrivate(profile string) bool {
+	return viper.GetBool(fmt.Sprintf("%s.%s.%s", ACCOUNT_GROUP, profile, "private"))
+}
+
 func listAccounts(all bool) {
 	accts := viper.Sub(ACCOUNT_GROUP)
 	if accts == nil {
@@ -211,11 +220,19 @@ func listAccounts(all bool) {
 	slices.Sort(acctList)
 	acctList = slices.Compact(acctList)
 
-	var account Account
 	for _, a := range acctList {
+		var account Account
 		err := accts.UnmarshalKey(a, &account)
+		var t string
+		if account.Token == "" {
+			t = "default"
+		} else {
+			t = account.Token
+		}
+
 		if err == nil {
-			fmt.Printf("%s:\n  ID: %s\n  Region: %s\n", a, account.ID, account.Region)
+			fmt.Printf("%s:\n  ID: %s\n  Region: %s\n  Private: %t\n  Token: %s\n",
+				a, account.ID, account.Region, account.Private, t)
 		}
 	}
 
@@ -248,46 +265,4 @@ func trimSuffixes(s string) string {
 		s = strings.TrimSuffix(s, fmt.Sprintf(".%s", suff))
 	}
 	return s
-}
-
-// fixAccounts is a temporary function to fix the account structures of the
-// existing name: id string configuration.
-func fixAccounts(check bool) error {
-	accts := viper.Sub(ACCOUNT_GROUP)
-	if accts == nil {
-		return nil
-	}
-
-	acctKeys := accts.AllKeys()
-	var acctList []string
-	for _, k := range acctKeys {
-		acctList = append(acctList, trimSuffixes(k))
-	}
-	acctList = slices.Compact(acctList)
-
-	slices.Sort(acctList)
-	count := 0
-	defaultRegion, err := lregion.GetRegion(lregion.EKS)
-	if err != nil {
-		return err
-	}
-
-	var account Account
-	for _, a := range acctList {
-		err := accts.UnmarshalKey(a, &account)
-		if err != nil {
-			if !check {
-				fmt.Printf("reformatting profile %s to new structure...\n", a)
-				viperSetAccount(a, Account{ID: accts.GetString(a), Region: defaultRegion})
-			}
-			count++
-		}
-	}
-	if count == 0 {
-		return nil
-	} else if check {
-		return ErrAccountsToFix
-	}
-
-	return viper.WriteConfig()
 }
