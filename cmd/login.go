@@ -74,30 +74,50 @@ updates.`,
 			newAuth = true
 		}
 
-		if !private {
-			private = getAccountPrivate(requestProfile)
+		// check if referencing a local profile
+		lc, err := laws.IsLocalConfig(requestProfile)
+		if err != nil {
+			log.Println("couldn't find predefined AWS configurations:", err)
 		}
 
-		if token != "" {
-			setToken(token)
-		} else if t := getAccountToken(requestProfile); t != "" {
-			setToken(t)
+		var profileToSet string
+		// if not a local profile, check for account information
+		if !lc {
+			if !private {
+				private = getAccountPrivate(requestProfile)
+			}
+
+			if token != "" {
+				setToken(token)
+			} else if t := getAccountToken(requestProfile); t != "" {
+				setToken(t)
+			} else {
+				checkToken()
+			}
+			log.Println("using token", getCurrentToken())
+
+			profileToSet = los.GetProfile(requestProfile)
 		} else {
-			checkToken()
+			profileToSet = requestProfile
 		}
-		log.Println("using token", getCurrentToken())
 
 		region, err = syncAccountRegionSession(requestProfile, region)
 		if err != nil {
 			log.Fatal("could not sync account session:", err)
 		}
 
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
+		if err != nil {
+			log.Fatal("could not generate AWS config: ", err)
+		}
+		region = cfg.Region
+
 		// Configure cluster options before gathering token
 		options := []lk8s.ClusterOptionsFunc{
-			lk8s.WithProfile(los.GetProfile(requestProfile)),
+			lk8s.WithProfile(profileToSet),
 			lk8s.WithRegion(region),
 		}
-		log.Println("Set profile to", los.GetProfile(requestProfile))
+		log.Println("set k8s profile to", profileToSet)
 		imp, err := cmd.Flags().GetString("as")
 		if err != nil {
 			log.Println(err)
@@ -112,11 +132,6 @@ updates.`,
 			options = append(options, lk8s.WithImpersonation(imp, impG))
 		} else if imp != "" && len(impG) <= 0 {
 			log.Fatal("when impersonating, must provide both a Username and a Group(use --as & --as-group)")
-		}
-
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
-		if err != nil {
-			log.Fatal("could not generate AWS config: ", err)
 		}
 
 		wg := sync.WaitGroup{}
@@ -209,7 +224,6 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 	if lc {
 		log.Println("using existing configuration profile", profile)
 		cfg, err := config.LoadDefaultConfig(ctx,
-			config.WithRegion(region),
 			config.WithSharedConfigProfile(profile),
 		)
 		if err != nil {
