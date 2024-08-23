@@ -1,3 +1,16 @@
+# v1.48.2 (2024-08-22)
+
+* No change notes available for this release.
+
+# v1.48.1 (2024-08-15)
+
+* **Dependency Update**: Bump minimum Go version to 1.21.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.48.0 (2024-08-12)
+
+* **Feature**: Added support for new AL2023 GPU AMIs to the supported AMITypes.
+
 # v1.47.0 (2024-07-25)
 
 * **Feature**: This release adds support for EKS cluster to manage extended support.
