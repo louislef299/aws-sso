@@ -74,6 +74,7 @@ item from the Backlog below.
 
 ### Backlog
 
+- Make better use of Viper pkg for config precedence
 - Delete old access tokens using `token rm`
 - Remove kube config context when logging out with `-c`
 - Documentation website
