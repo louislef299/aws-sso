@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.1](https://github.com/louislef299/aws-sso/compare/v1.4.0...v1.4.1) (2024-08-23)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.32.1 to 1.32.2 ([#210](https://github.com/louislef299/aws-sso/issues/210)) ([627add4](https://github.com/louislef299/aws-sso/commit/627add44b467169142e5b0bd3e0a9f876223f722))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.47.0 to 1.48.2 ([#211](https://github.com/louislef299/aws-sso/issues/211)) ([de08d74](https://github.com/louislef299/aws-sso/commit/de08d74decd7623610acd779f012a34359095d8d))
+* bump github.com/docker/docker ([#208](https://github.com/louislef299/aws-sso/issues/208)) ([3587017](https://github.com/louislef299/aws-sso/commit/35870177d1fd2f860e3aed0eb7b999f8e5ed8a67))
+* bump github.com/onsi/ginkgo/v2 from 2.20.0 to 2.20.1 ([#209](https://github.com/louislef299/aws-sso/issues/209)) ([b443636](https://github.com/louislef299/aws-sso/commit/b44363672571ac6df51aff8573eaeb1f8cb4c543))
+* bump k8s.io/cli-runtime from 0.30.3 to 0.31.0 ([#212](https://github.com/louislef299/aws-sso/issues/212)) ([3cb381f](https://github.com/louislef299/aws-sso/commit/3cb381f5b147dea86796547aa7b3888ffcb684cd))
+
 ## [1.4.0](https://github.com/louislef299/aws-sso/compare/v1.3.2...v1.4.0) (2024-08-19)
 
 
