@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.2](https://github.com/louislef299/aws-sso/compare/v1.4.1...v1.4.2) (2024-08-30)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#216](https://github.com/louislef299/aws-sso/issues/216)) ([c082aff](https://github.com/louislef299/aws-sso/commit/c082aff43b851d24250a8b04174aca3ef05b4641))
+* bump github.com/docker/cli ([#220](https://github.com/louislef299/aws-sso/issues/220)) ([6f39bfc](https://github.com/louislef299/aws-sso/commit/6f39bfc2570a06dbea81b6d9ec7e063ec2df461d))
+* bump github.com/docker/docker ([#219](https://github.com/louislef299/aws-sso/issues/219)) ([c136976](https://github.com/louislef299/aws-sso/commit/c136976dd2539cc7feb0199d2394bad654313c57))
+* bump github.com/onsi/ginkgo/v2 from 2.20.1 to 2.20.2 ([#218](https://github.com/louislef299/aws-sso/issues/218)) ([82c396d](https://github.com/louislef299/aws-sso/commit/82c396d70789040d65bb43baffb6a5c190004cd1))
+* bump github.com/onsi/gomega from 1.34.1 to 1.34.2 ([#217](https://github.com/louislef299/aws-sso/issues/217)) ([4c3e744](https://github.com/louislef299/aws-sso/commit/4c3e74436c39639349ca3efcc7b7d30a5017fb1c))
+
 ## [1.4.1](https://github.com/louislef299/aws-sso/compare/v1.4.0...v1.4.1) (2024-08-23)
 
 
