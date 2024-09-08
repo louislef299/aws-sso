@@ -1,6 +1,6 @@
 ---
 env:
-  GOVERSION: "1.21.4"
+  GOVERSION: "1.23.1"
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
