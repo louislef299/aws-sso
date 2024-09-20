@@ -14,7 +14,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.7
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.7
 	github.com/briandowns/spinner v1.23.1
-	github.com/docker/cli v27.2.1+incompatible
+	github.com/docker/cli v27.3.0+incompatible
 	github.com/docker/docker v27.2.1+incompatible
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/manifoldco/promptui v0.9.0
