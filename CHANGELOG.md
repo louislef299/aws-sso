@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.6](https://github.com/louislef299/aws-sso/compare/v1.4.5...v1.4.6) (2024-09-27)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#250](https://github.com/louislef299/aws-sso/issues/250)) ([93d5eb9](https://github.com/louislef299/aws-sso/commit/93d5eb905be6d8dc744711a85cf86662dd82114c))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.34.0 to 1.35.2 ([#249](https://github.com/louislef299/aws-sso/issues/249)) ([4c18c9f](https://github.com/louislef299/aws-sso/commit/4c18c9f5ef56cbf5989868fef73978a9ef9ecf82))
+* bump github.com/docker/cli ([#247](https://github.com/louislef299/aws-sso/issues/247)) ([1a8c7c3](https://github.com/louislef299/aws-sso/commit/1a8c7c3f28fd0ad9cade697398543f5d3edaef0d))
+* bump github.com/docker/docker ([#248](https://github.com/louislef299/aws-sso/issues/248)) ([ba62337](https://github.com/louislef299/aws-sso/commit/ba62337c4061d9b542ead6decfac045f098b3d3a))
+
 ## [1.4.5](https://github.com/louislef299/aws-sso/compare/v1.4.4...v1.4.5) (2024-09-20)
 
 
