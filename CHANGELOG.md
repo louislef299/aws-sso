@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.8](https://github.com/louislef299/aws-sso/compare/v1.4.7...v1.4.8) (2024-10-11)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#267](https://github.com/louislef299/aws-sso/issues/267)) ([8860093](https://github.com/louislef299/aws-sso/commit/8860093f38a5af6ab7d1aeb5575e8c2ea7fe8f47))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.35.4 to 1.36.2 ([#268](https://github.com/louislef299/aws-sso/issues/268)) ([da75d72](https://github.com/louislef299/aws-sso/commit/da75d72e8f5f4356e7887846fd7574d80d65f1f5))
+
 ## [1.4.7](https://github.com/louislef299/aws-sso/compare/v1.4.6...v1.4.7) (2024-10-06)
 
 
