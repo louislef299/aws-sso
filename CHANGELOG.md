@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.9](https://github.com/louislef299/aws-sso/compare/v1.4.8...v1.4.9) (2024-10-22)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.27.41 to 1.28.0 ([#275](https://github.com/louislef299/aws-sso/issues/275)) ([f8f2014](https://github.com/louislef299/aws-sso/commit/f8f20142b76197926f7beec926fbfe3af1dd1502))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.50.0 to 1.50.2 ([#274](https://github.com/louislef299/aws-sso/issues/274)) ([ffd7a3a](https://github.com/louislef299/aws-sso/commit/ffd7a3a0113e4e5ba19aa213dcbbde26abdfac81))
+
 ## [1.4.8](https://github.com/louislef299/aws-sso/compare/v1.4.7...v1.4.8) (2024-10-11)
 
 
