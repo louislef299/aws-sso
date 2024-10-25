@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.10](https://github.com/louislef299/aws-sso/compare/v1.4.9...v1.4.10) (2024-10-25)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.50.2 to 1.51.0 ([#280](https://github.com/louislef299/aws-sso/issues/280)) ([5f85dd7](https://github.com/louislef299/aws-sso/commit/5f85dd702106f0c75aa2ba39cd9c99155751936c))
+* bump k8s.io/cli-runtime from 0.31.1 to 0.31.2 ([#278](https://github.com/louislef299/aws-sso/issues/278)) ([38bec16](https://github.com/louislef299/aws-sso/commit/38bec16527636a2e7bfca51fd98f01479a9949bd))
+* bump k8s.io/client-go from 0.31.1 to 0.31.2 ([#279](https://github.com/louislef299/aws-sso/issues/279)) ([56da0a5](https://github.com/louislef299/aws-sso/commit/56da0a51ef7ebe77c2abed44038110a88bed2a09))
+
 ## [1.4.9](https://github.com/louislef299/aws-sso/compare/v1.4.8...v1.4.9) (2024-10-22)
 
 
