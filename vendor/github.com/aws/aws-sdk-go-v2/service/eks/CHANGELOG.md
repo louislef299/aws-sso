@@ -1,3 +1,15 @@
+# v1.51.3 (2024-11-07)
+
+* **Bug Fix**: Adds case-insensitive handling of error message fields in service responses
+
+# v1.51.2 (2024-11-06)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.51.1 (2024-10-28)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
 # v1.51.0 (2024-10-21)
 
 * **Feature**: This release adds support for Amazon Application Recovery Controller (ARC) zonal shift and zonal autoshift with EKS that enhances the resiliency of multi-AZ cluster environments
