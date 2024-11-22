@@ -38,7 +38,7 @@ jobs:
         args: build --snapshot --timeout 90m --clean
     # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
     - name: Run Trivy SBOM mode and submit results to Dependency Graph
-      uses: aquasecurity/trivy-action@0.28.0
+      uses: aquasecurity/trivy-action@0.29.0
       with:
         scan-type: 'rootfs'
         scan-ref: '.'
