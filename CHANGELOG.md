@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.12](https://github.com/louislef299/aws-sso/compare/v1.4.11...v1.4.12) (2024-11-29)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2 from 1.32.3 to 1.32.4 ([#292](https://github.com/louislef299/aws-sso/issues/292)) ([63c43fd](https://github.com/louislef299/aws-sso/commit/63c43fdff4b887058ebedb38dcfa9fdd99b77044))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.28.1 to 1.28.4 ([#297](https://github.com/louislef299/aws-sso/issues/297)) ([443c8b4](https://github.com/louislef299/aws-sso/commit/443c8b4d5ce6538a23c1fe9e177eff51deeac5a9))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.28.4 to 1.28.5 ([#302](https://github.com/louislef299/aws-sso/issues/302)) ([d8d3c29](https://github.com/louislef299/aws-sso/commit/d8d3c297b79801cef7bf249bf1090b1da08cd575))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.36.2 to 1.36.5 ([#294](https://github.com/louislef299/aws-sso/issues/294)) ([34a9962](https://github.com/louislef299/aws-sso/commit/34a9962cd93090cf6f86a4fa314ad998a524c33d))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.51.0 to 1.52.0 ([#296](https://github.com/louislef299/aws-sso/issues/296)) ([8df67ce](https://github.com/louislef299/aws-sso/commit/8df67ceb4ad7e550aaf57cf8d3160fef19c0f4ab))
+* bump github.com/onsi/ginkgo/v2 from 2.20.2 to 2.21.0 ([#293](https://github.com/louislef299/aws-sso/issues/293)) ([bb37955](https://github.com/louislef299/aws-sso/commit/bb37955d3fd09865e0f6b968d070bb76a74da37f))
+* bump github.com/onsi/ginkgo/v2 from 2.21.0 to 2.22.0 ([#299](https://github.com/louislef299/aws-sso/issues/299)) ([4aebfbf](https://github.com/louislef299/aws-sso/commit/4aebfbfb0db4c2cedce3434ddb8142d3bff8f58b))
+* bump k8s.io/cli-runtime from 0.31.2 to 0.31.3 ([#303](https://github.com/louislef299/aws-sso/issues/303)) ([869f17a](https://github.com/louislef299/aws-sso/commit/869f17af520cf5033ce146630c6d54f8b63cbd41))
+* bump k8s.io/client-go from 0.31.2 to 0.31.3 ([#304](https://github.com/louislef299/aws-sso/issues/304)) ([ef03140](https://github.com/louislef299/aws-sso/commit/ef03140978dd2500096134dfb87506e78924b11d))
+
 ## [1.4.11](https://github.com/louislef299/aws-sso/compare/v1.4.10...v1.4.11) (2024-11-02)
 
 
