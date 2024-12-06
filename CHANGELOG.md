@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.13](https://github.com/louislef299/aws-sso/compare/v1.4.12...v1.4.13) (2024-12-06)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.28.5 to 1.28.6 ([#308](https://github.com/louislef299/aws-sso/issues/308)) ([53784df](https://github.com/louislef299/aws-sso/commit/53784df7bbd852fc604517605429d32e4b931432))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.36.5 to 1.36.7 ([#309](https://github.com/louislef299/aws-sso/issues/309)) ([0d0b831](https://github.com/louislef299/aws-sso/commit/0d0b831b9d7dc9123373c6636df90ab163d287f7))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.52.0 to 1.53.0 ([#307](https://github.com/louislef299/aws-sso/issues/307)) ([2a2e3c9](https://github.com/louislef299/aws-sso/commit/2a2e3c9661deff6213028a9d4c8b693918ee6fcb))
+* bump github.com/aws/aws-sdk-go-v2/service/sso from 1.24.6 to 1.24.7 ([#306](https://github.com/louislef299/aws-sso/issues/306)) ([74bbec0](https://github.com/louislef299/aws-sso/commit/74bbec020984419b0fbfba52e01b865456141590))
+* bump github.com/onsi/gomega from 1.34.2 to 1.36.0 ([#310](https://github.com/louislef299/aws-sso/issues/310)) ([d153960](https://github.com/louislef299/aws-sso/commit/d15396063d78d7eec46bfbe7d00d1e09892344f1))
+
 ## [1.4.12](https://github.com/louislef299/aws-sso/compare/v1.4.11...v1.4.12) (2024-11-29)
 
 
