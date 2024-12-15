@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.14](https://github.com/louislef299/aws-sso/compare/v1.4.13...v1.4.14) (2024-12-15)
+
+
+### Bug Fixes
+
+* Squash & merge dependabot automation ([#321](https://github.com/louislef299/aws-sso/issues/321)) ([ff2c332](https://github.com/louislef299/aws-sso/commit/ff2c3323591597431ae1c2a4024a9d74c5537217))
+
 ## [1.4.13](https://github.com/louislef299/aws-sso/compare/v1.4.12...v1.4.13) (2024-12-06)
 
 
