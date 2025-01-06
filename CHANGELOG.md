@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.4.15](https://github.com/louislef299/aws-sso/compare/v1.4.14...v1.4.15) (2025-01-06)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.28.6 to 1.28.7 ([#331](https://github.com/louislef299/aws-sso/issues/331)) ([95bda34](https://github.com/louislef299/aws-sso/commit/95bda3480bd057a397da2bb37e7ab9a55d14179b))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#324](https://github.com/louislef299/aws-sso/issues/324)) ([2c06892](https://github.com/louislef299/aws-sso/commit/2c06892e7f6cf3b3dd7c290ce487a175842b4429))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.36.7 to 1.37.0 ([#332](https://github.com/louislef299/aws-sso/issues/332)) ([7f6daaf](https://github.com/louislef299/aws-sso/commit/7f6daaf07ae1025f942ee45953af04a4ade26ef5))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.37.0 to 1.38.0 ([#337](https://github.com/louislef299/aws-sso/issues/337)) ([41c0ff8](https://github.com/louislef299/aws-sso/commit/41c0ff81c39f0bf8b704990ce6cd0961fe4291b4))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.53.0 to 1.54.1 ([#325](https://github.com/louislef299/aws-sso/issues/325)) ([ef81299](https://github.com/louislef299/aws-sso/commit/ef81299531b6b46fe4fd56bc7a5aaf12d5808c91))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.54.1 to 1.56.0 ([#335](https://github.com/louislef299/aws-sso/issues/335)) ([7c924e6](https://github.com/louislef299/aws-sso/commit/7c924e650a8cfee37e945afef070de137e0e5211))
+* bump github.com/docker/cli ([#330](https://github.com/louislef299/aws-sso/issues/330)) ([4f41cd3](https://github.com/louislef299/aws-sso/commit/4f41cd3604aaf1286a6311f60b05a315ca60a6ff))
+* bump github.com/docker/docker ([#327](https://github.com/louislef299/aws-sso/issues/327)) ([4624848](https://github.com/louislef299/aws-sso/commit/4624848029b505441674c88d4955379cf2eaf0d8))
+* bump github.com/onsi/ginkgo/v2 from 2.22.1 to 2.22.2 ([#336](https://github.com/louislef299/aws-sso/issues/336)) ([4e7c9f0](https://github.com/louislef299/aws-sso/commit/4e7c9f08d203c67a33da1835545e588540d5fa73))
+* bump github.com/onsi/gomega from 1.36.1 to 1.36.2 ([#333](https://github.com/louislef299/aws-sso/issues/333)) ([c324ef6](https://github.com/louislef299/aws-sso/commit/c324ef6cc2c64e16c5f488fb8aaeb59f29ef0196))
+* Use DEPENDABOT_TOKEN for automerge ([#338](https://github.com/louislef299/aws-sso/issues/338)) ([93ccc99](https://github.com/louislef299/aws-sso/commit/93ccc99f75e370b18c0df505b0a18dc7068d26c9))
+
 ## [1.4.14](https://github.com/louislef299/aws-sso/compare/v1.4.13...v1.4.14) (2024-12-15)
 
 
