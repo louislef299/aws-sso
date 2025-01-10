@@ -66,7 +66,7 @@ github.com/aws/aws-sdk-go-v2/service/eks/types
 # github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.1
 ## explicit; go 1.21
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding
-# github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.7
+# github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.8
 ## explicit; go 1.21
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url
 # github.com/aws/aws-sdk-go-v2/service/sso v1.24.8
@@ -79,7 +79,7 @@ github.com/aws/aws-sdk-go-v2/service/sso/types
 github.com/aws/aws-sdk-go-v2/service/ssooidc
 github.com/aws/aws-sdk-go-v2/service/ssooidc/internal/endpoints
 github.com/aws/aws-sdk-go-v2/service/ssooidc/types
-# github.com/aws/aws-sdk-go-v2/service/sts v1.33.3
+# github.com/aws/aws-sdk-go-v2/service/sts v1.33.5
 ## explicit; go 1.21
 github.com/aws/aws-sdk-go-v2/service/sts
 github.com/aws/aws-sdk-go-v2/service/sts/internal/endpoints
