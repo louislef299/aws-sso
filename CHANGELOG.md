@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.17](https://github.com/louislef299/aws-sso/compare/v1.4.16...v1.4.17) (2025-01-17)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.28.9 to 1.29.0 ([#354](https://github.com/louislef299/aws-sso/issues/354)) ([4ac1063](https://github.com/louislef299/aws-sso/commit/4ac1063731f886d4c54948f1c608f8b9fff5f289))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#350](https://github.com/louislef299/aws-sso/issues/350)) ([0b2bdd1](https://github.com/louislef299/aws-sso/commit/0b2bdd191dad085703828ad2b3259fceb770c523))
+* bump github.com/docker/docker ([#352](https://github.com/louislef299/aws-sso/issues/352)) ([f8200cc](https://github.com/louislef299/aws-sso/commit/f8200cc70fcf3d529582a5d492d9540d962f952b))
+* bump k8s.io/cli-runtime from 0.32.0 to 0.32.1 ([#351](https://github.com/louislef299/aws-sso/issues/351)) ([2debc33](https://github.com/louislef299/aws-sso/commit/2debc33253ca7ae7600276587f2686e91c53d031))
+
 ## [1.4.16](https://github.com/louislef299/aws-sso/compare/v1.4.15...v1.4.16) (2025-01-10)
 
 
