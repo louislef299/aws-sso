@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.18](https://github.com/louislef299/aws-sso/compare/v1.4.17...v1.4.18) (2025-01-24)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.0 to 1.29.1 ([#360](https://github.com/louislef299/aws-sso/issues/360)) ([b92ddd0](https://github.com/louislef299/aws-sso/commit/b92ddd0050545a02333a0523717b88087b457754))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.56.0 to 1.56.5 ([#365](https://github.com/louislef299/aws-sso/issues/365)) ([4c71d35](https://github.com/louislef299/aws-sso/commit/4c71d35b244c706fb9ddb504770b6aec5193fabe))
+* bump github.com/briandowns/spinner from 1.23.1 to 1.23.2 ([#364](https://github.com/louislef299/aws-sso/issues/364)) ([6ecff58](https://github.com/louislef299/aws-sso/commit/6ecff58fb1246f63f7b3d42694718249f7bcac5a))
+* bump github.com/docker/cli ([#362](https://github.com/louislef299/aws-sso/issues/362)) ([05ad91c](https://github.com/louislef299/aws-sso/commit/05ad91c526caf4e37ccd0671107702fe82fdefd7))
+* bump github.com/docker/docker ([#363](https://github.com/louislef299/aws-sso/issues/363)) ([ff87bf3](https://github.com/louislef299/aws-sso/commit/ff87bf34f09b1703b7580b4c9f4bdf7b3a464216))
+
 ## [1.4.17](https://github.com/louislef299/aws-sso/compare/v1.4.16...v1.4.17) (2025-01-17)
 
 
