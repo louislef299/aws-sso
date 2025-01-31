@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.19](https://github.com/louislef299/aws-sso/compare/v1.4.18...v1.4.19) (2025-01-31)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.1 to 1.29.3 ([#378](https://github.com/louislef299/aws-sso/issues/378)) ([d224511](https://github.com/louislef299/aws-sso/commit/d2245115b569d16e6de8bcbb00844a936352f99f))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#372](https://github.com/louislef299/aws-sso/issues/372)) ([9874ab8](https://github.com/louislef299/aws-sso/commit/9874ab8fc68d4cef88bdba1e051ae77aad2ae017))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.56.5 to 1.57.1 ([#370](https://github.com/louislef299/aws-sso/issues/370)) ([6559366](https://github.com/louislef299/aws-sso/commit/655936636c49e7a16f0ced677881a730a6792128))
+* bump github.com/spf13/pflag from 1.0.5 to 1.0.6 ([#371](https://github.com/louislef299/aws-sso/issues/371)) ([e90d9c6](https://github.com/louislef299/aws-sso/commit/e90d9c6fd8e71899e698c49e2dd7c9c9a8885cc4))
+
 ## [1.4.18](https://github.com/louislef299/aws-sso/compare/v1.4.17...v1.4.18) (2025-01-24)
 
 
