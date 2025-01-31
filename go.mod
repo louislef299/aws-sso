@@ -21,7 +21,7 @@ require (
 	github.com/onsi/gomega v1.36.2
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/spf13/cobra v1.8.1
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.19.0
 	gopkg.in/ini.v1 v1.67.0
 	k8s.io/cli-runtime v0.32.1
