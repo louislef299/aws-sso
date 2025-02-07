@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.29.6
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.59
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.40.3
-	github.com/aws/aws-sdk-go-v2/service/eks v1.57.1
+	github.com/aws/aws-sdk-go-v2/service/eks v1.57.4
 	github.com/aws/aws-sdk-go-v2/service/sso v1.24.15
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.14
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.14
@@ -74,7 +74,6 @@ require (
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
