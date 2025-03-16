@@ -53,7 +53,7 @@ builds:
       - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
       
 archives:
-  - builds:
+  - ids:
     - aws-sso
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_
@@ -62,7 +62,7 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
     id: aws-sso
-  - builds:
+  - ids:
     - kubectl-aws_sso
     name_template: >-
       kubectl-{{ .ProjectName }}_{{ .Version }}_
