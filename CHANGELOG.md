@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.21](https://github.com/louislef299/aws-sso/compare/v1.4.20...v1.4.21) (2025-03-16)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.41.0 to 1.43.0 ([#409](https://github.com/louislef299/aws-sso/issues/409)) ([6d23e04](https://github.com/louislef299/aws-sso/commit/6d23e047336b45c277bc88c4c40c3e0e35a2e97b))
+* bump github.com/aws/aws-sdk-go-v2/service/sso ([#406](https://github.com/louislef299/aws-sso/issues/406)) ([ef74e28](https://github.com/louislef299/aws-sso/commit/ef74e284a5afc53d9f827bee36cf37351e87555b))
+* bump github.com/aws/aws-sdk-go-v2/service/sts ([#408](https://github.com/louislef299/aws-sso/issues/408)) ([544e567](https://github.com/louislef299/aws-sso/commit/544e567214377e24c9daf50216fdf46670827d1d))
+* bump github.com/spf13/cobra from 1.8.1 to 1.9.1 ([#395](https://github.com/louislef299/aws-sso/issues/395)) ([ffa70f2](https://github.com/louislef299/aws-sso/commit/ffa70f2c3a5248799f09da19214241ebb0e379ea))
+* Update deprecated GoReleaser build field ([#411](https://github.com/louislef299/aws-sso/issues/411)) ([e841cdb](https://github.com/louislef299/aws-sso/commit/e841cdb4cc067479ff62d68d07acc53392aeb359))
+
 ## [1.4.20](https://github.com/louislef299/aws-sso/compare/v1.4.19...v1.4.20) (2025-02-14)
 
 
