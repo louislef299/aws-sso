@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.22](https://github.com/louislef299/aws-sso/compare/v1.4.21...v1.4.22) (2025-03-21)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.6 to 1.29.9 ([#419](https://github.com/louislef299/aws-sso/issues/419)) ([ee54e17](https://github.com/louislef299/aws-sso/commit/ee54e17879f7cbb072aaa1981a19480a45fe9a5d))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#417](https://github.com/louislef299/aws-sso/issues/417)) ([0eb6b08](https://github.com/louislef299/aws-sso/commit/0eb6b081a3c967ae9f7e34778bc6e8fffbff9794))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.58.0 to 1.60.1 ([#415](https://github.com/louislef299/aws-sso/issues/415)) ([68647c3](https://github.com/louislef299/aws-sso/commit/68647c374c5d907faa284320cf8f79ea1c0d2a37))
+* bump github.com/docker/cli ([#416](https://github.com/louislef299/aws-sso/issues/416)) ([0416e1a](https://github.com/louislef299/aws-sso/commit/0416e1aa692f05e978a271d6609a34c5cad84d1c))
+* bump github.com/spf13/viper from 1.19.0 to 1.20.0 ([#418](https://github.com/louislef299/aws-sso/issues/418)) ([013ab93](https://github.com/louislef299/aws-sso/commit/013ab932c713f973d1e121f9f89513c0d5c04456))
+
 ## [1.4.21](https://github.com/louislef299/aws-sso/compare/v1.4.20...v1.4.21) (2025-03-16)
 
 
