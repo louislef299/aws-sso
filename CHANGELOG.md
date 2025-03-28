@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.23](https://github.com/louislef299/aws-sso/compare/v1.4.22...v1.4.23) (2025-03-28)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#431](https://github.com/louislef299/aws-sso/issues/431)) ([cf8f34a](https://github.com/louislef299/aws-sso/commit/cf8f34a61b2cc7bd86b8ecdaaed9dd573e06340c))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.60.1 to 1.62.0 ([#424](https://github.com/louislef299/aws-sso/issues/424)) ([49307cc](https://github.com/louislef299/aws-sso/commit/49307ccea0faf79fa8fa93aaefaffcf5e0f9762e))
+* bump github.com/docker/docker ([#427](https://github.com/louislef299/aws-sso/issues/427)) ([5076a8d](https://github.com/louislef299/aws-sso/commit/5076a8d886f2bdac5357643ce9e2080af5d09da3))
+* bump github.com/onsi/ginkgo/v2 from 2.22.2 to 2.23.3 ([#425](https://github.com/louislef299/aws-sso/issues/425)) ([eec5f4f](https://github.com/louislef299/aws-sso/commit/eec5f4f06cc47724283fc79a986bfbb7bbf36152))
+* bump github.com/spf13/viper from 1.20.0 to 1.20.1 ([#429](https://github.com/louislef299/aws-sso/issues/429)) ([ada7c49](https://github.com/louislef299/aws-sso/commit/ada7c491e32c9182f578c20a814ce605d473b7ad))
+* bump k8s.io/client-go from 0.32.2 to 0.32.3 ([#426](https://github.com/louislef299/aws-sso/issues/426)) ([cb738c4](https://github.com/louislef299/aws-sso/commit/cb738c4be054d59ae12bc5c377fd7c9847c5ed84))
+
 ## [1.4.22](https://github.com/louislef299/aws-sso/compare/v1.4.21...v1.4.22) (2025-03-21)
 
 
