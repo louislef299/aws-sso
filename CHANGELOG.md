@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.24](https://github.com/louislef299/aws-sso/compare/v1.4.23...v1.4.24) (2025-04-11)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.9 to 1.29.14 ([#442](https://github.com/louislef299/aws-sso/issues/442)) ([34da7ca](https://github.com/louislef299/aws-sso/commit/34da7caa4490546ae847565cc4a4e19feaf9f524))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#440](https://github.com/louislef299/aws-sso/issues/440)) ([c5b9051](https://github.com/louislef299/aws-sso/commit/c5b9051e848235057e36f4a15e543a78c351867c))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.43.2 to 1.43.3 ([#443](https://github.com/louislef299/aws-sso/issues/443)) ([0fa0bc5](https://github.com/louislef299/aws-sso/commit/0fa0bc50934693c4d63a11e82aa62e564ec94dc2))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.63.1 to 1.63.2 ([#445](https://github.com/louislef299/aws-sso/issues/445)) ([9e6fbbd](https://github.com/louislef299/aws-sso/commit/9e6fbbd6da49547a4d9a28f6ce51e232936b994c))
+* bump github.com/docker/cli ([#446](https://github.com/louislef299/aws-sso/issues/446)) ([9626717](https://github.com/louislef299/aws-sso/commit/962671795a0a323f7d36ab61aab08d435c9ce932))
+* bump github.com/onsi/ginkgo/v2 from 2.23.3 to 2.23.4 ([#441](https://github.com/louislef299/aws-sso/issues/441)) ([76b3576](https://github.com/louislef299/aws-sso/commit/76b3576635c3addb4dd68adca8d7fc4d4d6552b9))
+
 ## [1.4.23](https://github.com/louislef299/aws-sso/compare/v1.4.22...v1.4.23) (2025-04-04)
 
 
