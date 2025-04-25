@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.25](https://github.com/louislef299/aws-sso/compare/v1.4.24...v1.4.25) (2025-04-25)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.63.2 to 1.64.0 ([#450](https://github.com/louislef299/aws-sso/issues/450)) ([388f879](https://github.com/louislef299/aws-sso/commit/388f8797e976da05edd6375ff7ee72ffaea05047))
+* bump github.com/docker/cli ([#449](https://github.com/louislef299/aws-sso/issues/449)) ([4f0d042](https://github.com/louislef299/aws-sso/commit/4f0d042813937bf033eecdf3ec80f695e1b21fb1))
+* bump github.com/docker/docker ([#448](https://github.com/louislef299/aws-sso/issues/448)) ([eaaa908](https://github.com/louislef299/aws-sso/commit/eaaa908f97cbcd10e7c92e39f4cbbf779346c77e))
+* bump k8s.io/cli-runtime from 0.32.3 to 0.33.0 ([#453](https://github.com/louislef299/aws-sso/issues/453)) ([b02a50c](https://github.com/louislef299/aws-sso/commit/b02a50cbaefda106d39d9981f31ab98508d962f3))
+* bump k8s.io/client-go from 0.32.3 to 0.33.0 ([#452](https://github.com/louislef299/aws-sso/issues/452)) ([d1e7007](https://github.com/louislef299/aws-sso/commit/d1e70070c7b1bd98e4633db167453aae673a97b7))
+
 ## [1.4.24](https://github.com/louislef299/aws-sso/compare/v1.4.23...v1.4.24) (2025-04-11)
 
 
