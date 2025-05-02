@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.26](https://github.com/louislef299/aws-sso/compare/v1.4.25...v1.4.26) (2025-05-02)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.43.3 to 1.44.0 ([#455](https://github.com/louislef299/aws-sso/issues/455)) ([60055db](https://github.com/louislef299/aws-sso/commit/60055dbed9618d69e43f1a53dda39af5632a5533))
+
 ## [1.4.25](https://github.com/louislef299/aws-sso/compare/v1.4.24...v1.4.25) (2025-04-25)
 
 
