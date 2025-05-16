@@ -1,6 +1,7 @@
 module github.com/louislef299/aws-sso
 
-go 1.22.0
+go 1.24.0
+
 toolchain go1.24.1
 
 require (
@@ -24,8 +25,8 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	gopkg.in/ini.v1 v1.67.0
-	k8s.io/cli-runtime v0.33.0
-	k8s.io/client-go v0.33.0
+	k8s.io/cli-runtime v0.33.1
+	k8s.io/client-go v0.33.1
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738
 )
 
@@ -122,8 +123,8 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.5.0 // indirect
-	k8s.io/api v0.33.0 // indirect
-	k8s.io/apimachinery v0.33.0 // indirect
+	k8s.io/api v0.33.1 // indirect
+	k8s.io/apimachinery v0.33.1 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff // indirect
 	sigs.k8s.io/json v0.0.0-20241010143419-9aa6b5e7a4b3 // indirect
