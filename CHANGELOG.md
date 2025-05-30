@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.26](https://github.com/louislef299/aws-sso/compare/v1.4.25...v1.4.26) (2025-05-30)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.43.3 to 1.44.0 ([#455](https://github.com/louislef299/aws-sso/issues/455)) ([60055db](https://github.com/louislef299/aws-sso/commit/60055dbed9618d69e43f1a53dda39af5632a5533))
+* bump github.com/docker/cli ([#461](https://github.com/louislef299/aws-sso/issues/461)) ([fc13687](https://github.com/louislef299/aws-sso/commit/fc13687f36c53400e3363024e2af3e68581e6e3c))
+* bump github.com/docker/docker ([#462](https://github.com/louislef299/aws-sso/issues/462)) ([ff993be](https://github.com/louislef299/aws-sso/commit/ff993bed6f62f35855de0c7b67ffc6fa337e640e))
+* bump k8s.io/cli-runtime from 0.33.0 to 0.33.1 ([#459](https://github.com/louislef299/aws-sso/issues/459)) ([949bd51](https://github.com/louislef299/aws-sso/commit/949bd518d7f59eb08d2f9a13cc92e9af859b520f))
+
 ## [1.4.25](https://github.com/louislef299/aws-sso/compare/v1.4.24...v1.4.25) (2025-04-25)
 
 
