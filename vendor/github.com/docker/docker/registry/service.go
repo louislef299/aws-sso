@@ -3,14 +3,15 @@ package registry // import "github.com/docker/docker/registry"
 import (
 	"context"
 	"crypto/tls"
+	"errors"
 	"net/url"
 	"strings"
 	"sync"
 
+	cerrdefs "github.com/containerd/errdefs"
 	"github.com/containerd/log"
 	"github.com/distribution/reference"
 	"github.com/docker/docker/api/types/registry"
-	"github.com/docker/docker/errdefs"
 )
 
 // Service is a registry service. It tracks configuration data such as a list
@@ -40,7 +41,7 @@ func (s *Service) ServiceConfig() *registry.ServiceConfig {
 
 // ReplaceConfig prepares a transaction which will atomically replace the
 // registry service's configuration when the returned commit function is called.
-func (s *Service) ReplaceConfig(options ServiceOptions) (commit func(), err error) {
+func (s *Service) ReplaceConfig(options ServiceOptions) (commit func(), _ error) {
 	config, err := newServiceConfig(options)
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func (s *Service) Auth(ctx context.Context, authConfig *registry.AuthConfig, use
 	endpoints, err := s.lookupV2Endpoints(ctx, registryHostName, false)
 	s.mu.RUnlock()
 	if err != nil {
-		if errdefs.IsContext(err) {
+		if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
 			return "", "", err
 		}
 		return "", "", invalidParam(err)
@@ -87,7 +88,7 @@ func (s *Service) Auth(ctx context.Context, authConfig *registry.AuthConfig, use
 	for _, endpoint := range endpoints {
 		authToken, err := loginV2(ctx, authConfig, endpoint, userAgent)
 		if err != nil {
-			if errdefs.IsContext(err) || errdefs.IsUnauthorized(err) {
+			if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) || cerrdefs.IsUnauthorized(err) {
 				// Failed to authenticate; don't continue with (non-TLS) endpoints.
 				return "", "", err
 			}
@@ -148,7 +149,7 @@ type APIEndpoint struct {
 
 // LookupPullEndpoints creates a list of v2 endpoints to try to pull from, in order of preference.
 // It gives preference to mirrors over the actual registry, and HTTPS over plain HTTP.
-func (s *Service) LookupPullEndpoints(hostname string) (endpoints []APIEndpoint, err error) {
+func (s *Service) LookupPullEndpoints(hostname string) ([]APIEndpoint, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
@@ -157,7 +158,7 @@ func (s *Service) LookupPullEndpoints(hostname string) (endpoints []APIEndpoint,
 
 // LookupPushEndpoints creates a list of v2 endpoints to try to push to, in order of preference.
 // It gives preference to HTTPS over plain HTTP. Mirrors are not included.
-func (s *Service) LookupPushEndpoints(hostname string) (endpoints []APIEndpoint, err error) {
+func (s *Service) LookupPushEndpoints(hostname string) ([]APIEndpoint, error) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
