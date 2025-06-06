@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.27](https://github.com/louislef299/aws-sso/compare/v1.4.26...v1.4.27) (2025-06-06)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.64.0 to 1.65.0 ([#467](https://github.com/louislef299/aws-sso/issues/467)) ([217ed06](https://github.com/louislef299/aws-sso/commit/217ed065e29f174bd783535364f038fe6874de27))
+* bump github.com/docker/cli ([#466](https://github.com/louislef299/aws-sso/issues/466)) ([e3a24ca](https://github.com/louislef299/aws-sso/commit/e3a24ca42e86c5b1c3257bcdc3128f158806e54d))
+* bump github.com/docker/docker ([#465](https://github.com/louislef299/aws-sso/issues/465)) ([c487729](https://github.com/louislef299/aws-sso/commit/c487729a0ccca83f3738577c26cdba286ee5418f))
+
 ## [1.4.26](https://github.com/louislef299/aws-sso/compare/v1.4.25...v1.4.26) (2025-05-30)
 
 
