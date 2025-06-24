@@ -31,6 +31,7 @@ var (
 	accountRegion  string
 	accountToken   string
 	accountPrivate bool
+	accountURL     string
 	allAccounts    bool
 
 	ErrNoAccountFound = errors.New("no account found")
@@ -39,9 +40,10 @@ var (
 
 type Account struct {
 	ID      string
-	Region  string
 	Private bool
+	Region  string
 	Token   string
+	URL     string
 }
 
 // accountCmd represents the account command
@@ -73,6 +75,7 @@ var accountAddCmd = &cobra.Command{
 			Region:  accountRegion,
 			Private: accountPrivate,
 			Token:   accountToken,
+			URL:     accountURL,
 		})
 		if err != nil {
 			log.Fatal("couldn't write to configuration file:", err)
@@ -112,6 +115,7 @@ var accountSetCmd = &cobra.Command{
 			Region:  accountRegion,
 			Private: accountPrivate,
 			Token:   accountToken,
+			URL:     accountURL,
 		})
 		err := viper.WriteConfig()
 		if err != nil {
@@ -145,6 +149,7 @@ func init() {
 
 	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountAddCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
+	accountAddCmd.Flags().StringVar(&accountURL, "url", viper.GetString(lenv.CORE_URL), "The SSO URL to use for the account")
 	accountAddCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
 	if err := accountAddCmd.MarkFlagRequired("name"); err != nil {
@@ -158,6 +163,7 @@ func init() {
 	accountSetCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountSetCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
 	accountSetCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
+	accountSetCmd.Flags().StringVar(&accountURL, "url", viper.GetString(lenv.CORE_URL), "The SSO URL to use for the account")
 	accountSetCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 }
 
@@ -230,9 +236,16 @@ func listAccounts(all bool) {
 			t = account.Token
 		}
 
+		var url string
+		if account.URL == "" {
+			url = "(default) " + viper.GetString(lenv.CORE_URL)
+		} else {
+			url = account.URL
+		}
+
 		if err == nil {
-			fmt.Printf("%s:\n  ID: %s\n  Region: %s\n  Private: %t\n  Token: %s\n",
-				a, account.ID, account.Region, account.Private, t)
+			fmt.Printf("%s:\n  ID: %s\n  Region: %s\n  Private: %t\n  Token: %s\n  SSO URL: %s\n",
+				a, account.ID, account.Region, account.Private, t, url)
 		}
 	}
 
