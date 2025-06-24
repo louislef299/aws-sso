@@ -8,49 +8,49 @@ before:
 builds:
   # Used by homebrew
   - env:
-      - CGO_ENABLED=0
+    - CGO_ENABLED=0
     id: "aws-sso"
     binary: "aws-sso"
     goos:
-      - linux
-      - darwin
-      - windows
+    - linux
+    - darwin
+    - windows
     goarch:
-      - "amd64"
-      - "arm"
-      - "arm64"
-      - "386"
+    - "amd64"
+    - "arm"
+    - "arm64"
+    - "386"
     ldflags:
-      - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
+    - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
   
   # Used by krew
   - env:
-      - CGO_ENABLED=0
+    - CGO_ENABLED=0
     id: "kubectl-aws_sso"
     binary: "kubectl-aws_sso"
     goos:
-      - linux
-      - darwin
-      - windows
+    - linux
+    - darwin
+    - windows
     goarch:
-      - "amd64"
-      - "arm"
-      - "arm64"
-      - "386"
+    - "amd64"
+    - "arm"
+    - "arm64"
+    - "386"
     flags:
-      - -tags=kube
+    - -tags=kube
     ldflags:
-      - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
-      - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
+    - -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version={{.Version}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS={{.Runtime.Goos}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch={{.Runtime.Goarch}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion={{.Env.GOVERSION}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime={{.Date}}'
+    - -X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash={{.ShortCommit}}'
       
 archives:
   - ids:
@@ -82,7 +82,7 @@ changelog:
       - '^docs:'
       - '^test:'
 
-brews:
+homebrew_casks:
 - name: aws-sso
   commit_author:
     name: Louis Lefebvre
