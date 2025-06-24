@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.0](https://github.com/louislef299/aws-sso/compare/v1.4.27...v1.5.0) (2025-06-24)
+
+
+### Features
+
+* Add alternate remote logic ([#482](https://github.com/louislef299/aws-sso/issues/482)) ([194f9b3](https://github.com/louislef299/aws-sso/commit/194f9b3a60dd5d000c5c9de82a1637bfd278c090))
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#479](https://github.com/louislef299/aws-sso/issues/479)) ([859f505](https://github.com/louislef299/aws-sso/commit/859f505a93390e842f3e09368d2e3ee8224125a1))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.44.0 to 1.45.1 ([#477](https://github.com/louislef299/aws-sso/issues/477)) ([80abe47](https://github.com/louislef299/aws-sso/commit/80abe4759242e834a0e51cee330a7e4780c9a569))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.65.0 to 1.66.1 ([#476](https://github.com/louislef299/aws-sso/issues/476)) ([c27bd70](https://github.com/louislef299/aws-sso/commit/c27bd70ccc3b706ad5767d69a54c358cfb3337b5))
+* Update GoReleaser brews to homebrew_casks ([#480](https://github.com/louislef299/aws-sso/issues/480)) ([46892a7](https://github.com/louislef299/aws-sso/commit/46892a7be19961fbe15f15c4397b231dda040bf8))
+
 ## [1.4.27](https://github.com/louislef299/aws-sso/compare/v1.4.26...v1.4.27) (2025-06-06)
 
 
