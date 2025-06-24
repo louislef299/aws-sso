@@ -12,7 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/louislef299/aws-sso/pkg/v1/prompt"
 	"github.com/spf13/viper"
@@ -89,7 +89,7 @@ func RetrieveRoleInfo(ctx context.Context, cfg *aws.Config, accountID, accessTok
 }
 
 func getConfiguredRole() string {
-	return viper.GetString(CORE_DEFAULT_ROLE)
+	return viper.GetString(envs.CORE_DEFAULT_ROLE)
 }
 
 func saveCredentials(profile, region, output string, roleCredentials *sso.GetRoleCredentialsOutput) (string, error) {

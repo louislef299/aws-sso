@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
@@ -48,7 +48,7 @@ func checkAWSFiles(files []string) error {
 }
 
 func CurrentProfile() string {
-	e := viper.GetString(SESSION_PROFILE)
+	e := viper.GetString(envs.SESSION_PROFILE)
 	if e == "" {
 		return ""
 	}

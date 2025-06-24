@@ -35,7 +35,7 @@ test:
 
 lint: releaser-lint
 	@echo "Linting Go program files"
-	@golangci-lint run
+	@golangci-lint run -c .golangci.yml
 
 update:
 	go mod tidy

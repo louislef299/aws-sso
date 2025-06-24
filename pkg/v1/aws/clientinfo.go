@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	los "github.com/louislef299/aws-sso/pkg/v1/os"
 	"github.com/spf13/viper"
 )
@@ -65,7 +65,7 @@ func (c *ClientInformation) IsExpired() bool {
 }
 
 func GetAccessToken() string {
-	t := viper.GetString(SESSION_TOKEN)
+	t := viper.GetString(envs.SESSION_TOKEN)
 	if t == DEFAULT_ACCESS_TOKEN || t == "" {
 		return DEFAULT_ACCESS_TOKEN
 	}

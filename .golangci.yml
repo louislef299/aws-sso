@@ -1,0 +1,39 @@
+---
+version: "2"
+linters:
+  default: none
+  enable:
+    - goheader
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - unused
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - path: (.+)\.go$
+        text: gopath
+      - path: (.+)\.go$
+        text: scripts
+      - path: (.+)\.go$
+        text: vendor
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

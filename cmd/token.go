@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -117,13 +117,13 @@ func init() {
 
 func setToken(name string) {
 	if c := getCurrentToken(); c != "" {
-		viper.Set(fmt.Sprintf("%s.%s", TOKEN_HEADER, c), INACTIVE_TOKEN_ID)
+		viper.Set(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, c), INACTIVE_TOKEN_ID)
 	}
 	if name == "-" {
-		name = DEFAULT_TOKEN_NAME
+		name = envs.DEFAULT_TOKEN_NAME
 	}
-	viper.Set(fmt.Sprintf("%s.%s", TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
-	viper.Set(SESSION_TOKEN, name)
+	viper.Set(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
+	viper.Set(envs.SESSION_TOKEN, name)
 	if err := viper.WriteConfig(); err != nil {
 		log.Fatal("couldn't write config:", err)
 	}
@@ -131,29 +131,31 @@ func setToken(name string) {
 
 // Quick check to make sure the session token is set
 func checkToken() {
-	if !viper.IsSet(SESSION_TOKEN) || getCurrentToken() == "" {
-		setToken(DEFAULT_TOKEN_NAME)
+	if !viper.IsSet(envs.SESSION_TOKEN) || getCurrentToken() == "" {
+		setToken(envs.DEFAULT_TOKEN_NAME)
 	}
 }
 
 // Returns the current session token
 func addToken(name string) {
-	deepSet(fmt.Sprintf("%s.%s", TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
+	deepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
 	setToken(name)
 }
 
-func getCurrentToken() string         { return viper.GetString(SESSION_TOKEN) }
-func doesTokenExist(name string) bool { return !(getToken(name) == "") }
-func getToken(name string) string     { return viper.GetString(fmt.Sprintf("%s.%s", TOKEN_HEADER, name)) }
+func getCurrentToken() string         { return viper.GetString(envs.SESSION_TOKEN) }
+func doesTokenExist(name string) bool { return (getToken(name) != "") }
+func getToken(name string) string {
+	return viper.GetString(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name))
+}
 
 func listTokens() {
-	tokens := viper.Sub(TOKEN_HEADER)
+	tokens := viper.Sub(envs.TOKEN_HEADER)
 	fmt.Println("Local Tokens:")
 
 	if tokens == nil {
 		// The default token will always exist
-		setToken(DEFAULT_TOKEN_NAME)
-		fmt.Printf("* %s\n", DEFAULT_TOKEN_NAME)
+		setToken(envs.DEFAULT_TOKEN_NAME)
+		fmt.Printf("* %s\n", envs.DEFAULT_TOKEN_NAME)
 		return
 	}
 
@@ -169,5 +171,5 @@ func listTokens() {
 }
 
 func removeToken(name string) {
-	deepSet(fmt.Sprintf("%s.%s", TOKEN_HEADER, name), "")
+	deepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), "")
 }
