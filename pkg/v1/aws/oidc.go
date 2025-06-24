@@ -138,11 +138,13 @@ func RegisterClient(ctx context.Context, cfg *aws.Config, startUrl string, b bro
 		ClientType: aws.String(clientType),
 	})
 	if err != nil {
+		log.Println("could not register a new OIDC client")
 		return nil, err
 	}
 
 	output, err := StartDeviceAuthorization(ctx, cfg, startUrl, resp)
 	if err != nil {
+		log.Println("could not start device authorization")
 		return nil, err
 	}
 

@@ -22,6 +22,7 @@ const (
 	ACCOUNT_GROUP  = "account"
 	ACCOUNT_REGION = "region"
 	ACCOUNT_ID     = "id"
+	ACCOUNT_URL    = "url"
 	ROLE_ARN_KEY   = "role_arn"
 )
 
@@ -183,6 +184,16 @@ func getAccountID(profile string) string {
 		log.Printf("couldn't find an account ID matching profile %s, using empty default...\n", profile)
 	}
 	return id
+}
+
+func getAccountURL(profile string) string {
+	url := viper.GetString(fmt.Sprintf("%s.%s.%s", ACCOUNT_GROUP, profile, ACCOUNT_URL))
+	if url == "" {
+		log.Printf("couldn't find an account URL matching profile %s, using core default...\n", url)
+	} else {
+		return url
+	}
+	return viper.GetString(lenv.CORE_URL)
 }
 
 func getAccountRegion(profile string) string {

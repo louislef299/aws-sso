@@ -106,7 +106,7 @@ updates.`,
 			log.Fatal("could not sync account session:", err)
 		}
 
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile, newAuth)
+		cfg, err := getAWSConfig(cmd.Context(), requestProfile, region, newAuth)
 		if err != nil {
 			log.Fatal("could not generate AWS config: ", err)
 		}
@@ -214,7 +214,7 @@ func fuzzyCluster(clusters []string) string {
 	return clusters[indexChoice]
 }
 
-func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Config, error) {
+func getAWSConfig(ctx context.Context, profile, region string, newProfile bool) (*aws.Config, error) {
 	// check if referencing a local profile
 	lc, err := laws.IsLocalConfig(profile)
 	if err != nil {
@@ -237,6 +237,11 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 	ssoRegion, err := lregion.GetRegion(lregion.STS)
 	if err != nil {
 		log.Fatal("could not gather sso region:", err)
+	}
+
+	// gross anti-pattern, but too lazy to reprogram the existing logic for now
+	if region == "cn-north-1" || region == "cn-northwest-1" {
+		ssoRegion = "cn-north-1"
 	}
 	log.Println("using sso region", ssoRegion, "to login")
 
@@ -318,9 +323,8 @@ func getBrowser() browser.Browser {
 	return browser.GetBrowser(viper.GetString(envs.CORE_BROWSER), private)
 }
 
-func getURL() string {
-	// validate there is a url endpoint
-	url := viper.GetString(envs.CORE_URL)
+func getURL(profile string) string {
+	url := getAccountURL(profile)
 	if url != "" {
 		return url
 	}
@@ -346,7 +350,7 @@ func getURL() string {
 }
 
 func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newProfile bool) (string, error) {
-	u := getURL()
+	u := getURL(profile)
 	deepSet(envs.SESSION_URL, u)
 
 	clientInfo, err := laws.GatherClientInformation(ctx, &cfg, u, getBrowser(), refresh)
