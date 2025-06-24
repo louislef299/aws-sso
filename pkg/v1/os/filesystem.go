@@ -15,7 +15,7 @@ func IsFileOrFolderExisting(target string) (bool, error) {
 	} else if os.IsNotExist(err) {
 		return false, nil
 	} else {
-		return false, fmt.Errorf("Could not determine if file or folder %q exists or not. Exiting.", target)
+		return false, fmt.Errorf("could not determine if file or folder %q exists or not", target)
 	}
 }
 

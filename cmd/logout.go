@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/louislef299/aws-sso/internal/logout"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	"github.com/spf13/cobra"
@@ -39,7 +39,7 @@ Center sign in session, and removes the token locally.`,
 		}
 
 		// if session.profile is set, coming from a session
-		if laws.IsProfileConfigured() && !viper.GetBool(CORE_DISABLE_ECR_LOGIN) {
+		if laws.IsProfileConfigured() && !viper.GetBool(envs.CORE_DISABLE_ECR_LOGIN) {
 			// clean docker configs
 			registry, err := laws.GetECRRegistryName(cmd.Context(), &cfg)
 			if err != nil {
@@ -63,9 +63,9 @@ Center sign in session, and removes the token locally.`,
 		}
 
 		// reset viper session configs
-		sessionTree := viper.Sub(SESSION_HEADER)
+		sessionTree := viper.Sub(envs.SESSION_HEADER)
 		for _, k := range sessionTree.AllKeys() {
-			viper.Set(fmt.Sprintf("%s.%s", SESSION_HEADER, k), "")
+			viper.Set(fmt.Sprintf("%s.%s", envs.SESSION_HEADER, k), "")
 		}
 		err = viper.WriteConfig()
 		if err != nil {

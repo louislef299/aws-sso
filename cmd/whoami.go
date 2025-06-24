@@ -12,7 +12,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	lk8s "github.com/louislef299/aws-sso/pkg/v1/kube"
@@ -32,7 +32,7 @@ gather cluster information.
 Similar to running:
 aws sts get-caller-identity`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if !viper.IsSet(SESSION_PROFILE) || !laws.IsProfileConfigured() {
+		if !viper.IsSet(envs.SESSION_PROFILE) || !laws.IsProfileConfigured() {
 			log.Println("not currently signed in")
 			return
 		} else {
@@ -59,8 +59,8 @@ aws sts get-caller-identity`,
 		}
 		fmt.Printf("AWS Information:\n\tUser ID: %s\n\tAccount: %s\n\tCaller ARN: %s\n", *callerID.UserId, *callerID.Account, *callerID.Arn)
 
-		if !viper.GetBool(CORE_DISABLE_EKS_LOGIN) {
-			cluster := viper.GetString(SESSION_CLUSTER)
+		if !viper.GetBool(envs.CORE_DISABLE_EKS_LOGIN) {
+			cluster := viper.GetString(envs.SESSION_CLUSTER)
 			if cluster == "" {
 				log.Println("Kubernetes not configured locally")
 			}

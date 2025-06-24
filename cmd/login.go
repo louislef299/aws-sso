@@ -18,7 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/browser"
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
 	ldocker "github.com/louislef299/aws-sso/pkg/v1/docker"
@@ -135,7 +135,7 @@ updates.`,
 		}
 
 		wg := sync.WaitGroup{}
-		if !viper.GetBool(CORE_DISABLE_ECR_LOGIN) && !disableECRLogin {
+		if !viper.GetBool(envs.CORE_DISABLE_ECR_LOGIN) && !disableECRLogin {
 			// configure docker credentials
 			wg.Add(1)
 			go func() {
@@ -156,7 +156,7 @@ updates.`,
 			}()
 		}
 
-		if !viper.GetBool(CORE_DISABLE_EKS_LOGIN) && !disableEKSLogin {
+		if !viper.GetBool(envs.CORE_DISABLE_EKS_LOGIN) && !disableEKSLogin {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
@@ -189,13 +189,13 @@ updates.`,
 func init() {
 	rootCmd.AddCommand(loginCmd)
 	loginCmd.Flags().StringVarP(&region, "region", "r", "", "The region you would like to use at login")
-	BindConfigValue(SESSION_REGION, loginCmd.Flags().Lookup("region"))
+	BindConfigValue(envs.SESSION_REGION, loginCmd.Flags().Lookup("region"))
 
 	loginCmd.Flags().StringVarP(&startUrl, "url", "u", "", "The AWS SSO start url")
-	BindConfigValue(SESSION_URL, loginCmd.Flags().Lookup("url"))
+	BindConfigValue(envs.SESSION_URL, loginCmd.Flags().Lookup("url"))
 
 	loginCmd.Flags().StringVar(&role, "role", "", "The IAM role to use when logging in")
-	BindConfigValue(SESSION_ROLE, loginCmd.Flags().Lookup("role"))
+	BindConfigValue(envs.SESSION_ROLE, loginCmd.Flags().Lookup("role"))
 
 	loginCmd.Flags().BoolVar(&disableEKSLogin, "disableEKSLogin", false, "Disables automatic detection and login for EKS")
 	loginCmd.Flags().BoolVar(&disableECRLogin, "disableECRLogin", true, "Disables automatic detection and login for ECR")
@@ -229,7 +229,7 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 		if err != nil {
 			return nil, err
 		}
-		deepSet(SESSION_PROFILE, profile)
+		deepSet(envs.SESSION_PROFILE, profile)
 
 		return &cfg, nil
 	}
@@ -250,7 +250,7 @@ func getAWSConfig(ctx context.Context, profile string, newProfile bool) (*aws.Co
 	if err != nil {
 		log.Fatal("couldn't log into AWS: ", err)
 	}
-	deepSet(SESSION_PROFILE, p)
+	deepSet(envs.SESSION_PROFILE, p)
 
 	log.Println("loading up new config", p, "with region", region)
 	// Start up new config with newly configured profile
@@ -279,7 +279,7 @@ func getClusterName(ctx context.Context, cfg *aws.Config, skipFuzzy bool) (strin
 	var cluster string
 	if clusterName != "" {
 		cluster = clusterName
-	} else if defaultCluster := viper.GetString(CORE_DEFAULT_CLUSTER); defaultCluster != "" {
+	} else if defaultCluster := viper.GetString(envs.CORE_DEFAULT_CLUSTER); defaultCluster != "" {
 		r, err := regexp.Compile(defaultCluster)
 		if err == nil {
 			log.Printf("looking for cluster matching expression: %s\n", defaultCluster)
@@ -297,7 +297,7 @@ func getClusterName(ctx context.Context, cfg *aws.Config, skipFuzzy bool) (strin
 		cluster = clusters[0]
 	} else if len(clusters) == 0 {
 		return "", ErrClustersDoNotExist
-	} else if c := viper.GetString(SESSION_CLUSTER); c != "" {
+	} else if c := viper.GetString(envs.SESSION_CLUSTER); c != "" {
 		cluster = c
 	} else if !skipFuzzy {
 		cluster = fuzzyCluster(clusters)
@@ -315,17 +315,17 @@ func getBrowser() browser.Browser {
 	} else {
 		log.Println("browser set to default(use cookies)")
 	}
-	return browser.GetBrowser(viper.GetString(CORE_BROWSER), private)
+	return browser.GetBrowser(viper.GetString(envs.CORE_BROWSER), private)
 }
 
 func getURL() string {
 	// validate there is a url endpoint
-	url := viper.GetString(CORE_URL)
+	url := viper.GetString(envs.CORE_URL)
 	if url != "" {
 		return url
 	}
 
-	url = viper.GetString(SESSION_URL)
+	url = viper.GetString(envs.SESSION_URL)
 	if url != "" {
 		return url
 	}
@@ -347,7 +347,7 @@ func getURL() string {
 
 func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newProfile bool) (string, error) {
 	u := getURL()
-	deepSet(SESSION_URL, u)
+	deepSet(envs.SESSION_URL, u)
 
 	clientInfo, err := laws.GatherClientInformation(ctx, &cfg, u, getBrowser(), refresh)
 	if err != nil {
@@ -365,7 +365,7 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 		return "", err
 	}
 	log.Println("using aws role", *role.RoleName)
-	deepSet(SESSION_ROLE, *role.RoleName)
+	deepSet(envs.SESSION_ROLE, *role.RoleName)
 
 	err = laws.SaveUsageInformation(account, &role)
 	if err != nil {
@@ -399,7 +399,7 @@ func loginEKS(ctx context.Context, cfg aws.Config, cluster string, optFns ...lk8
 	if err != nil {
 		log.Fatal("could not update kubeconfig: ", err)
 	}
-	viper.Set(SESSION_CLUSTER, *clusterInfo.Cluster.Name)
+	viper.Set(envs.SESSION_CLUSTER, *clusterInfo.Cluster.Name)
 	err = viper.WriteConfig()
 	if err != nil {
 		log.Fatal("could not write cluster information to config:", err)

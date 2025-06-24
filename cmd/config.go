@@ -12,7 +12,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -146,14 +146,14 @@ func init() {
 	configCmd.AddCommand(configValuesCmd)
 
 	// Space saved for config values not bound to flags
-	addConfigValue(CORE_DEFAULT_CLUSTER, "The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)")
-	addConfigValue(CORE_DEFAULT_ROLE, "The default iam role to use when logging in, supports go regex expressions(golang.org/s/re2syntax)")
-	addConfigValue(CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
-	addConfigValue(CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
-	addConfigValue(CORE_URL, "The default sso start url used when logging in")
-	addConfigValue(CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
-	addConfigValue(CORE_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
-	addConfigValue(CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
+	addConfigValue(envs.CORE_DEFAULT_CLUSTER, "The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)")
+	addConfigValue(envs.CORE_DEFAULT_ROLE, "The default iam role to use when logging in, supports go regex expressions(golang.org/s/re2syntax)")
+	addConfigValue(envs.CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
+	addConfigValue(envs.CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
+	addConfigValue(envs.CORE_URL, "The default sso start url used when logging in")
+	addConfigValue(envs.CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
+	addConfigValue(envs.CORE_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
+	addConfigValue(envs.CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
 }
 
 // BindConfigValue will bind the Viper config value to the provided pflag

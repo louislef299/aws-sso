@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	. "github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/spf13/viper"
 )
 
@@ -76,14 +76,14 @@ func GetRegion(regionType int) (string, error) {
 // Returns the region in precedence of environment
 // region, config region and finally default region.
 func GetResourceRegion() (string, error) {
-	r := viper.GetString(SESSION_REGION)
+	r := viper.GetString(envs.SESSION_REGION)
 	if err := checkOutput(r); err == nil {
 		return r, nil
 	} else if err == ErrRegionInvalid {
 		return "", err
 	}
 
-	r = viper.GetString(CORE_DEFAULT_REGION)
+	r = viper.GetString(envs.CORE_DEFAULT_REGION)
 	if err := checkOutput(r); err == nil {
 		return r, nil
 	} else if err == ErrRegionInvalid {
@@ -110,14 +110,14 @@ func GetResourceRegion() (string, error) {
 // Returns the region in precedence of environment
 // region, config region and finally default region.
 func GetSTSRegion() (string, error) {
-	r := viper.GetString(CORE_SSO_REGION)
+	r := viper.GetString(envs.CORE_SSO_REGION)
 	if err := checkOutput(r); err == nil {
 		return r, nil
 	} else if err == ErrRegionInvalid {
 		return "", err
 	}
 
-	r = viper.GetString(CORE_DEFAULT_REGION)
+	r = viper.GetString(envs.CORE_DEFAULT_REGION)
 	if err := checkOutput(r); err == nil {
 		return r, nil
 	} else if err == ErrRegionInvalid {
@@ -138,7 +138,7 @@ func GetSTSRegion() (string, error) {
 		return "", err
 	}
 
-	r = viper.GetString(SESSION_REGION)
+	r = viper.GetString(envs.SESSION_REGION)
 	if err := checkOutput(r); err == nil {
 		return r, nil
 	} else if err == ErrRegionInvalid {
