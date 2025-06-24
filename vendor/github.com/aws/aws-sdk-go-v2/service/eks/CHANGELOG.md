@@ -1,3 +1,20 @@
+# v1.66.1 (2025-06-17)
+
+* **Dependency Update**: Update to smithy-go v1.22.4.
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.66.0 (2025-06-11)
+
+* **Feature**: Release for EKS Pod Identity Cross Account feature and disableSessionTags flag.
+
+# v1.65.2 (2025-06-10)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.65.1 (2025-06-06)
+
+* No change notes available for this release.
+
 # v1.65.0 (2025-06-02)
 
 * **Feature**: Add support for filtering ListInsights API calls on MISCONFIGURATION insight category
