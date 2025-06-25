@@ -11,7 +11,7 @@ Installation can be done with either [homebrew][] or [krew][]:
 
 ```bash
 brew tap louislef299/aws-sso
-brew install aws-sso
+brew install --cask aws-sso
 ```
 
 ```bash
