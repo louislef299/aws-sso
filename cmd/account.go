@@ -70,6 +70,9 @@ var accountAddCmd = &cobra.Command{
 				log.Fatal("couldn't get default region:", err)
 			}
 		}
+		if accountURL == "" {
+			accountURL = getAccountURL(args[0])
+		}
 
 		err = addAccount(accountName, &Account{
 			ID:      accountNumber,
@@ -109,6 +112,9 @@ var accountSetCmd = &cobra.Command{
 		}
 		if accountRegion == "" {
 			accountRegion = getAccountRegion(args[0])
+		}
+		if accountURL == "" {
+			accountURL = getAccountURL(args[0])
 		}
 
 		viperSetAccount(args[0], Account{
@@ -150,7 +156,7 @@ func init() {
 
 	accountAddCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountAddCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
-	accountAddCmd.Flags().StringVar(&accountURL, "url", viper.GetString(lenv.CORE_URL), "The SSO URL to use for the account")
+	accountAddCmd.Flags().StringVar(&accountURL, "url", "", "The SSO URL to use for the account")
 	accountAddCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 	accountAddCmd.Flags().StringVar(&accountName, "name", "", "The logical name of the account being added")
 	if err := accountAddCmd.MarkFlagRequired("name"); err != nil {
@@ -164,7 +170,7 @@ func init() {
 	accountSetCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
 	accountSetCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
 	accountSetCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
-	accountSetCmd.Flags().StringVar(&accountURL, "url", viper.GetString(lenv.CORE_URL), "The SSO URL to use for the account")
+	accountSetCmd.Flags().StringVar(&accountURL, "url", "", "The SSO URL to use for the account")
 	accountSetCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")
 }
 
