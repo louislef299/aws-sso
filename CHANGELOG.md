@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/louislef299/aws-sso/compare/v1.5.0...v1.5.1) (2025-06-25)
+
+
+### Bug Fixes
+
+* Update acct set & add url logic ([#485](https://github.com/louislef299/aws-sso/issues/485)) ([acfa005](https://github.com/louislef299/aws-sso/commit/acfa005698f595462a0c279c35270c27e78e56e8))
+
 ## [1.5.0](https://github.com/louislef299/aws-sso/compare/v1.4.27...v1.5.0) (2025-06-24)
 
 
