@@ -1,8 +1,9 @@
 ---
 name: Scan Vulnerabilities
 on:
-  schedule:
-  - cron: '0 0 * * *'
+  pull_request:
+    branches: 
+    - "main"
   workflow_dispatch:
 
 permissions:
@@ -10,18 +11,39 @@ permissions:
   issues: write
 
 jobs:
-  build:
-    name: Scan Go Vulnerabilities
+  trivy-vuln-scan:
+    name: Trivy Scan Filesystem Vulnerabilities
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4.1.6
-    - name: Run Trivy Vulnerability Scanner and Create GitHub Issues
-      uses: knqyf263/trivy-issue-action@v0.0.6
+    - name: Check out code
+      uses: actions/checkout@v4
+    - name: Trivy Security Scan
+      uses: aquasecurity/trivy-action@0.31.0
       with:
-        assignee: 'louislef299'
-        severity: CRITICAL,HIGH
-        skip-dirs: integration,examples,pkg
-        label: kind/security
+        scan-type: 'fs'
+        scan-ref: '.'
+        hide-progress: false
+        format: 'table'
+        exit-code: '1'
+        severity: 'MEDIUM,HIGH,CRITICAL'
+        scanners: vuln,secret
+
+  trivy-compliance:
+    name: Trivy Scan Licenses
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+    - name: Trivy License Security Scan
+      uses: aquasecurity/trivy-action@0.31.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TRIVY_LICENSE_FULL: true
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        hide-progress: false
+        format: 'table'
+        exit-code: '1'
+        severity: 'HIGH,CRITICAL'
+        scanners: license
+        trivy-config: './trivy.yaml'
