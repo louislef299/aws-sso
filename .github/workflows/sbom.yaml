@@ -15,6 +15,7 @@ jobs:
     steps:
     - name: Setup Go
       uses: actions/setup-go@v5
+      id: go-setup
       with:
         go-version: 'stable'
         check-latest: true
@@ -29,6 +30,8 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
     - name: Build Binaries with GoReleaser
       uses: goreleaser/goreleaser-action@v6
+      env:
+        GOVERSION: ${{ steps.go-setup.outputs.go-version }}
       with:
         distribution: goreleaser
         version: "~> v2"
