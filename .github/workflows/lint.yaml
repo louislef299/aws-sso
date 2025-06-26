@@ -4,9 +4,6 @@ on:
   pull_request:
     branches: [ "*" ]
 
-env:
-  GOVERSION: "1.21.4"
-
 jobs:
   golangci:
     name: Go Lint
@@ -15,7 +12,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '>=${{ env.GOVERSION }}'
+          go-version: 'stable'
       - name: Check out code
         uses: actions/checkout@v4
       - name: golangci-lint
@@ -34,7 +31,7 @@ jobs:
     - run: git fetch --force --tags
     - uses: actions/setup-go@v5
       with:
-        go-version: '>=${{ env.GOVERSION }}'
+        go-version: 'stable'
     - uses: goreleaser/goreleaser-action@v6
       with:
         distribution: goreleaser
@@ -49,7 +46,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
-        go-version: '>=${{ env.GOVERSION }}'
+        go-version: 'stable'
         check-latest: true
     - name: Test
       run: go test -v -race ./...
