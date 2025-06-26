@@ -53,7 +53,14 @@ release: lint test login
 	 goreleaser release --clean
 
 build: lint test
-	@GOVERSION=$(GOVERSION) goreleaser build --clean --skip=validate
+	@GOVERSION=$(GOVERSION) goreleaser build --skip=validate
+
+scan: $(BINARY_NAME) license-scan
+	trivy rootfs --scanners vuln --format cyclonedx --output $(BINARY_NAME).cyclonedx.json .
+	trivy sbom $(BINARY_NAME).cyclonedx.json
+
+license-scan:
+	trivy fs --scanners license --license-full  .
 
 clean:
-	@rm -rf $(BINARY_NAME) dist
+	@rm -rf $(BINARY_NAME) $(BINARY_NAME).cyclonedx.json dist

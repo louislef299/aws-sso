@@ -25,4 +25,7 @@ aws-sso
 go.work
 
 # Goreleaser
-/dist 
+/dist
+
+# Trivy Results
+*cyclonedx*

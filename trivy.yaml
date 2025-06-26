@@ -49,7 +49,6 @@ license:
     - GPL-2.0-with-classpath-exception
     - GPL-2.0-with-font-exception
     - GPL-2.0-with-GCC-exception
-    - GPL-3.0
     - GPL-3.0-with-autoconf-exception
     - GPL-3.0-with-GCC-exception
     - LGPL-2.0
@@ -76,6 +75,7 @@ license:
     - CPL-1.0
     - EPL-1.0
     - EPL-2.0
+    - GPL-3.0
     - FreeImage
     - IPL-1.0
     - MPL-1.0
