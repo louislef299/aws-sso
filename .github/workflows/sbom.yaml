@@ -4,9 +4,6 @@ on:
   pull_request:
     branches: [ "*" ]
 
-env:
-    GOVERSION: "1.22.1"
-
 permissions:
     contents: write
 
@@ -19,7 +16,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v5
       with:
-        go-version: '>=${{ env.GOVERSION }}'
+        go-version: 'stable'
         check-latest: true
         cache-dependency-path: '**/go.sum'
     - name: Check out code

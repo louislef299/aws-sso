@@ -1,6 +1,11 @@
 ---
+name: Release Please
+'on':
+  push:
+    branches:
+    - main
+
 env:
-  GOVERSION: "1.23.1"
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
@@ -29,7 +34,7 @@ jobs:
     - run: git fetch --force --tags
     - uses: actions/setup-go@v5
       with:
-        go-version: '>=${{ env.GOVERSION }}'
+        go-version: 'stable'
         check-latest: true
     - uses: goreleaser/goreleaser-action@v6
       env:
@@ -38,9 +43,3 @@ jobs:
         distribution: goreleaser
         version: latest
         args: release --clean
-
-name: Release Please
-'on':
-  push:
-    branches:
-    - main
