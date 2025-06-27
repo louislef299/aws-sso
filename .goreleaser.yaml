@@ -96,6 +96,12 @@ homebrew_casks:
     name: homebrew-aws-sso
     branch: main
     token: "{{ .Env.GITHUB_TOKEN }}"
+  hooks:
+    post:
+      install: |
+        if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+          system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-sso"]
+        end
 
 krews:
 - name: aws-sso
