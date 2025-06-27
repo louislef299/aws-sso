@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.4](https://github.com/louislef299/aws-sso/compare/v1.5.3...v1.5.4) (2025-06-27)
+
+
+### Bug Fixes
+
+* Update GOVERSION in release-please action ([#496](https://github.com/louislef299/aws-sso/issues/496)) ([9bb090e](https://github.com/louislef299/aws-sso/commit/9bb090e0a4bb55e1f275b60533b8ae9cf32d791b))
+
 ## [1.5.3](https://github.com/louislef299/aws-sso/compare/v1.5.2...v1.5.3) (2025-06-27)
 
 
