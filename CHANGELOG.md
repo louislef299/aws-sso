@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.2](https://github.com/louislef299/aws-sso/compare/v1.5.1...v1.5.2) (2025-06-27)
+
+
+### Bug Fixes
+
+* Replace GOVERSION env variable for GoReleaser ([#491](https://github.com/louislef299/aws-sso/issues/491)) ([412a01e](https://github.com/louislef299/aws-sso/commit/412a01e53ed3a0928d758371a94f3303160cfa64))
+* Update brew cask to update binary attributes post-install ([#493](https://github.com/louislef299/aws-sso/issues/493)) ([8eefea9](https://github.com/louislef299/aws-sso/commit/8eefea9672d9e077799db446313aa5ba11fbb3d8))
+* Update Go version to be latest stable ([#489](https://github.com/louislef299/aws-sso/issues/489)) ([a27e69d](https://github.com/louislef299/aws-sso/commit/a27e69d1b7bf65f762b44220681ed1d49ef57791))
+
 ## [1.5.1](https://github.com/louislef299/aws-sso/compare/v1.5.0...v1.5.1) (2025-06-25)
 
 
