@@ -5,8 +5,7 @@ updates:
 - package-ecosystem: gomod
   directory: /
   schedule:
-    day: friday
-    interval: weekly
+    interval: daily
   commit-message:
     prefix: fix
 - package-ecosystem: github-actions
