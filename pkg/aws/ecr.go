@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
 	lregion "github.com/louislef299/aws-sso/internal/region"
-	"github.com/louislef299/aws-sso/pkg/v1/os"
+	"github.com/louislef299/aws-sso/pkg/os"
 )
 
 // Returns the name of the ECR registry for the AWS environment

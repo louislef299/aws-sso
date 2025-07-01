@@ -6,7 +6,7 @@ package browser
 import (
 	"context"
 
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 )
 
 var linuxChromePaths = []string{`/usr/bin/google-chrome`, `/../../mnt/c/Program Files/Google/Chrome/Application/chrome.exe`, `/../../mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe`}

@@ -10,7 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/envs"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
 )

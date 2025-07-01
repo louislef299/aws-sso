@@ -6,7 +6,7 @@ package browser
 import (
 	"context"
 
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 )
 
 var linuxBravePaths = []string{`/usr/bin/brave-browser`, `/../../mnt/c/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe`}

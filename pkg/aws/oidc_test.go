@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/louislef299/aws-sso/pkg/v1/aws"
+	"github.com/louislef299/aws-sso/pkg/aws"
 )
 
 var _ = Describe("Oidc", func() {

@@ -6,8 +6,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/envs"
-	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	laws "github.com/louislef299/aws-sso/pkg/aws"
+	los "github.com/louislef299/aws-sso/pkg/os"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/spf13/viper"

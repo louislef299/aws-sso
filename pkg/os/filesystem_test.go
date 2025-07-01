@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	pluginos "github.com/louislef299/aws-sso/pkg/v1/os"
+	pluginos "github.com/louislef299/aws-sso/pkg/os"
 )
 
 var _ = Describe("Filesystem", func() {

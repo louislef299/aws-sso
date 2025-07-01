@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	laws "github.com/louislef299/aws-sso/pkg/aws"
+	los "github.com/louislef299/aws-sso/pkg/os"
 	"gopkg.in/ini.v1"
 )
 

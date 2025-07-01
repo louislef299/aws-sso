@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
 	lregion "github.com/louislef299/aws-sso/internal/region"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 )
 
 const LastUsageLocation = "/.aws/sso/cache/last-usage.json"

@@ -8,7 +8,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/louislef299/aws-sso/pkg/v1/version"
+	"github.com/louislef299/aws-sso/pkg/version"
 	"github.com/spf13/cobra"
 )
 
