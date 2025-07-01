@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/louislef299/aws-sso/internal/envs"
-	"github.com/louislef299/aws-sso/pkg/v1/aws"
+	"github.com/louislef299/aws-sso/pkg/aws"
 )
 
 var _ = Describe("Clientinfo", func() {

@@ -6,7 +6,7 @@ package browser
 import (
 	"context"
 
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 )
 
 var linuxFirefoxPaths = []string{`/usr/bin/firefox`, `/../../mnt/c/Program Files/Mozilla Firefox/firefox.exe`}

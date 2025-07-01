@@ -13,8 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
 	"github.com/louislef299/aws-sso/internal/envs"
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
-	"github.com/louislef299/aws-sso/pkg/v1/prompt"
+	los "github.com/louislef299/aws-sso/pkg/os"
+	"github.com/louislef299/aws-sso/pkg/prompt"
 	"github.com/spf13/viper"
 )
 

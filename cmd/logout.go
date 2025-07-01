@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/louislef299/aws-sso/internal/logout"
-	laws "github.com/louislef299/aws-sso/pkg/v1/aws"
+	laws "github.com/louislef299/aws-sso/pkg/aws"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

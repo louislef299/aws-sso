@@ -9,7 +9,7 @@ import (
 	"path"
 	"time"
 
-	los "github.com/louislef299/aws-sso/pkg/v1/os"
+	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -7,12 +7,12 @@ COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 GOBIN = ${HOME}/go/bin
 GOTRACEBACK = 'crash'
 GOVERSION= $(shell go version | awk '{print $$3}')
-GOFLAGS= -s -w -X 'github.com/louislef299/aws-sso/pkg/v1/version.Version=$(shell cat version.txt)' \
--X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildOS=$(shell go env GOOS)' \
--X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildArch=$(shell go env GOARCH)' \
--X 'github.com/louislef299/aws-sso/pkg/v1/version.GoVersion=$(GOVERSION)' \
--X 'github.com/louislef299/aws-sso/pkg/v1/version.BuildTime=$(shell date)' \
--X 'github.com/louislef299/aws-sso/pkg/v1/version.CommitHash=$(COMMIT_HASH)'
+GOFLAGS= -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version=$(shell cat version.txt)' \
+-X 'github.com/louislef299/aws-sso/pkg/version.BuildOS=$(shell go env GOOS)' \
+-X 'github.com/louislef299/aws-sso/pkg/version.BuildArch=$(shell go env GOARCH)' \
+-X 'github.com/louislef299/aws-sso/pkg/version.GoVersion=$(GOVERSION)' \
+-X 'github.com/louislef299/aws-sso/pkg/version.BuildTime=$(shell date)' \
+-X 'github.com/louislef299/aws-sso/pkg/version.CommitHash=$(COMMIT_HASH)'
 
 default: lint test clean $(BINARY_NAME)
 	@echo "Run './$(BINARY_NAME) -h' to get started"
