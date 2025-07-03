@@ -15,6 +15,12 @@ import (
 var (
 	region, cmdTimeout string
 	commandTimeout     time.Duration
+	configLoc          string
+)
+
+const (
+	AO_CONFIG_ENV  = "AWS_SSO_CONFIG"
+	AO_CONFIG_NAME = ".aws-sso"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -38,39 +44,45 @@ func Execute(ctx context.Context) {
 }
 
 func init() {
-	initConfig()
 	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "3s", "the default timeout for network commands executed")
 	var err error
 	commandTimeout, err = time.ParseDuration(cmdTimeout)
 	if err != nil {
 		log.Fatal("could not parse commandTimeout: ", err)
 	}
+	rootCmd.PersistentFlags().StringVar(&configLoc, "config", "", "Configuration file to use during execution")
+
+	initConfig()
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	viper.SetConfigType("toml")
-	if c := os.Getenv("AWS_AUTH_CONFIG"); c != "" {
+	if c := os.Getenv(AO_CONFIG_ENV); c != "" {
 		viper.AddConfigPath(path.Dir(c))
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
+	}
 
-		// Search config in home directory with name ".aws-sso" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".aws-sso")
-		file := path.Join(home, ".aws-sso")
+	if configLoc != "" {
+		viper.AddConfigPath(configLoc)
+	}
 
-		if exists, err := los.IsFileOrFolderExisting(file); err != nil {
+	// Find home directory.
+	home, err := os.UserHomeDir()
+	cobra.CheckErr(err)
+
+	// Search config in home directory with name ".aws-sso" (without extension).
+	viper.AddConfigPath(home)
+	viper.SetConfigName(AO_CONFIG_NAME)
+	file := path.Join(home, AO_CONFIG_NAME)
+
+	if exists, err := los.IsFileOrFolderExisting(file); err != nil {
+		panic(err)
+	} else if !exists {
+		f, err := os.Create(file)
+		if err != nil {
 			panic(err)
-		} else if !exists {
-			f, err := os.Create(file)
-			if err != nil {
-				panic(err)
-			}
-			f.Close()
 		}
+		f.Close()
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

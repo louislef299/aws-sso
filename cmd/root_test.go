@@ -21,7 +21,7 @@ func TestRootCmdConfig(t *testing.T) {
 
 	err = rootCmd.Execute()
 	assert.NoError(t, err)
-	assert.Equal(t, "knot", rootCmd.Use)
+	assert.Equal(t, "aws-sso", rootCmd.Use)
 
 	// TODO: fix this test case
 	//assert.Equal(t, "firefox", viper.GetString(envs.CORE_BROWSER))
