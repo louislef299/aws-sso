@@ -33,17 +33,17 @@ var (
 var configCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"conf"},
-	Short:   "Local configuration used for knot",
-	// PersistentPreRun: func(cmd *cobra.Command, args []string) {
-	// 	cmd.Println("Using config file", viper.ConfigFileUsed())
-	// },
+	Short:   "Local configuration used for aws-sso",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		cmd.Println("Using config file", viper.ConfigFileUsed())
+	},
 }
 
 // configGetCmd represents the get command
 var configGetCmd = &cobra.Command{
 	Use:     "get",
 	Short:   "Get a configuration value.",
-	Example: "  knot config get name",
+	Example: "  aws-sso config get name",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			log.Println("must provide at least one configuration value retrieve")
@@ -83,10 +83,10 @@ var configListCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:     "set",
 	Short:   "Set a local configuration value.",
-	Example: "  knot config set name Louis Lefebvre",
+	Example: "  aws-sso config set name Louis Lefebvre",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
-			log.Println("usage: knot config set <key> <value>")
+			log.Println("usage: aws-sso config set <key> <value>")
 			os.Exit(1)
 		}
 
@@ -105,7 +105,7 @@ var configUnsetCmd = &cobra.Command{
 	Short: "Unset your config settings",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			log.Fatal("must provide one key to unset. example: knot config unset core.profile")
+			log.Fatal("must provide one key to unset. example: aws-sso config unset core.profile")
 		}
 
 		viper.Set(args[0], "")
