@@ -18,9 +18,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
+	"context"
+	"log"
+	"os"
+	"os/signal"
+
 	"github.com/louislef299/aws-sso/cmd"
 )
 
 func main() {
-	cmd.Execute()
+	// Create a context that intercepts SIGINT
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	go func() {
+		<-ctx.Done()
+		log.Println("received SIGINT; shutting down...")
+		defer func() {
+			cancel()
+			os.Exit(0)
+		}()
+	}()
+
+	cmd.Execute(ctx)
 }
