@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 Louis Lefebvre <louislefebvre1999@gmail.com>
-*/
 package cmd
 
 import (
@@ -36,24 +33,24 @@ var (
 var configCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"conf"},
-	Short:   "Local configuration used for aws-sso",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Using config file", viper.ConfigFileUsed())
-	},
+	Short:   "Local configuration used for knot",
+	// PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	// 	cmd.Println("Using config file", viper.ConfigFileUsed())
+	// },
 }
 
 // configGetCmd represents the get command
 var configGetCmd = &cobra.Command{
 	Use:     "get",
 	Short:   "Get a configuration value.",
-	Example: "  aws-sso config get name",
+	Example: "  knot config get name",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			log.Println("must provide at least one configuration value retrieve")
 			os.Exit(1)
 		}
 		for _, arg := range args {
-			fmt.Printf("value of %s: %v\n", arg, viper.Get(arg))
+			cmd.Printf("value of %s: %v\n", arg, viper.Get(arg))
 		}
 	},
 }
@@ -64,7 +61,7 @@ var configListCmd = &cobra.Command{
 	Short:   "List your local configuration values.",
 	Aliases: []string{"ls"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Current config values:")
+		cmd.Println("Current config values:")
 		keys := viper.AllKeys()
 		acctRegex, sessRegex := regexp.MustCompile(acctGroupRegex), regexp.MustCompile(sessionGroupRegex)
 		slices.Sort(keys)
@@ -77,7 +74,7 @@ var configListCmd = &cobra.Command{
 			if value == "" && !allConfigValues {
 				continue
 			}
-			fmt.Printf("%s=%v\n", k, value)
+			cmd.Printf("%s=%v\n", k, value)
 		}
 	},
 }
@@ -86,10 +83,10 @@ var configListCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:     "set",
 	Short:   "Set a local configuration value.",
-	Example: "  aws-sso config set name Louis Lefebvre",
+	Example: "  knot config set name Louis Lefebvre",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 2 {
-			log.Println("usage: aws-sso config set <key> <value>")
+			log.Println("usage: knot config set <key> <value>")
 			os.Exit(1)
 		}
 
@@ -98,7 +95,7 @@ var configSetCmd = &cobra.Command{
 			log.Fatal("couldn't write to config:", err)
 		}
 
-		fmt.Printf("set %s to %v\n", args[0], viper.Get(args[0]))
+		cmd.Printf("set %s to %v\n", args[0], viper.Get(args[0]))
 	},
 }
 
@@ -108,14 +105,14 @@ var configUnsetCmd = &cobra.Command{
 	Short: "Unset your config settings",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			log.Fatal("must provide one key to unset. example: aws-sso config unset core.profile")
+			log.Fatal("must provide one key to unset. example: knot config unset core.profile")
 		}
 
 		viper.Set(args[0], "")
 		if err := viper.WriteConfig(); err != nil {
 			log.Fatal("could not write to config file:", err)
 		}
-		fmt.Println("successfully unset", args[0])
+		cmd.Println("successfully unset", args[0])
 	},
 }
 
@@ -125,7 +122,7 @@ var configValuesCmd = &cobra.Command{
 	Aliases: []string{"vals"},
 	Short:   "Get the possible configuration values.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("The following values are available for configuration:")
+		cmd.Println("The following values are available for configuration:")
 		w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', tabwriter.AlignRight)
 		for _, c := range currentConfigValues {
 			fmt.Fprintln(w, c.String())
