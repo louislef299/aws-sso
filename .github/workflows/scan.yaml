@@ -18,7 +18,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
     - name: Trivy Security Scan
-      uses: aquasecurity/trivy-action@0.31.0
+      uses: aquasecurity/trivy-action@0.32.0
       with:
         scan-type: 'fs'
         scan-ref: '.'
@@ -35,7 +35,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
     - name: Trivy License Security Scan
-      uses: aquasecurity/trivy-action@0.31.0
+      uses: aquasecurity/trivy-action@0.32.0
       env:
         TRIVY_LICENSE_FULL: true
       with:
