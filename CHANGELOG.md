@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.5](https://github.com/louislef299/aws-sso/compare/v1.5.4...v1.5.5) (2025-07-04)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.14 to 1.29.17 ([#502](https://github.com/louislef299/aws-sso/issues/502)) ([d2a2a9c](https://github.com/louislef299/aws-sso/commit/d2a2a9c4fd212071ed1f37fac2cb63a1a4ce8198))
+* bump github.com/docker/cli ([#505](https://github.com/louislef299/aws-sso/issues/505)) ([cb1341c](https://github.com/louislef299/aws-sso/commit/cb1341c086f0d5dcb1b51edcc7b7e9ba24c9a5d8))
+* bump github.com/docker/cli ([#510](https://github.com/louislef299/aws-sso/issues/510)) ([3a00023](https://github.com/louislef299/aws-sso/commit/3a000239edf334e02825e2959cf6a1e2d25fd94c))
+* bump github.com/docker/docker ([#504](https://github.com/louislef299/aws-sso/issues/504)) ([1bc30bf](https://github.com/louislef299/aws-sso/commit/1bc30bf6e520f3ab36930e202970204d0f939b9e))
+* bump github.com/docker/docker ([#511](https://github.com/louislef299/aws-sso/issues/511)) ([209d9e6](https://github.com/louislef299/aws-sso/commit/209d9e677bc9c58f99adaa6535b6d666abc4d517))
+* bump k8s.io/cli-runtime from 0.33.1 to 0.33.2 ([#503](https://github.com/louislef299/aws-sso/issues/503)) ([a0c76f7](https://github.com/louislef299/aws-sso/commit/a0c76f743b2acc3768b66df0b02105a2ca396b34))
+* bump k8s.io/client-go from 0.33.1 to 0.33.2 ([#501](https://github.com/louislef299/aws-sso/issues/501)) ([3e01b01](https://github.com/louislef299/aws-sso/commit/3e01b0130093fa88d144d45a18405cfa60721572))
+* Update cmd.Execute to use ctx ([#513](https://github.com/louislef299/aws-sso/issues/513)) ([a461f1c](https://github.com/louislef299/aws-sso/commit/a461f1c06a151e4d41f0f913a968667f1f35914d))
+* Upgrade config cmd & add plugins ([#514](https://github.com/louislef299/aws-sso/issues/514)) ([ab361b7](https://github.com/louislef299/aws-sso/commit/ab361b70da7776435db8afb7da863394bd4380d5))
+
 ## [1.5.4](https://github.com/louislef299/aws-sso/compare/v1.5.3...v1.5.4) (2025-06-27)
 
 
