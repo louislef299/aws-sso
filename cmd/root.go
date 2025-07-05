@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"path"
@@ -15,12 +16,11 @@ import (
 var (
 	region, cmdTimeout string
 	commandTimeout     time.Duration
-	configLoc          string
 )
 
 const (
-	AO_CONFIG_ENV  = "AWS_SSO_CONFIG"
 	AO_CONFIG_NAME = ".aws-sso"
+	AO_ENV_PREFIX  = "AWS_SSO"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -30,6 +30,11 @@ var rootCmd = &cobra.Command{
 	Long:  `An AWS login helper to make authentication easier`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
+		// Force parse flags manually before using viper-bound values
+		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
+			return err
+		}
 		return nil
 	},
 }
@@ -44,37 +49,19 @@ func Execute(ctx context.Context) {
 }
 
 func init() {
+	cobra.OnInitialize(initConfig)
+
 	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "3s", "the default timeout for network commands executed")
 	var err error
 	commandTimeout, err = time.ParseDuration(cmdTimeout)
 	if err != nil {
 		log.Fatal("could not parse commandTimeout: ", err)
 	}
-	rootCmd.PersistentFlags().StringVar(&configLoc, "config", "", "Configuration file to use during execution")
-
-	initConfig()
-}
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	viper.SetConfigType("toml")
-	if c := os.Getenv(AO_CONFIG_ENV); c != "" {
-		viper.AddConfigPath(path.Dir(c))
-	}
-
-	if configLoc != "" {
-		viper.AddConfigPath(configLoc)
-	}
 
 	// Find home directory.
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
-
-	// Search config in home directory with name ".aws-sso" (without extension).
-	viper.AddConfigPath(home)
-	viper.SetConfigName(AO_CONFIG_NAME)
 	file := path.Join(home, AO_CONFIG_NAME)
-
 	if exists, err := los.IsFileOrFolderExisting(file); err != nil {
 		panic(err)
 	} else if !exists {
@@ -85,10 +72,31 @@ func initConfig() {
 		f.Close()
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	rootCmd.PersistentFlags().String("config", home, "Configuration file to use during execution")
+	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
+}
+
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	viper.SetConfigType("toml")
+	viper.SetEnvPrefix(AO_ENV_PREFIX)
+	viper.AutomaticEnv()
+
+	configFile := viper.GetString("config")
+	info, err := os.Stat(configFile)
+	if err == nil && info.IsDir() {
+		viper.AddConfigPath(configFile)
+		viper.SetConfigName(AO_CONFIG_NAME)
+	} else {
+		viper.SetConfigFile(configFile)
+	}
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			panic(fmt.Sprintf("no configuration file found: %v", err))
+		} else {
+			panic(err)
+		}
 	}
 }

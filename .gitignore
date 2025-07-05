@@ -12,9 +12,6 @@ aws-sso
 # Test binary, built with `go test -c`
 *.test
 
-# Test Config File
-.aws-sso*
-
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
