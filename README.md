@@ -74,7 +74,6 @@ item from the Backlog below.
 
 ### Backlog
 
-- Make better use of Viper pkg for config precedence
 - Update `whoami` to check for existing profile
 - Delete old access tokens using `token rm`
 - Remove kube config context when logging out with `-c`
