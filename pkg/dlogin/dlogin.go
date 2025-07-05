@@ -48,7 +48,7 @@ type ConfigOptions any
 type ConfigOptionsFunc func(*ConfigOptions) error
 type ILogin interface {
 	Init(cmd *cobra.Command) error
-	Login(ctx context.Context, config any, opts ...ConfigOptionsFunc) error
+	Login(ctx context.Context, config any) error
 }
 
 func Init(driverName string, cmd *cobra.Command) error {
@@ -62,7 +62,7 @@ func Init(driverName string, cmd *cobra.Command) error {
 	return driverLogin.Init(cmd)
 }
 
-func DLogin(driverName string, config any) error {
+func DLogin(ctx context.Context, driverName string, config any) error {
 	driversMu.RLock()
 	driverLogin, ok := drivers[driverName]
 	driversMu.RUnlock()

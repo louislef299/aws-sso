@@ -20,10 +20,10 @@ import (
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
-	ldocker "github.com/louislef299/aws-sso/pkg/docker"
 	lk8s "github.com/louislef299/aws-sso/pkg/kube"
 	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/louislef299/aws-sso/pkg/prompt"
+	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -139,21 +139,13 @@ updates.`,
 		go func() {
 			defer wg.Done()
 			log.Println("configuring local docker credentials with ECR token")
+
 			ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
 			defer cancel()
-
-			ecrToken, ecrEndpoint, err := laws.GetECRToken(ctx, cfg)
-			if err != nil {
-				log.Fatal("couldn't gather ecr token:", err)
-			}
-
-			err = ldocker.Login("AWS", ecrToken, ecrEndpoint)
-			if err != nil {
-				log.Fatalf("could not log docker into ecr endpoint %s: %v", ecrEndpoint, err)
-			}
-
-			err = dlogin.DLogin("ecr", struct{}{})
-			if err != nil {
+			if err = dlogin.DLogin(ctx, "ecr", &pecr.ECRLogin{
+				Username: "AWS",
+				Config:   cfg,
+			}); err != nil {
 				panic(err)
 			}
 		}()

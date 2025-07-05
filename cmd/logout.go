@@ -38,15 +38,15 @@ Center sign in session, and removes the token locally.`,
 		// if session.profile is set, coming from a session
 		if laws.IsProfileConfigured() {
 			// clean docker configs
-			registry, err := laws.GetECRRegistryName(cmd.Context(), &cfg)
-			if err != nil {
-				log.Println("couldn't logout of docker: ", err)
-			} else {
-				err = logout.DockerLogout(registry)
-				if err != nil {
-					log.Fatal("could not logout of ECR registry:", err)
-				}
-			}
+			// registry, err := laws.GetECRRegistryName(cmd.Context(), &cfg)
+			// if err != nil {
+			// 	log.Println("couldn't logout of docker: ", err)
+			// } else {
+			// 	err = logout.DockerLogout(registry)
+			// 	if err != nil {
+			// 		log.Fatal("could not logout of ECR registry:", err)
+			// 	}
+			// }
 		}
 
 		// clean aws configs MUST GO LAST
