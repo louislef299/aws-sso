@@ -10,6 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
+	"github.com/louislef299/aws-sso/internal/logout"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
@@ -50,13 +51,32 @@ func (a *ECRLogin) Login(ctx context.Context, config any) error {
 	}
 
 	log.Println("logging into ECR!")
-
 	ecrToken, ecrEndpoint, err := GetECRToken(ctx, cfg.Config)
 	if err != nil {
 		return fmt.Errorf("couldn't gather ecr token: %v", err)
 	}
 
 	return ldocker.Login("AWS", ecrToken, ecrEndpoint)
+}
+
+func (a *ECRLogin) Logout(ctx context.Context, config any) error {
+	cfg, ok := config.(*ECRLogin)
+	if !ok {
+		return fmt.Errorf("expected ECRLogin, got %T", config)
+	}
+
+	// clean docker configs
+	registry, err := GetECRRegistryName(ctx, cfg.Config)
+	if err != nil {
+		return fmt.Errorf("couldn't logout of docker: %v", err)
+	} else {
+		err = logout.DockerLogout(registry)
+		if err != nil {
+			return fmt.Errorf("could not logout of ECR registry: %v", err)
+		}
+	}
+	log.Println("logged out of ECR!")
+	return nil
 }
 
 // Returns the name of the ECR registry for the AWS environment

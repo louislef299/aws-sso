@@ -38,6 +38,14 @@ var rootCmd = &cobra.Command{
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
 			return err
 		}
+
+		ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
+		go func() {
+			<-ctx.Done()
+			cancel()
+		}()
+
+		cmd.SetContext(ctx)
 		return nil
 	},
 }
