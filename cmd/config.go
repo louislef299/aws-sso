@@ -145,7 +145,6 @@ func init() {
 	config.AddConfigValue(envs.CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
 	config.AddConfigValue(envs.CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
 	config.AddConfigValue(envs.CORE_URL, "The default sso start url used when logging in")
-	config.AddConfigValue(envs.CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
 	config.AddConfigValue(envs.CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
 }
 
