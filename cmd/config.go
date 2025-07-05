@@ -28,7 +28,6 @@ var configCmd = &cobra.Command{
 	Aliases: []string{"conf"},
 	Short:   "Local configuration used for aws-sso",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
-		// Ensure to register each plugin
 		if err := rootCmd.PersistentPreRunE(cmd, args); err != nil {
 			log.Fatal(err)
 		}

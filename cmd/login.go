@@ -24,16 +24,15 @@ import (
 	lk8s "github.com/louislef299/aws-sso/pkg/kube"
 	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/louislef299/aws-sso/pkg/prompt"
-	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var (
-	role, startUrl, output, token    string
-	clusterName                      string
-	disableEKSLogin, disableECRLogin bool
-	private, refresh, skipDefaults   bool
+	role, startUrl, output, token  string
+	clusterName                    string
+	disableEKSLogin                bool
+	private, refresh, skipDefaults bool
 
 	ErrKeyDoesNotExist     = errors.New("the provided key doesn't exist")
 	ErrClusterDoesNotExist = errors.New("the provided cluster does not exist in this environment")

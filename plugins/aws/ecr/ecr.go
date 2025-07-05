@@ -20,7 +20,7 @@ func init() {
 }
 
 func (e *ECRLogin) Init(cmd *cobra.Command) error {
-	cmd.Flags().Bool("disableECRLogin", true, "Disables automatic detection and login for ECR")
+	cmd.Flags().Bool("disableECRLogin", false, "Disables automatic detection and login for ECR")
 	lcmd.AddConfigValue(ECR_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
 
 	return viper.BindPFlag(ECR_DISABLE_ECR_LOGIN, cmd.Flags().Lookup("disableECRLogin"))
