@@ -191,8 +191,6 @@ func init() {
 	loginCmd.Flags().StringVar(&role, "role", "", "The IAM role to use when logging in")
 	lconfig.BindConfigValue(envs.SESSION_ROLE, loginCmd.Flags().Lookup("role"))
 
-	loginCmd.Flags().BoolVar(&disableEKSLogin, "disableEKSLogin", false, "Disables automatic detection and login for EKS")
-
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
 	loginCmd.Flags().BoolVar(&skipDefaults, "skipDefaults", false, "Skip the default login values and use prompt selection")
