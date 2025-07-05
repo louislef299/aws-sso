@@ -10,19 +10,12 @@ import (
 	"text/tabwriter"
 
 	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/pkg/config"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
-type ConfigValue struct {
-	Name        string
-	Description string
-}
-
 var (
-	currentConfigValues []*ConfigValue
-
 	acctGroupRegex    = `^account\.*`
 	sessionGroupRegex = `^session\.*`
 
@@ -35,6 +28,10 @@ var configCmd = &cobra.Command{
 	Aliases: []string{"conf"},
 	Short:   "Local configuration used for aws-sso",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if err := rootCmd.PersistentPreRunE(cmd, args); err != nil {
+			log.Fatal(err)
+		}
+
 		cmd.Println("Using config file", viper.ConfigFileUsed())
 	},
 }
@@ -124,7 +121,7 @@ var configValuesCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Println("The following values are available for configuration:")
 		w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', tabwriter.AlignRight)
-		for _, c := range currentConfigValues {
+		for _, c := range config.GetCurrentConfigValues() {
 			fmt.Fprintln(w, c.String())
 		}
 		w.Flush()
@@ -143,31 +140,13 @@ func init() {
 	configCmd.AddCommand(configValuesCmd)
 
 	// Space saved for config values not bound to flags
-	addConfigValue(envs.CORE_DEFAULT_CLUSTER, "The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)")
-	addConfigValue(envs.CORE_DEFAULT_ROLE, "The default iam role to use when logging in, supports go regex expressions(golang.org/s/re2syntax)")
-	addConfigValue(envs.CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
-	addConfigValue(envs.CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
-	addConfigValue(envs.CORE_URL, "The default sso start url used when logging in")
-	addConfigValue(envs.CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
-	addConfigValue(envs.CORE_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
-	addConfigValue(envs.CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
-}
-
-// BindConfigValue will bind the Viper config value to the provided pflag
-func BindConfigValue(name string, flag *pflag.Flag) {
-	err := viper.BindPFlag(name, flag)
-	if err != nil {
-		log.Println("WARNING: could not bind flag", name)
-		return
-	}
-	addConfigValue(fmt.Sprintf("<BOUND_FLAG>%s", name), flag.Usage)
-}
-
-func addConfigValue(name, description string) {
-	currentConfigValues = append(currentConfigValues, &ConfigValue{
-		Name:        name,
-		Description: description,
-	})
+	config.AddConfigValue(envs.CORE_DEFAULT_CLUSTER, "The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)")
+	config.AddConfigValue(envs.CORE_DEFAULT_ROLE, "The default iam role to use when logging in, supports go regex expressions(golang.org/s/re2syntax)")
+	config.AddConfigValue(envs.CORE_DEFAULT_REGION, "The default region used when a region is not found in your environment or set with flags")
+	config.AddConfigValue(envs.CORE_SSO_REGION, "The region to use for the AWS SSO authentication")
+	config.AddConfigValue(envs.CORE_URL, "The default sso start url used when logging in")
+	config.AddConfigValue(envs.CORE_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
+	config.AddConfigValue(envs.CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
 }
 
 // Sets value and writes to config file immediately
@@ -177,8 +156,4 @@ func deepSet(key, value string) {
 	if err != nil {
 		log.Fatalf("could not configure key %s to value %s: %v\n", key, value, err)
 	}
-}
-
-func (c *ConfigValue) String() string {
-	return fmt.Sprintf("%s:\t%s", c.Name, c.Description)
 }

@@ -8,7 +8,10 @@ import (
 	"path"
 	"time"
 
+	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
+	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -35,6 +38,14 @@ var rootCmd = &cobra.Command{
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
 			return err
 		}
+
+		ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
+		go func() {
+			<-ctx.Done()
+			cancel()
+		}()
+
+		cmd.SetContext(ctx)
 		return nil
 	},
 }
@@ -42,6 +53,11 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute(ctx context.Context) {
+	// we need to always initConfig due to plugin flags needing to get
+	// registered with help and usage commands
+	initConfig()
+	initPlugins()
+
 	err := rootCmd.ExecuteContext(ctx)
 	if err != nil {
 		os.Exit(1)
@@ -96,6 +112,18 @@ func initConfig() {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			panic(fmt.Sprintf("no configuration file found: %v", err))
 		} else {
+			panic(err)
+		}
+	}
+}
+
+// Initialize all the plugins with the loginCmd
+func initPlugins() {
+	// Initialize all the plugins with the loginCmd
+	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
+	for _, p := range plugins {
+		err := dlogin.Init(p, loginCmd)
+		if err != nil {
 			panic(err)
 		}
 	}
