@@ -6,17 +6,19 @@ import (
 	"maps"
 	"slices"
 	"sync"
+
+	"github.com/spf13/cobra"
 )
 
 var (
 	driversMu sync.RWMutex
-	drivers   = make(map[string]Login)
+	drivers   = make(map[string]ILogin)
 )
 
 // Register makes a login driver available by the provided name.
 // If Register is called twice with the same name or if driver is nil,
 // it panics.
-func Register(name string, driver Login) {
+func Register(name string, driver ILogin) {
 	driversMu.Lock()
 	defer driversMu.Unlock()
 	if driver == nil {
@@ -44,8 +46,20 @@ type Config struct {
 
 type ConfigOptions any
 type ConfigOptionsFunc func(*ConfigOptions) error
-type Login interface {
+type ILogin interface {
+	Init(cmd *cobra.Command) error
 	Login(ctx context.Context, config any, opts ...ConfigOptionsFunc) error
+}
+
+func Init(driverName string, cmd *cobra.Command) error {
+	driversMu.RLock()
+	driverLogin, ok := drivers[driverName]
+	driversMu.RUnlock()
+	if !ok {
+		return fmt.Errorf("login: unknown driver %q (forgotten import?)", driverName)
+	}
+
+	return driverLogin.Init(cmd)
 }
 
 func DLogin(driverName string, config any) error {
@@ -56,9 +70,5 @@ func DLogin(driverName string, config any) error {
 		return fmt.Errorf("login: unknown driver %q (forgotten import?)", driverName)
 	}
 
-	err := driverLogin.Login(context.TODO(), config)
-	if err != nil {
-		return err
-	}
-	return nil
+	return driverLogin.Login(context.TODO(), config)
 }

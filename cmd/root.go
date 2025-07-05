@@ -8,6 +8,8 @@ import (
 	"path"
 	"time"
 
+	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -34,6 +36,16 @@ var rootCmd = &cobra.Command{
 		// Force parse flags manually before using viper-bound values
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
 			return err
+		}
+
+		// Initialize all the plugins with the loginCmd
+		plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
+		for _, p := range plugins {
+			log.Println("registering plugin", p)
+			err := dlogin.Init(p, loginCmd)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	},

@@ -18,10 +18,13 @@ import (
 	"github.com/louislef299/aws-sso/internal/envs"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
+	lconfig "github.com/louislef299/aws-sso/pkg/config"
+	"github.com/louislef299/aws-sso/pkg/dlogin"
 	ldocker "github.com/louislef299/aws-sso/pkg/docker"
 	lk8s "github.com/louislef299/aws-sso/pkg/kube"
 	los "github.com/louislef299/aws-sso/pkg/os"
 	"github.com/louislef299/aws-sso/pkg/prompt"
+	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -132,26 +135,29 @@ updates.`,
 		}
 
 		wg := sync.WaitGroup{}
-		if !viper.GetBool(envs.CORE_DISABLE_ECR_LOGIN) && !disableECRLogin {
-			// configure docker credentials
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				log.Println("configuring local docker credentials with ECR token")
-				ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
-				defer cancel()
+		// configure docker credentials
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			log.Println("configuring local docker credentials with ECR token")
+			ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
+			defer cancel()
 
-				ecrToken, ecrEndpoint, err := laws.GetECRToken(ctx, cfg)
-				if err != nil {
-					log.Fatal("couldn't gather ecr token:", err)
-				}
+			ecrToken, ecrEndpoint, err := laws.GetECRToken(ctx, cfg)
+			if err != nil {
+				log.Fatal("couldn't gather ecr token:", err)
+			}
 
-				err = ldocker.Login("AWS", ecrToken, ecrEndpoint)
-				if err != nil {
-					log.Fatalf("could not log docker into ecr endpoint %s: %v", ecrEndpoint, err)
-				}
-			}()
-		}
+			err = ldocker.Login("AWS", ecrToken, ecrEndpoint)
+			if err != nil {
+				log.Fatalf("could not log docker into ecr endpoint %s: %v", ecrEndpoint, err)
+			}
+
+			err = dlogin.DLogin("ecr", struct{}{})
+			if err != nil {
+				panic(err)
+			}
+		}()
 
 		if !viper.GetBool(envs.CORE_DISABLE_EKS_LOGIN) && !disableEKSLogin {
 			wg.Add(1)
@@ -186,16 +192,16 @@ updates.`,
 func init() {
 	rootCmd.AddCommand(loginCmd)
 	loginCmd.Flags().StringVarP(&region, "region", "r", "", "The region you would like to use at login")
-	BindConfigValue(envs.SESSION_REGION, loginCmd.Flags().Lookup("region"))
+	lconfig.BindConfigValue(envs.SESSION_REGION, loginCmd.Flags().Lookup("region"))
 
 	loginCmd.Flags().StringVarP(&startUrl, "url", "u", "", "The AWS SSO start url")
-	BindConfigValue(envs.SESSION_URL, loginCmd.Flags().Lookup("url"))
+	lconfig.BindConfigValue(envs.SESSION_URL, loginCmd.Flags().Lookup("url"))
 
 	loginCmd.Flags().StringVar(&role, "role", "", "The IAM role to use when logging in")
-	BindConfigValue(envs.SESSION_ROLE, loginCmd.Flags().Lookup("role"))
+	lconfig.BindConfigValue(envs.SESSION_ROLE, loginCmd.Flags().Lookup("role"))
 
 	loginCmd.Flags().BoolVar(&disableEKSLogin, "disableEKSLogin", false, "Disables automatic detection and login for EKS")
-	loginCmd.Flags().BoolVar(&disableECRLogin, "disableECRLogin", true, "Disables automatic detection and login for ECR")
+
 	loginCmd.Flags().BoolVarP(&private, "private", "p", false, "Open a private browser when gathering/refreshing token")
 	loginCmd.Flags().BoolVar(&refresh, "refresh", false, "Whether to manually refresh your local authentication token")
 	loginCmd.Flags().BoolVar(&skipDefaults, "skipDefaults", false, "Skip the default login values and use prompt selection")

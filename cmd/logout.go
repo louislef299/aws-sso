@@ -36,7 +36,7 @@ Center sign in session, and removes the token locally.`,
 		}
 
 		// if session.profile is set, coming from a session
-		if laws.IsProfileConfigured() && !viper.GetBool(envs.CORE_DISABLE_ECR_LOGIN) {
+		if laws.IsProfileConfigured() {
 			// clean docker configs
 			registry, err := laws.GetECRRegistryName(cmd.Context(), &cfg)
 			if err != nil {

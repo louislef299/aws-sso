@@ -13,7 +13,7 @@ const (
 	CORE_DEFAULT_REGION    = "core.defaultRegion"
 	CORE_SSO_REGION        = "core.ssoRegion"
 	CORE_URL               = "core.url"
-	CORE_DISABLE_ECR_LOGIN = "core.disableECRLogin"
+	CORE_PLUGINS           = "core.plugins"
 	CORE_DISABLE_EKS_LOGIN = "core.disableEKSLogin"
 
 	// Session variables
