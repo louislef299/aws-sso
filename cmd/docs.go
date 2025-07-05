@@ -12,7 +12,7 @@ import (
 // docsCmd represents the docs command
 var docsCmd = &cobra.Command{
 	Use:    "docs",
-	Short:  "Generate lnet docs",
+	Short:  "Generate aws-sso command docs",
 	Hidden: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dir, err := cmd.Flags().GetString("dir")

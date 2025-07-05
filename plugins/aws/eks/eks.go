@@ -53,7 +53,7 @@ func (a *EKSLogin) Login(ctx context.Context, config any) error {
 	}
 
 	if viper.GetBool(EKS_DISABLE_EKS_LOGIN) {
-		log.Println("ECR Plugin is disabled, skipping...")
+		log.Println("EKS Plugin is disabled, skipping...")
 		return nil
 	}
 
@@ -106,7 +106,7 @@ func (a *EKSLogin) Logout(ctx context.Context, config any) error {
 	}
 
 	if viper.GetBool(EKS_DISABLE_EKS_LOGIN) {
-		log.Println("ECR Plugin is disabled, skipping...")
+		log.Println("EKS Plugin is disabled, skipping...")
 		return nil
 	}
 
