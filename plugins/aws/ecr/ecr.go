@@ -50,7 +50,6 @@ func (a *ECRLogin) Login(ctx context.Context, config any) error {
 		return nil
 	}
 
-	log.Println("logging into ECR!")
 	ecrToken, ecrEndpoint, err := GetECRToken(ctx, cfg.Config)
 	if err != nil {
 		return fmt.Errorf("couldn't gather ecr token: %v", err)
@@ -65,6 +64,11 @@ func (a *ECRLogin) Logout(ctx context.Context, config any) error {
 		return fmt.Errorf("expected ECRLogin, got %T", config)
 	}
 
+	if viper.GetBool(ECR_DISABLE_ECR_LOGIN) {
+		log.Println("ECR Plugin is disabled, skipping...")
+		return nil
+	}
+
 	// clean docker configs
 	registry, err := GetECRRegistryName(ctx, cfg.Config)
 	if err != nil {
@@ -75,7 +79,6 @@ func (a *ECRLogin) Logout(ctx context.Context, config any) error {
 			return fmt.Errorf("could not logout of ECR registry: %v", err)
 		}
 	}
-	log.Println("logged out of ECR!")
 	return nil
 }
 

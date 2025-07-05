@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"regexp"
-	"slices"
 	"strings"
 	"sync"
 
@@ -20,10 +18,9 @@ import (
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
-	lk8s "github.com/louislef299/aws-sso/pkg/kube"
 	los "github.com/louislef299/aws-sso/pkg/os"
-	"github.com/louislef299/aws-sso/pkg/prompt"
 	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
+	peks "github.com/louislef299/aws-sso/plugins/aws/eks"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -34,9 +31,7 @@ var (
 	disableEKSLogin                bool
 	private, refresh, skipDefaults bool
 
-	ErrKeyDoesNotExist     = errors.New("the provided key doesn't exist")
-	ErrClusterDoesNotExist = errors.New("the provided cluster does not exist in this environment")
-	ErrClustersDoNotExist  = errors.New("no clusters in this environment")
+	ErrKeyDoesNotExist = errors.New("the provided key doesn't exist")
 )
 
 // loginCmd represents the login command
@@ -111,28 +106,6 @@ updates.`,
 		}
 		region = cfg.Region
 
-		// Configure cluster options before gathering token
-		options := []lk8s.ClusterOptionsFunc{
-			lk8s.WithProfile(profileToSet),
-			lk8s.WithRegion(region),
-		}
-		log.Println("set k8s profile to", profileToSet)
-		imp, err := cmd.Flags().GetString("as")
-		if err != nil {
-			log.Println(err)
-		}
-		impG, err := cmd.Flags().GetStringArray("as-group")
-		if err != nil {
-			log.Println(err)
-		}
-		// check for impersonation flags(kube or aws)
-		if imp != "" && len(impG) > 0 {
-			log.Printf("impersonating user %s in group %s\n", imp, impG)
-			options = append(options, lk8s.WithImpersonation(imp, impG))
-		} else if imp != "" && len(impG) <= 0 {
-			log.Fatal("when impersonating, must provide both a Username and a Group(use --as & --as-group)")
-		}
-
 		wg := sync.WaitGroup{}
 		// configure docker credentials
 		wg.Add(1)
@@ -155,24 +128,18 @@ updates.`,
 			go func() {
 				defer wg.Done()
 
-				cluster, err := getClusterName(cmd.Context(), cfg, false)
-				if err == ErrClustersDoNotExist {
-					log.Println("there were no clusters found in this environment. skipping Kubernetes EKS and Docker ECR configuration")
-					return
-				} else if err == ErrClusterDoesNotExist {
-					log.Printf("cluster %s wasn't found, please select one of the provided clusters:", cluster)
-					clusters, err := laws.GetClusters(cmd.Context(), cfg)
-					if err != nil {
-						log.Fatal("couldn't gather clusters: ", err)
-					}
-					cluster = fuzzyCluster(clusters)
-				} else if err != nil {
-					log.Printf("could not gather cluster information: %v\n", err)
-					return
+				ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
+				defer cancel()
+				if err = dlogin.DLogin(ctx, "eks", &peks.EKSLogin{
+					Cluster:      clusterName,
+					Profile:      profileToSet,
+					Region:       region,
+					Command:      cmd,
+					Config:       cfg,
+					SkipDefaults: skipDefaults,
+				}); err != nil {
+					panic(err)
 				}
-				log.Println("using cluster", cluster)
-
-				loginEKS(cmd.Context(), *cfg, cluster, options...)
 			}()
 		}
 
@@ -198,12 +165,6 @@ func init() {
 
 	loginCmd.Flags().StringVarP(&clusterName, "cluster", "c", "", "The cluster you would like to target when logging in")
 	loginCmd.Flags().StringVarP(&output, "output", "o", "json", "The output format for sso")
-}
-
-func fuzzyCluster(clusters []string) string {
-	indexChoice, _ := prompt.Select("Select your cluster", clusters, prompt.FuzzySearchWithPrefixAnchor(clusters))
-	log.Printf("Selected cluster %s", clusters[indexChoice])
-	return clusters[indexChoice]
 }
 
 func getAWSConfig(ctx context.Context, profile, region string, newProfile bool) (*aws.Config, error) {
@@ -257,53 +218,6 @@ func getAWSConfig(ctx context.Context, profile, region string, newProfile bool) 
 	}
 
 	return &cfg, nil
-}
-
-func getClusterName(ctx context.Context, cfg *aws.Config, skipFuzzy bool) (string, error) {
-	clusters, err := laws.GetClusters(ctx, cfg)
-	if err != nil {
-		return "", err
-	}
-
-	if len(clusters) == 0 {
-		return "", ErrClustersDoNotExist
-	}
-
-	if skipDefaults {
-		return fuzzyCluster(clusters), nil
-	}
-
-	var cluster string
-	if clusterName != "" {
-		cluster = clusterName
-	} else if defaultCluster := viper.GetString(envs.CORE_DEFAULT_CLUSTER); defaultCluster != "" {
-		r, err := regexp.Compile(defaultCluster)
-		if err == nil {
-			log.Printf("looking for cluster matching expression: %s\n", defaultCluster)
-			for _, c := range clusters {
-				if r.MatchString(c) {
-					cluster = c
-					break
-				}
-			}
-		} else {
-			log.Printf("assuming default static name due to regex failure: %v\n", err)
-			cluster = defaultCluster
-		}
-	} else if len(clusters) == 1 {
-		cluster = clusters[0]
-	} else if len(clusters) == 0 {
-		return "", ErrClustersDoNotExist
-	} else if c := viper.GetString(envs.SESSION_CLUSTER); c != "" {
-		cluster = c
-	} else if !skipFuzzy {
-		cluster = fuzzyCluster(clusters)
-	}
-
-	if !slices.Contains(clusters, cluster) {
-		return cluster, ErrClusterDoesNotExist
-	}
-	return cluster, nil
 }
 
 func getBrowser() browser.Browser {
@@ -381,23 +295,4 @@ func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newPr
 		}
 	}
 	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)
-}
-
-func loginEKS(ctx context.Context, cfg aws.Config, cluster string, optFns ...lk8s.ClusterOptionsFunc) {
-	// configure kubernetes credentials
-	clusterInfo, err := laws.GetClusterInfo(ctx, &cfg, cluster)
-	if err != nil {
-		log.Fatal("couldn't gather cluster information:", err)
-	}
-
-	log.Printf("configuring kubernetes configuration cluster access for %s\n", cluster)
-	err = lk8s.ConfigureCluster(ctx, clusterInfo.Cluster, optFns...)
-	if err != nil {
-		log.Fatal("could not update kubeconfig: ", err)
-	}
-	viper.Set(envs.SESSION_CLUSTER, *clusterInfo.Cluster.Name)
-	err = viper.WriteConfig()
-	if err != nil {
-		log.Fatal("could not write cluster information to config:", err)
-	}
 }

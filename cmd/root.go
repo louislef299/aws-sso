@@ -68,7 +68,7 @@ func Execute(ctx context.Context) {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "3s", "the default timeout for network commands executed")
+	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "1m", "the default timeout for network commands executed")
 	var err error
 	commandTimeout, err = time.ParseDuration(cmdTimeout)
 	if err != nil {
@@ -120,7 +120,6 @@ func initConfig() {
 
 // Initialize all the plugins with the loginCmd
 func initPlugins() {
-	// Initialize all the plugins with the loginCmd
 	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
 	for _, p := range plugins {
 		err := dlogin.Init(p, loginCmd)
