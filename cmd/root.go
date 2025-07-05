@@ -113,11 +113,7 @@ func initConfig() {
 func initPlugins() {
 	// Initialize all the plugins with the loginCmd
 	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
-	if len(plugins) == 0 {
-		log.Println("no plugins found!")
-	}
 	for _, p := range plugins {
-		log.Println("registering plugin", p)
 		err := dlogin.Init(p, loginCmd)
 		if err != nil {
 			panic(err)
