@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/louislef299/aws-sso/compare/v1.5.5...v1.6.0) (2025-07-05)
+
+
+### Features
+
+* Add ECR plugin to login workflow ([#519](https://github.com/louislef299/aws-sso/issues/519)) ([fcabaf2](https://github.com/louislef299/aws-sso/commit/fcabaf2983f5c28e4874e51a5450e9ec6c35b6cb))
+
+
+### Bug Fixes
+
+* Update config file business logic ([#517](https://github.com/louislef299/aws-sso/issues/517)) ([b0c215c](https://github.com/louislef299/aws-sso/commit/b0c215c00b7e5a7f5db77ac50ef34a12336fe24c))
+
 ## [1.5.5](https://github.com/louislef299/aws-sso/compare/v1.5.4...v1.5.5) (2025-07-04)
 
 
