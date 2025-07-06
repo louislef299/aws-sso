@@ -147,12 +147,3 @@ func init() {
 	config.AddConfigValue(envs.CORE_URL, "The default sso start url used when logging in")
 	config.AddConfigValue(envs.CORE_BROWSER, "Default browser is required for advanced features like opening in a private browser")
 }
-
-// Sets value and writes to config file immediately
-func deepSet(key, value string) {
-	viper.Set(key, value)
-	err := viper.WriteConfig()
-	if err != nil {
-		log.Fatalf("could not configure key %s to value %s: %v\n", key, value, err)
-	}
-}

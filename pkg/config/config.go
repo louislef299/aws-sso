@@ -32,6 +32,15 @@ func AddConfigValue(name, description string) {
 	})
 }
 
+// Sets value and writes to config file immediately
+func DeepSet(key, value string) {
+	viper.Set(key, value)
+	err := viper.WriteConfig()
+	if err != nil {
+		log.Fatalf("could not configure key %s to value %s: %v\n", key, value, err)
+	}
+}
+
 func GetCurrentConfigValues() []*ConfigValue {
 	return currentConfigValues
 }

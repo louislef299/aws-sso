@@ -13,6 +13,7 @@ import (
 	los "github.com/louislef299/aws-sso/pkg/os"
 	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	_ "github.com/louislef299/aws-sso/plugins/aws/eks"
+	_ "github.com/louislef299/aws-sso/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
