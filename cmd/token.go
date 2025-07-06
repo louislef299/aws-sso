@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/louislef299/aws-sso/internal/envs"
+	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -135,7 +136,7 @@ func checkToken() {
 
 // Returns the current session token
 func addToken(name string) {
-	deepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
+	lconfig.DeepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), ACTIVE_TOKEN_ID)
 	setToken(name)
 }
 
@@ -168,5 +169,5 @@ func listTokens() {
 }
 
 func removeToken(name string) {
-	deepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), "")
+	lconfig.DeepSet(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name), "")
 }

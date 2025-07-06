@@ -10,17 +10,15 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/louislef299/aws-sso/internal/browser"
+	lacct "github.com/louislef299/aws-sso/internal/account"
 	"github.com/louislef299/aws-sso/internal/envs"
-	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
 	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	peks "github.com/louislef299/aws-sso/plugins/aws/eks"
+	poidc "github.com/louislef299/aws-sso/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -78,12 +76,12 @@ updates.`,
 		// if not a local profile, check for account information
 		if !lc {
 			if !private {
-				private = getAccountPrivate(requestProfile)
+				private = lacct.GetAccountPrivate(requestProfile)
 			}
 
 			if token != "" {
 				setToken(token)
-			} else if t := getAccountToken(requestProfile); t != "" {
+			} else if t := lacct.GetAccountToken(requestProfile); t != "" {
 				setToken(t)
 			} else {
 				checkToken()
@@ -100,11 +98,17 @@ updates.`,
 			log.Fatal("could not sync account session:", err)
 		}
 
-		cfg, err := getAWSConfig(cmd.Context(), requestProfile, region, newAuth)
-		if err != nil {
-			log.Fatal("could not generate AWS config: ", err)
+		oidcCfg := &poidc.OIDCLogin{
+			Profile:      requestProfile,
+			Region:       region,
+			NewProfile:   newAuth,
+			Private:      private,
+			Refresh:      refresh,
+			SkipDefaults: skipDefaults,
 		}
-		region = cfg.Region
+		if err = dlogin.DLogin(cmd.Context(), "oidc", oidcCfg); err != nil {
+			panic(err)
+		}
 
 		wg := sync.WaitGroup{}
 		// configure docker credentials
@@ -117,7 +121,7 @@ updates.`,
 			defer cancel()
 			if err = dlogin.DLogin(ctx, "ecr", &pecr.ECRLogin{
 				Username: "AWS",
-				Config:   cfg,
+				Config:   oidcCfg.Config,
 			}); err != nil {
 				panic(err)
 			}
@@ -135,7 +139,7 @@ updates.`,
 					Profile:      profileToSet,
 					Region:       region,
 					Command:      cmd,
-					Config:       cfg,
+					Config:       oidcCfg.Config,
 					SkipDefaults: skipDefaults,
 				}); err != nil {
 					panic(err)
@@ -165,134 +169,4 @@ func init() {
 
 	loginCmd.Flags().StringVarP(&clusterName, "cluster", "c", "", "The cluster you would like to target when logging in")
 	loginCmd.Flags().StringVarP(&output, "output", "o", "json", "The output format for sso")
-}
-
-func getAWSConfig(ctx context.Context, profile, region string, newProfile bool) (*aws.Config, error) {
-	// check if referencing a local profile
-	lc, err := laws.IsLocalConfig(profile)
-	if err != nil {
-		log.Println("couldn't find predefined AWS configurations:", err)
-	}
-
-	if lc {
-		log.Println("using existing configuration profile", profile)
-		cfg, err := config.LoadDefaultConfig(ctx,
-			config.WithSharedConfigProfile(profile),
-		)
-		if err != nil {
-			return nil, err
-		}
-		deepSet(envs.SESSION_PROFILE, profile)
-
-		return &cfg, nil
-	}
-
-	ssoRegion, err := lregion.GetRegion(lregion.STS)
-	if err != nil {
-		log.Fatal("could not gather sso region:", err)
-	}
-
-	// gross anti-pattern, but too lazy to reprogram the existing logic for now
-	if region == "cn-north-1" || region == "cn-northwest-1" {
-		ssoRegion = "cn-north-1"
-	}
-	log.Println("using sso region", ssoRegion, "to login")
-
-	acctID := getAccountID(profile)
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(ssoRegion))
-	if err != nil {
-		return nil, err
-	}
-
-	p, err := loginAWS(ctx, cfg, acctID, profile, newProfile)
-	if err != nil {
-		log.Fatal("couldn't log into AWS: ", err)
-	}
-	deepSet(envs.SESSION_PROFILE, p)
-
-	log.Println("loading up new config", p, "with region", region)
-	// Start up new config with newly configured profile
-	cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(region), config.WithSharedConfigProfile(p))
-	if err != nil {
-		log.Fatal("couldn't load new config:", err)
-	}
-
-	return &cfg, nil
-}
-
-func getBrowser() browser.Browser {
-	if private {
-		log.Println("browser set to open incognito(no cookies)")
-	} else {
-		log.Println("browser set to default(use cookies)")
-	}
-	return browser.GetBrowser(viper.GetString(envs.CORE_BROWSER), private)
-}
-
-func getURL(profile string) string {
-	url := getAccountURL(profile)
-	if url != "" {
-		return url
-	}
-
-	url = viper.GetString(envs.SESSION_URL)
-	if url != "" {
-		return url
-	}
-
-	fmt.Printf("enter your AWS access portal URL: ")
-	reader := bufio.NewReader(os.Stdin)
-	url, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("An error occurred while reading input: ", err)
-	}
-	url = strings.TrimSuffix(url, "\n")
-	viper.Set("session.url", url)
-
-	if err := viper.WriteConfig(); err != nil {
-		log.Fatal("could not write to config file:", err)
-	}
-	return url
-}
-
-func loginAWS(ctx context.Context, cfg aws.Config, acctID, profile string, newProfile bool) (string, error) {
-	u := getURL(profile)
-	deepSet(envs.SESSION_URL, u)
-
-	clientInfo, err := laws.GatherClientInformation(ctx, &cfg, u, getBrowser(), refresh)
-	if err != nil {
-		return "", err
-	}
-
-	account, err := laws.RetrieveAccountInformation(ctx, &cfg, &clientInfo.AccessToken, &acctID)
-	if err != nil {
-		return "", err
-	}
-	acctID = *account.AccountId
-
-	role, err := laws.RetrieveRoleInfo(ctx, &cfg, *account.AccountId, clientInfo.AccessToken, skipDefaults)
-	if err != nil {
-		return "", err
-	}
-	log.Println("using aws role", *role.RoleName)
-	deepSet(envs.SESSION_ROLE, *role.RoleName)
-
-	err = laws.SaveUsageInformation(account, &role)
-	if err != nil {
-		return "", err
-	}
-
-	// set the new profile in account config
-	if newProfile {
-		err = addAccount(profile, &Account{
-			ID:      acctID,
-			Region:  cfg.Region,
-			Private: private,
-			Token:   getCurrentToken(),
-		})
-		if err != nil {
-			log.Println("WARNING: couldn't write to configuration file:", err)
-		}
-	}
-	return laws.GetAndSaveRoleCredentials(ctx, &cfg, account.AccountId, role.RoleName, &clientInfo.AccessToken, profile, cfg.Region)
 }
