@@ -121,6 +121,7 @@ func initConfig() {
 
 // Initialize all the plugins with the loginCmd
 func initPlugins() {
+	viper.SetDefault(envs.CORE_PLUGINS, []string{"oidc", "eks", "ecr"})
 	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
 	for _, p := range plugins {
 		err := dlogin.Init(p, loginCmd)
