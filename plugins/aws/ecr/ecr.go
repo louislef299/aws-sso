@@ -10,7 +10,8 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
-	"github.com/louislef299/aws-sso/internal/logout"
+	"github.com/docker/cli/cli/config"
+	"github.com/docker/docker/registry"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
@@ -74,10 +75,30 @@ func (a *ECRLogin) Logout(ctx context.Context, config any) error {
 	if err != nil {
 		return fmt.Errorf("couldn't logout of docker: %v", err)
 	} else {
-		err = logout.DockerLogout(registry)
+		err = DockerLogout(registry)
 		if err != nil {
 			return fmt.Errorf("could not logout of ECR registry: %v", err)
 		}
+	}
+	return nil
+}
+
+func DockerLogout(registryname string) error {
+	registryname = registry.ConvertToHostname(registryname)
+	dcfg, err := config.Load(config.Dir())
+	if err != nil {
+		return fmt.Errorf("loading config file failed: %v", err)
+	}
+
+	// check if we're logged in based on the records in the config file
+	// which means it couldn't have user/pass cause they may be in the creds store
+	if _, loggedIn := dcfg.AuthConfigs[registryname]; loggedIn {
+		if err := dcfg.GetCredentialsStore(registryname).Erase(registryname); err != nil {
+			return fmt.Errorf("could not erase credentials: %v", err)
+		}
+		log.Println("erased", registryname)
+	} else {
+		log.Println("wasn't logged into", registryname)
 	}
 	return nil
 }

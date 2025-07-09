@@ -6,10 +6,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/envs"
-	"github.com/louislef299/aws-sso/internal/logout"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
+	poidc "github.com/louislef299/aws-sso/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -43,13 +43,15 @@ Center sign in session, and removes the token locally.`,
 				Username: "AWS",
 				Config:   &cfg,
 			}); err != nil {
-				panic(err)
+				log.Fatal(err)
 			}
 		}
 
 		// clean aws configs MUST GO LAST
-		err = logout.Logout(cmd.Context(), &cfg, cleanToken)
-		if err != nil {
+		if err := dlogin.DLogout(cmd.Context(), "oidc", &poidc.OIDCLogin{
+			Config:     &cfg,
+			CleanToken: cleanToken,
+		}); err != nil {
 			log.Fatal("could not logout of AWS:", err)
 		}
 
