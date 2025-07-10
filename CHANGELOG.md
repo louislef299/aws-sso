@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.6.0](https://github.com/louislef299/aws-sso/compare/v1.5.5...v1.6.0) (2025-07-10)
+
+
+### Features
+
+* Add ECR plugin to login workflow ([#519](https://github.com/louislef299/aws-sso/issues/519)) ([fcabaf2](https://github.com/louislef299/aws-sso/commit/fcabaf2983f5c28e4874e51a5450e9ec6c35b6cb))
+* Add plugins command to see active drivers ([#523](https://github.com/louislef299/aws-sso/issues/523)) ([bb8e14a](https://github.com/louislef299/aws-sso/commit/bb8e14a8d606cea88d35c7be83474d0a32d865ae))
+* Enable EKS Plugin ([#520](https://github.com/louislef299/aws-sso/issues/520)) ([673b292](https://github.com/louislef299/aws-sso/commit/673b292fded1f749dcd2a4e5594706834c419ff3))
+* Migrate OIDC workflow to Plugin architecture ([#521](https://github.com/louislef299/aws-sso/issues/521)) ([df39e11](https://github.com/louislef299/aws-sso/commit/df39e1123e1f8538db315107f3694b81fcb842f6))
+
+
+### Bug Fixes
+
+* bump github.com/docker/cli ([#525](https://github.com/louislef299/aws-sso/issues/525)) ([d068765](https://github.com/louislef299/aws-sso/commit/d068765d302c30b96db58d77dceb4d5e9959608a))
+* bump github.com/docker/docker ([#524](https://github.com/louislef299/aws-sso/issues/524)) ([5c3f63c](https://github.com/louislef299/aws-sso/commit/5c3f63c057c9cd00f177a9e19e476bb3493d1544))
+* Migrate logout logic to plugins ([#522](https://github.com/louislef299/aws-sso/issues/522)) ([b085667](https://github.com/louislef299/aws-sso/commit/b0856672587f67789bb151ef88f1edeb8aad0249)), closes [#507](https://github.com/louislef299/aws-sso/issues/507)
+* Update config file business logic ([#517](https://github.com/louislef299/aws-sso/issues/517)) ([b0c215c](https://github.com/louislef299/aws-sso/commit/b0c215c00b7e5a7f5db77ac50ef34a12336fe24c))
+
 ## [1.5.5](https://github.com/louislef299/aws-sso/compare/v1.5.4...v1.5.5) (2025-07-04)
 
 
