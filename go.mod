@@ -26,7 +26,7 @@ require (
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
 	gopkg.in/ini.v1 v1.67.0
-	k8s.io/cli-runtime v0.33.2
+	k8s.io/cli-runtime v0.33.3
 	k8s.io/client-go v0.33.3
 	k8s.io/utils v0.0.0-20241104100929-3ea5e8cea738
 )
