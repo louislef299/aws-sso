@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.6.0](https://github.com/louislef299/aws-sso/compare/v1.5.5...v1.6.0) (2025-07-23)
+
+
+### Features
+
+* Add ECR plugin to login workflow ([#519](https://github.com/louislef299/aws-sso/issues/519)) ([fcabaf2](https://github.com/louislef299/aws-sso/commit/fcabaf2983f5c28e4874e51a5450e9ec6c35b6cb))
+* Add plugins command to see active drivers ([#523](https://github.com/louislef299/aws-sso/issues/523)) ([bb8e14a](https://github.com/louislef299/aws-sso/commit/bb8e14a8d606cea88d35c7be83474d0a32d865ae))
+* Enable EKS Plugin ([#520](https://github.com/louislef299/aws-sso/issues/520)) ([673b292](https://github.com/louislef299/aws-sso/commit/673b292fded1f749dcd2a4e5594706834c419ff3))
+* Migrate OIDC workflow to Plugin architecture ([#521](https://github.com/louislef299/aws-sso/issues/521)) ([df39e11](https://github.com/louislef299/aws-sso/commit/df39e1123e1f8538db315107f3694b81fcb842f6))
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.17 to 1.29.18 ([#530](https://github.com/louislef299/aws-sso/issues/530)) ([5ce537d](https://github.com/louislef299/aws-sso/commit/5ce537d7f6f8c7529a78373c9789a1c461d28b16))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.45.1 to 1.45.2 ([#529](https://github.com/louislef299/aws-sso/issues/529)) ([f4fef76](https://github.com/louislef299/aws-sso/commit/f4fef7679de1a3b897b498559cccd67529f41696))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.45.2 to 1.46.0 ([#538](https://github.com/louislef299/aws-sso/issues/538)) ([b6596e1](https://github.com/louislef299/aws-sso/commit/b6596e1a0b06afe57b044077112d87308f3b3ef6))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.66.1 to 1.66.2 ([#532](https://github.com/louislef299/aws-sso/issues/532)) ([9949d4e](https://github.com/louislef299/aws-sso/commit/9949d4e99db7103c520aa4f2d08d69a85040688c))
+* bump github.com/docker/cli ([#525](https://github.com/louislef299/aws-sso/issues/525)) ([d068765](https://github.com/louislef299/aws-sso/commit/d068765d302c30b96db58d77dceb4d5e9959608a))
+* bump github.com/docker/docker ([#524](https://github.com/louislef299/aws-sso/issues/524)) ([5c3f63c](https://github.com/louislef299/aws-sso/commit/5c3f63c057c9cd00f177a9e19e476bb3493d1544))
+* bump github.com/onsi/gomega from 1.37.0 to 1.38.0 ([#537](https://github.com/louislef299/aws-sso/issues/537)) ([cfed1a4](https://github.com/louislef299/aws-sso/commit/cfed1a4de2570a28249687416eb55ea036bd44e6))
+* bump github.com/spf13/pflag from 1.0.6 to 1.0.7 ([#528](https://github.com/louislef299/aws-sso/issues/528)) ([f755e7e](https://github.com/louislef299/aws-sso/commit/f755e7ebceb90a79261ee1d43eb5ca3829b5e38e))
+* bump k8s.io/cli-runtime from 0.33.2 to 0.33.3 ([#526](https://github.com/louislef299/aws-sso/issues/526)) ([568389f](https://github.com/louislef299/aws-sso/commit/568389f56410ef0b6a4ef846076bfd65888e9292))
+* bump k8s.io/client-go from 0.33.2 to 0.33.3 ([#527](https://github.com/louislef299/aws-sso/issues/527)) ([542cd57](https://github.com/louislef299/aws-sso/commit/542cd57832fc37c9dd768941d0841a803aeaa958))
+* Migrate logout logic to plugins ([#522](https://github.com/louislef299/aws-sso/issues/522)) ([b085667](https://github.com/louislef299/aws-sso/commit/b0856672587f67789bb151ef88f1edeb8aad0249)), closes [#507](https://github.com/louislef299/aws-sso/issues/507)
+* Update config file business logic ([#517](https://github.com/louislef299/aws-sso/issues/517)) ([b0c215c](https://github.com/louislef299/aws-sso/commit/b0c215c00b7e5a7f5db77ac50ef34a12336fe24c))
+
 ## [1.5.5](https://github.com/louislef299/aws-sso/compare/v1.5.4...v1.5.5) (2025-07-04)
 
 
