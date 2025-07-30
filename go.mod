@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.37.0
 	github.com/aws/aws-sdk-go-v2/config v1.30.1
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.1
-	github.com/aws/aws-sdk-go-v2/service/ecr v1.46.0
+	github.com/aws/aws-sdk-go-v2/service/ecr v1.47.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.67.0
 	github.com/aws/aws-sdk-go-v2/service/sso v1.26.0
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.31.0
