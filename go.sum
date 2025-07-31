@@ -2,8 +2,8 @@ github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 h1:L/gRVlceqvL25
 github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
-github.com/aws/aws-sdk-go-v2 v1.37.0 h1:YtCOESR/pN4j5oA7cVHSfOwIcuh/KwHC4DOSXFbv5F0=
-github.com/aws/aws-sdk-go-v2 v1.37.0/go.mod h1:9Q0OoGQoboYIAJyslFyF1f5K1Ryddop8gqMhWx/n4Wg=
+github.com/aws/aws-sdk-go-v2 v1.37.1 h1:SMUxeNz3Z6nqGsXv0JuJXc8w5YMtrQMuIBmDx//bBDY=
+github.com/aws/aws-sdk-go-v2 v1.37.1/go.mod h1:9Q0OoGQoboYIAJyslFyF1f5K1Ryddop8gqMhWx/n4Wg=
 github.com/aws/aws-sdk-go-v2/config v1.30.1 h1:sHL8g/+9tcZATeV2tEkEfxZeaNokDtKsSjGMGHD49qA=
 github.com/aws/aws-sdk-go-v2/config v1.30.1/go.mod h1:wkibEyFfxXRyTSzRU4bbF5IUsSXyE4xQ4ZjkGmi5tFo=
 github.com/aws/aws-sdk-go-v2/credentials v1.18.1 h1:E55xvOqlX7CvB66Z7rSM9usCrFU1ryUIUHqiXsEzVoE=
