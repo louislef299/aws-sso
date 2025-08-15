@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Trivy Security Scan
       uses: aquasecurity/trivy-action@0.32.0
       with:
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: Trivy License Security Scan
       uses: aquasecurity/trivy-action@0.32.0
       env:
