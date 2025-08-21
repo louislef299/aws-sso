@@ -7,12 +7,12 @@ toolchain go1.24.1
 require (
 	github.com/aws/aws-sdk-go-v2 v1.38.0
 	github.com/aws/aws-sdk-go-v2/config v1.31.0
-	github.com/aws/aws-sdk-go-v2/credentials v1.18.4
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.5
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.49.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.69.0
 	github.com/aws/aws-sdk-go-v2/service/sso v1.28.1
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.33.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.37.0
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.33.1
+	github.com/aws/aws-sdk-go-v2/service/sts v1.37.1
 	github.com/briandowns/spinner v1.23.2
 	github.com/docker/cli v28.3.3+incompatible
 	github.com/docker/docker v28.3.3+incompatible
