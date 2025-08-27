@@ -1,5 +1,56 @@
 # Changelog
 
+## [1.6.0](https://github.com/louislef299/aws-sso/compare/v1.5.5...v1.6.0) (2025-08-27)
+
+
+### Features
+
+* Add ECR plugin to login workflow ([#519](https://github.com/louislef299/aws-sso/issues/519)) ([fcabaf2](https://github.com/louislef299/aws-sso/commit/fcabaf2983f5c28e4874e51a5450e9ec6c35b6cb))
+* Add plugins command to see active drivers ([#523](https://github.com/louislef299/aws-sso/issues/523)) ([bb8e14a](https://github.com/louislef299/aws-sso/commit/bb8e14a8d606cea88d35c7be83474d0a32d865ae))
+* Enable EKS Plugin ([#520](https://github.com/louislef299/aws-sso/issues/520)) ([673b292](https://github.com/louislef299/aws-sso/commit/673b292fded1f749dcd2a4e5594706834c419ff3))
+* Migrate OIDC workflow to Plugin architecture ([#521](https://github.com/louislef299/aws-sso/issues/521)) ([df39e11](https://github.com/louislef299/aws-sso/commit/df39e1123e1f8538db315107f3694b81fcb842f6))
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.17 to 1.29.18 ([#530](https://github.com/louislef299/aws-sso/issues/530)) ([5ce537d](https://github.com/louislef299/aws-sso/commit/5ce537d7f6f8c7529a78373c9789a1c461d28b16))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.29.18 to 1.30.0 ([#543](https://github.com/louislef299/aws-sso/issues/543)) ([c7cebf4](https://github.com/louislef299/aws-sso/commit/c7cebf42a3cb47e220b3f2583832188a10120f1b))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.30.0 to 1.30.1 ([#546](https://github.com/louislef299/aws-sso/issues/546)) ([fed0bab](https://github.com/louislef299/aws-sso/commit/fed0babb0d2a70985bbce73e34271363d60a68f4))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.30.1 to 1.30.2 ([#552](https://github.com/louislef299/aws-sso/issues/552)) ([0e77d1d](https://github.com/louislef299/aws-sso/commit/0e77d1d323f27ef1b2dc82c755b9864e37e4b805))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.30.2 to 1.31.0 ([#568](https://github.com/louislef299/aws-sso/issues/568)) ([517d98e](https://github.com/louislef299/aws-sso/commit/517d98e55568051408aaaac08bb43437795177f6))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#542](https://github.com/louislef299/aws-sso/issues/542)) ([4a8f1da](https://github.com/louislef299/aws-sso/commit/4a8f1da4b6603ffa23aee1f32df67b6ba24e8c5b))
+* bump github.com/aws/aws-sdk-go-v2/credentials from 1.18.2 to 1.18.3 ([#559](https://github.com/louislef299/aws-sso/issues/559)) ([740a2a9](https://github.com/louislef299/aws-sso/commit/740a2a95d31e511aa5c1a73ab36e48284f5e5aee))
+* bump github.com/aws/aws-sdk-go-v2/credentials from 1.18.4 to 1.18.5 ([#581](https://github.com/louislef299/aws-sso/issues/581)) ([50e1d9f](https://github.com/louislef299/aws-sso/commit/50e1d9f404628b6cc3ad129e23bbe4e8ee704cec))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.45.1 to 1.45.2 ([#529](https://github.com/louislef299/aws-sso/issues/529)) ([f4fef76](https://github.com/louislef299/aws-sso/commit/f4fef7679de1a3b897b498559cccd67529f41696))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.45.2 to 1.46.0 ([#538](https://github.com/louislef299/aws-sso/issues/538)) ([b6596e1](https://github.com/louislef299/aws-sso/commit/b6596e1a0b06afe57b044077112d87308f3b3ef6))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.46.0 to 1.47.0 ([#548](https://github.com/louislef299/aws-sso/issues/548)) ([be0a779](https://github.com/louislef299/aws-sso/commit/be0a779d4faed6d20540f2cb45ca8ce361364acd))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.47.0 to 1.47.1 ([#558](https://github.com/louislef299/aws-sso/issues/558)) ([a98ac17](https://github.com/louislef299/aws-sso/commit/a98ac17fbea4a1008b9c92d94f70904f04af490c))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.47.1 to 1.49.0 ([#569](https://github.com/louislef299/aws-sso/issues/569)) ([00ec70c](https://github.com/louislef299/aws-sso/commit/00ec70c53c7df30a009f16e1cbfb9f8c7ef00db4))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.49.0 to 1.49.1 ([#579](https://github.com/louislef299/aws-sso/issues/579)) ([d26f3d1](https://github.com/louislef299/aws-sso/commit/d26f3d1d459ef3c2b3a694d384f644571d1d2e80))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.66.1 to 1.66.2 ([#532](https://github.com/louislef299/aws-sso/issues/532)) ([9949d4e](https://github.com/louislef299/aws-sso/commit/9949d4e99db7103c520aa4f2d08d69a85040688c))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.66.2 to 1.67.0 ([#544](https://github.com/louislef299/aws-sso/issues/544)) ([eb9d7f4](https://github.com/louislef299/aws-sso/commit/eb9d7f47888d008e7c3c96e1341c5e558b9f88cd))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.67.0 to 1.67.1 ([#553](https://github.com/louislef299/aws-sso/issues/553)) ([4355133](https://github.com/louislef299/aws-sso/commit/435513336ced1e7261afd075a8167f9ffaa89662))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.67.1 to 1.69.0 ([#566](https://github.com/louislef299/aws-sso/issues/566)) ([7654420](https://github.com/louislef299/aws-sso/commit/7654420165e9b8dfdbcdc9310247fd7e29d817c1))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.69.0 to 1.71.0 ([#580](https://github.com/louislef299/aws-sso/issues/580)) ([1ae1d23](https://github.com/louislef299/aws-sso/commit/1ae1d2397add05d958d07eb7cdbbf90733af17d6))
+* bump github.com/aws/aws-sdk-go-v2/service/sso from 1.25.6 to 1.26.0 ([#539](https://github.com/louislef299/aws-sso/issues/539)) ([eae0786](https://github.com/louislef299/aws-sso/commit/eae0786feb82524092bc87a5d2b21e436bc415a4))
+* bump github.com/aws/aws-sdk-go-v2/service/sso from 1.28.0 to 1.28.1 ([#577](https://github.com/louislef299/aws-sso/issues/577)) ([c756ef7](https://github.com/louislef299/aws-sso/commit/c756ef72e94b255ca5c2f1f80135a78700452dc0))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#540](https://github.com/louislef299/aws-sso/issues/540)) ([7e58405](https://github.com/louislef299/aws-sso/commit/7e58405665c4e9532702bf4074bd69a81619972a))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#551](https://github.com/louislef299/aws-sso/issues/551)) ([2cf4b52](https://github.com/louislef299/aws-sso/commit/2cf4b527219cf8d917f6a2ab7e9d35891b12e0b2))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#582](https://github.com/louislef299/aws-sso/issues/582)) ([6728d13](https://github.com/louislef299/aws-sso/commit/6728d138dc7b6c24b2982c89e7cf5b3ec8a64380))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.34.1 to 1.35.0 ([#541](https://github.com/louislef299/aws-sso/issues/541)) ([a15c5e9](https://github.com/louislef299/aws-sso/commit/a15c5e93967e616056992c704872199a3f19a1a1))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.37.0 to 1.37.1 ([#578](https://github.com/louislef299/aws-sso/issues/578)) ([61a79a1](https://github.com/louislef299/aws-sso/commit/61a79a17bd24d1d7555a5b3cef0cc3d3d9d7d1de))
+* bump github.com/docker/cli ([#525](https://github.com/louislef299/aws-sso/issues/525)) ([d068765](https://github.com/louislef299/aws-sso/commit/d068765d302c30b96db58d77dceb4d5e9959608a))
+* bump github.com/docker/cli ([#550](https://github.com/louislef299/aws-sso/issues/550)) ([71d502b](https://github.com/louislef299/aws-sso/commit/71d502b47b07ffabd7631a5b21ef10a175aa89ef))
+* bump github.com/docker/docker ([#524](https://github.com/louislef299/aws-sso/issues/524)) ([5c3f63c](https://github.com/louislef299/aws-sso/commit/5c3f63c057c9cd00f177a9e19e476bb3493d1544))
+* bump github.com/docker/docker ([#547](https://github.com/louislef299/aws-sso/issues/547)) ([60c5b2b](https://github.com/louislef299/aws-sso/commit/60c5b2b7fef0f3e080f99e3412722695a51baac3))
+* bump github.com/onsi/gomega from 1.37.0 to 1.38.0 ([#537](https://github.com/louislef299/aws-sso/issues/537)) ([cfed1a4](https://github.com/louislef299/aws-sso/commit/cfed1a4de2570a28249687416eb55ea036bd44e6))
+* bump github.com/spf13/pflag from 1.0.6 to 1.0.7 ([#528](https://github.com/louislef299/aws-sso/issues/528)) ([f755e7e](https://github.com/louislef299/aws-sso/commit/f755e7ebceb90a79261ee1d43eb5ca3829b5e38e))
+* bump k8s.io/cli-runtime from 0.33.2 to 0.33.3 ([#526](https://github.com/louislef299/aws-sso/issues/526)) ([568389f](https://github.com/louislef299/aws-sso/commit/568389f56410ef0b6a4ef846076bfd65888e9292))
+* bump k8s.io/client-go from 0.33.2 to 0.33.3 ([#527](https://github.com/louislef299/aws-sso/issues/527)) ([542cd57](https://github.com/louislef299/aws-sso/commit/542cd57832fc37c9dd768941d0841a803aeaa958))
+* Get out of the red ([#588](https://github.com/louislef299/aws-sso/issues/588)) ([81546fc](https://github.com/louislef299/aws-sso/commit/81546fcc553ed01900ab64c7d4268895a33b1fe3))
+* Migrate logout logic to plugins ([#522](https://github.com/louislef299/aws-sso/issues/522)) ([b085667](https://github.com/louislef299/aws-sso/commit/b0856672587f67789bb151ef88f1edeb8aad0249)), closes [#507](https://github.com/louislef299/aws-sso/issues/507)
+* Update config file business logic ([#517](https://github.com/louislef299/aws-sso/issues/517)) ([b0c215c](https://github.com/louislef299/aws-sso/commit/b0c215c00b7e5a7f5db77ac50ef34a12336fe24c))
+
 ## [1.5.5](https://github.com/louislef299/aws-sso/compare/v1.5.4...v1.5.5) (2025-07-04)
 
 
