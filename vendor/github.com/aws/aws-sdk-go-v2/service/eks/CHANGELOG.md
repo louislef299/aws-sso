@@ -1,3 +1,11 @@
+# v1.72.0 (2025-08-25)
+
+* **Feature**: Remove incorrect endpoint tests
+
+# v1.71.1 (2025-08-21)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
 # v1.71.0 (2025-08-20)
 
 * **Feature**: EKS Add-ons Custom Namespace Support
