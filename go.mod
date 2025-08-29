@@ -6,8 +6,8 @@ toolchain go1.24.1
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.38.2
-	github.com/aws/aws-sdk-go-v2/config v1.31.4
-	github.com/aws/aws-sdk-go-v2/credentials v1.18.8
+	github.com/aws/aws-sdk-go-v2/config v1.31.5
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.9
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.49.3
 	github.com/aws/aws-sdk-go-v2/service/eks v1.73.0
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.0
