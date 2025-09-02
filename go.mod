@@ -34,11 +34,7 @@ require (
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
-<<<<<<< HEAD
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.5 // indirect
-=======
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.6 // indirect
->>>>>>> 0d20fd9 (fix: bump github.com/aws/aws-sdk-go-v2/config from 1.31.5 to 1.31.6)
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.6 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.6 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
