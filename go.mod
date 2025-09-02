@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/eks v1.73.1
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.0
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.2
-	github.com/aws/aws-sdk-go-v2/service/sts v1.38.1
+	github.com/aws/aws-sdk-go-v2/service/sts v1.38.2
 	github.com/briandowns/spinner v1.23.2
 	github.com/docker/cli v28.3.3+incompatible
 	github.com/docker/docker v28.3.3+incompatible
@@ -39,7 +39,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.6 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.6 // indirect
 	github.com/aws/smithy-go v1.23.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
