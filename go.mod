@@ -10,7 +10,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.9
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.50.0
 	github.com/aws/aws-sdk-go-v2/service/eks v1.73.1
-	github.com/aws/aws-sdk-go-v2/service/sso v1.29.0
+	github.com/aws/aws-sdk-go-v2/service/sso v1.29.1
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.2
 	github.com/aws/aws-sdk-go-v2/service/sts v1.38.2
 	github.com/briandowns/spinner v1.23.2
