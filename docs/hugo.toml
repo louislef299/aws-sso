@@ -1,4 +1,4 @@
-baseURL = 'https://louislefebvre.net/aws-sso'
+baseURL = 'https://aws-sso.netlify.app'
 languageCode = 'en-us'
 title = 'aws-sso docs'
 theme = 'hugo-theme-nostyleplease'
