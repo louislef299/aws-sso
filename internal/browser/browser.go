@@ -36,6 +36,11 @@ func GetBrowser(browserName string, private bool) Browser {
 		return &Firefox{
 			private: private,
 		}
+	case "firefox-developer":
+		return &Firefox{
+			private:   private,
+			developer: true,
+		}
 	default:
 		return &Default{
 			private: private,

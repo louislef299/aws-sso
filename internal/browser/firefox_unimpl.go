@@ -1,5 +1,5 @@
-//go:build !darwin && !linux && !windows
-// +build !darwin,!linux,!windows
+//go:build !darwin && !linux
+// +build !darwin,!linux
 
 package browser
 
@@ -8,7 +8,8 @@ import (
 )
 
 type Firefox struct {
-	private bool
+	private   bool
+	developer bool
 }
 
 func (f *Firefox) OpenURL(ctx context.Context, url string) error {

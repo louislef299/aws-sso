@@ -7,15 +7,24 @@ import (
 	"context"
 )
 
-const macosFirefoxPath = "/Applications/Firefox.app/Contents/MacOS/firefox"
+const (
+	macosFirefoxPath                 = "/Applications/Firefox.app/Contents/MacOS/firefox"
+	macosFirefoxDeveloperEditionPath = "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox"
+)
 
 type Firefox struct {
-	private bool
+	private   bool
+	developer bool
 }
 
 func (f *Firefox) OpenURL(ctx context.Context, url string) error {
-	if f.private {
-		return open(ctx, macosFirefoxPath, "--private-window", url)
+	path := macosFirefoxPath
+	if f.developer {
+		path = macosFirefoxDeveloperEditionPath
 	}
-	return open(ctx, macosFirefoxPath, url)
+
+	if f.private {
+		return open(ctx, path, "--private-window", url)
+	}
+	return open(ctx, path, url)
 }

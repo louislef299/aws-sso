@@ -9,15 +9,24 @@ import (
 	los "github.com/louislef299/aws-sso/pkg/os"
 )
 
-var linuxFirefoxPaths = []string{`/usr/bin/firefox`, `/../../mnt/c/Program Files/Mozilla Firefox/firefox.exe`}
+var (
+	linuxFirefoxPaths                 = []string{`/usr/bin/firefox`, `/../../mnt/c/Program Files/Mozilla Firefox/firefox.exe`}
+	linuxFirefoxDeveloperEditionPaths = []string{`/usr/bin/firefox-dev`, `/../../mnt/c/Program Files/Mozilla Firefox/firefox-dev.exe`}
+)
 
 type Firefox struct {
-	private bool
+	private   bool
+	developer bool
 }
 
 func (f *Firefox) OpenURL(ctx context.Context, url string) error {
+	paths := linuxFirefoxPaths
+	if f.developer {
+		paths = linuxFirefoxDeveloperEditionPaths
+	}
+
 	var linuxPath string
-	for _, path := range linuxFirefoxPaths {
+	for _, path := range paths {
 		if exists, err := los.IsFileOrFolderExisting(path); err == nil && exists {
 			linuxPath = path
 			break

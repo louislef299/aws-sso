@@ -32,10 +32,11 @@ Setting the `core.browser` config value allows the user to open their browser in
 private(incognito) mode for gathering tokens. The currently supported browsers
 alongside operating systems as of v1.1.2 are:
 
-browser | linux | darwin | windows
- ------ | ----- | ------ | -------
-brave   | ✅    | ✅     | ✅
-chrome  | ✅    | ✅     | ✅
-firefox | ✅    | ✅     | ✅
+browser           | linux | darwin | windows
+ ---------------- | ----- | ------ | -------
+brave             | ✅    | ✅     | ✅
+chrome            | ✅    | ✅     | ✅
+firefox           | ✅    | ✅     | ❌
+firefox-developer | ✅    | ✅     | ❌
 
 [`account add` command]: ./cmds/aws-sso_account_add.md
