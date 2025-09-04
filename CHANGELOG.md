@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.3](https://github.com/louislef299/aws-sso/compare/v1.6.2...v1.6.3) (2025-09-04)
+
+
+### Bug Fixes
+
+* baseURL for website & netlify config ([#636](https://github.com/louislef299/aws-sso/issues/636)) ([94e437a](https://github.com/louislef299/aws-sso/commit/94e437a2719108180898ad38aae3030d1dece388))
+* Create helpful default config on startup ([#633](https://github.com/louislef299/aws-sso/issues/633)) ([c8cfc50](https://github.com/louislef299/aws-sso/commit/c8cfc50e334d529467444ea8ce9ea8b8648e10aa)), closes [#630](https://github.com/louislef299/aws-sso/issues/630)
+* Update account flags to id instead of number ([#635](https://github.com/louislef299/aws-sso/issues/635)) ([34ab551](https://github.com/louislef299/aws-sso/commit/34ab5519f674935c8e7bdb26d53dbecdaffb7d0a)), closes [#500](https://github.com/louislef299/aws-sso/issues/500)
+
 ## [1.6.2](https://github.com/louislef299/aws-sso/compare/v1.6.1...v1.6.2) (2025-09-04)
 
 
