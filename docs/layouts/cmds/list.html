@@ -1,0 +1,18 @@
+{{ define "main" }}
+{{ partial "back_link.html" .}}
+
+<h1>{{ .Title }}</h1>
+
+{{ .Content }}
+
+<ul>
+  {{ $files := .Pages }}
+  {{ range $files }}
+    {{ if ne .File.LogicalName "_index.md" }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ replace .File.LogicalName ".md" "" }}</a>
+    </li>
+    {{ end }}
+  {{ end }}
+</ul>
+{{ end }}

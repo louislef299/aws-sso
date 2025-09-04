@@ -5,3 +5,7 @@ url = "getting-started"
   [[entries.entries]]
   title = "Local Configuration"
   url = "config"
+
+  [[entries.entries]]
+  title = "Commands"
+  url = "cmds"
