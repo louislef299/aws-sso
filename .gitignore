@@ -31,3 +31,4 @@ go.work
 # Hugo Static Site
 .hugo_build.lock
 public/
+**/resources/_gen/
