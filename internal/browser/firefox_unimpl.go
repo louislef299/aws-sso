@@ -8,7 +8,8 @@ import (
 )
 
 type Firefox struct {
-	private bool
+	private   bool
+	developer bool
 }
 
 func (f *Firefox) OpenURL(ctx context.Context, url string) error {
