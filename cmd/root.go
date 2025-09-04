@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"path"
@@ -87,7 +88,15 @@ func init() {
 		if err != nil {
 			panic(err)
 		}
-		f.Close()
+		defer f.Close()
+		tmpl, err := template.New("config").Parse(getConfigTemplate())
+		if err != nil {
+			panic(err)
+		}
+		err = tmpl.Execute(f, "")
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	rootCmd.PersistentFlags().String("config", home, "Configuration file to use during execution")
@@ -129,4 +138,34 @@ func initPlugins() {
 			panic(err)
 		}
 	}
+}
+
+func getConfigTemplate() string {
+	return `# Account represents the AWS account alias. This will then be added to the
+# aws-sso account list command and allows for aws-sso login <account> to work
+# properly.
+[account]
+[account.dev]
+id = '000000000000'
+private = false
+region = 'us-east-2'
+token = 'default'
+url = 'https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html'
+
+# Core represents all configurations that can be used across Accounts and
+# Plugins. These are useful to aws-sso functioning on your local system.
+[core]
+browser = 'chrome'
+defaultregion = 'us-east-1'
+plugins = ['oidc', 'eks', 'ecr']
+ssoregion = 'us-east-1'
+
+# The Session and Token sections are managed by the aws-sso CLI tool. You
+# typically shouldn't have to mess with these unless there are some low-level
+# errors happening on your machine. To get rid of your current session
+# altogether, feel free to run aws-sso logout --clean.
+[session]
+
+[token]
+`
 }
