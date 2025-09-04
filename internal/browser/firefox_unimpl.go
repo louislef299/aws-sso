@@ -1,5 +1,5 @@
-//go:build !darwin && !linux && !windows
-// +build !darwin,!linux,!windows
+//go:build !darwin && !linux
+// +build !darwin,!linux
 
 package browser
 
