@@ -1,6 +1,6 @@
 docs/content/cmds/aws-sso_config_list.md## aws-sso config list
 
-List your local configuration values.
+List your core local configuration values.
 
 ```
 aws-sso config list [flags]

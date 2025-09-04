@@ -4,37 +4,125 @@ draft = false
 title = 'Local Configuration'
 +++
 
-There are certain configurations you can set in your local environment to make
-the `aws-sso` cli experience smoother. You can always list all of the
-configurable values with the `aws-sso config values` command.
-
-Current configuration values v1.1.2:
+To get started, run `aws-sso config ls`. It should print off something similar
+to:
 
 ```bash
-The following values are available for configuration:
-core.defaultCluster:		The default cluster to target when logging in, supports go regex expressions(golang.org/s/re2syntax)
-core.defaultRole:		The default iam role to use when logging in
-core.region:			The default region used when a region is not found in your environment or set with the --region flag
-core.url:			The default sso start url used when logging in
-core.disableEKSLogin:		Disables automatic detection and login for EKS
-core.disableECRLogin:		Disables automatic detection and login for ECR
-core.browser:			The default browser to use. Required for advanced features like opening in a private browser
-<BOUND_FLAG>session.region:	The region you would like to use at login
-<BOUND_FLAG>session.url:	The AWS SSO start url
-<BOUND_FLAG>session.role:	The IAM role to use when logging in
+$ aws-sso config ls
+Using config file /Users/louis/.aws-sso
+Current config values:
+config=/Users/louis
+core.browser=chrome
+core.defaultregion=us-east-1
+core.plugins=[oidc eks ecr]
+core.ssoregion=us-east-1
+core.url=https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html
+ecr.disableecrlogin=false
+eks.disableekslogin=false
 ```
+
+This will list your `[core]` configuration values. These are variables that are
+shared amongst the tool regardless of account or plugins in use. You can list
+all of your configurable values with `aws-sso config values`.
+
+Here is an example of how to set your [default SSO start url][], which is
+required for proper tool functionality:
+
+```bash
+$ aws-sso config set core.url https://your_subdomain.awsapps.com/start
+Using config file /Users/louis/.aws-sso
+set core.url to https://your_subdomain.awsapps.com/start
+
+$ aws-sso config list
+Using config file /Users/louis/.aws-sso
+Current config values:
+config=/Users/louis
+core.browser=chrome
+core.defaultregion=us-east-1
+core.plugins=[oidc eks ecr]
+core.ssoregion=us-east-1
+core.url=https://your_subdomain.awsapps.com/start
+ecr.disableecrlogin=false
+eks.disableekslogin=false
+```
+
+Once you have set `core.url` and validated that the `core.ssoregion` reflects
+your [AWS Organization region][], it's time to setup your first account!
 
 ## Accounts
 
-Account aliases can be added manually to `aws-sso` by running the [`account add`
-command][]. Otherwise, the cli will read in pre-existing named profiles in your
-local AWS Config file.
+[Accounts][] in `aws-sso` represents the actual AWS Account to target when
+signing in. The only required input is the actual Account ID, otherwise the tool
+defaults are used. Defaults can be overridden at the Account level, so setting
+them with account for that specific Account only.
+
+Accounts can be added to `aws-sso` by running the [`account add` command][].
+Here is an example:
+
+```bash
+$ aws-sso acct add --name prod --id 111111111111
+2025/09/04 15:04:31 account.go:54: couldn't find an account URL matching profile , using core default...
+2025/09/04 15:04:31 account.go:69: associated account prod to account number 111111111111
+
+# Note: accts is a hidden command
+$ aws-sso accts
+Account mapping:
+Account mapping:
+dev:
+  ID: 000000000000
+  Region: us-east-2
+  Private: false
+  Token: default
+  SSO URL: (default) https://your_subdomain.awsapps.com/start
+prod:
+  ID: 111111111111
+  Region: 
+  Private: false
+  Token: default
+  SSO URL: https://your_subdomain.awsapps.com/start
+```
+
+To override values, run the [`account set` command][]:
+
+```bash
+$ aws-sso acct set dev --id 222222222222
+2025/09/04 15:07:45 account.go:54: couldn't find an account URL matching profile , using core default...
+account values have been set for dev
+```
+
+If you want to remove accounts, you need to edit `$HOME/.aws-sso` in a text
+editor. `aws-sso` uses [viper][] under the hood, so if you would like deleting
+to be a part of the service offering, [let their team know][]!
+
+## Logging In
+
+With your SSO start URL configured and your account setup, let's login!
+
+```bash
+$ aws-sso login dev
+2025/09/04 15:11:47 login.go:89: using token default
+2025/09/04 15:11:47 oidc.go:79: using sso region us-east-1 to login
+2025/09/04 15:11:47 oidc.go:191: browser set to default(use cookies)
+2025/09/04 15:11:47 oidc.go:82: gathering client info
+2025/09/04 15:11:47 oidc.go:61: checking config location /Users/louis/.aws/sso/cache/hash-redacted.json
+2025/09/04 15:11:47 oidc.go:90: registering client
+2025/09/04 15:11:47 oidc.go:147: could not start device authorization
+2025/09/04 15:11:47 oidc.go:89: couldn't log into AWS: operation error SSO OIDC: StartDeviceAuthorization, https response error StatusCode: 400, RequestID: 02bd42e4-ea7a-42f4-8328-9b61d95f7761, InvalidRequestException:
+```
+
+Since my start URL wasn't properly configured, I'm getting an error. There is
+[currently an issue][issue #626] that will address unhelpful error messages, but
+you should be able to get an idea of where the error is happening and what is
+going on. Feel free to reach out to me over an issue and I can try to help out.
+
+If you successfully logged in, feel free to validate it with `aws-sso whoami`.
+Hopefully you find this tool useful!
 
 ## Browser Utilization
 
 Setting the `core.browser` config value allows the user to open their browser in
 private(incognito) mode for gathering tokens. The currently supported browsers
-alongside operating systems as of v1.1.2 are:
+alongside operating systems as of v1.6.2 are:
 
 browser           | linux | darwin | windows
  ---------------- | ----- | ------ | -------
@@ -44,3 +132,10 @@ firefox           | ✅    | ✅     | ❌
 firefox-developer | ✅    | ✅     | ❌
 
 [`account add` command]: ./cmds/aws-sso_account_add.md
+[`account set` command]: ./cmds/aws-sso_account_set.md
+[Accounts]: https://pkg.go.dev/github.com/louislef299/aws-sso/internal/account
+[AWS Organization region]: https://docs.aws.amazon.com/organizations/latest/userguide/region-support.html
+[default SSO start url]: https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html
+[issue #626]: https://github.com/louislef299/aws-sso/issues/626
+[let their team know]: https://forms.gle/R6faU74qPRPAzchZ9
+[viper]: https://pkg.go.dev/github.com/spf13/viper

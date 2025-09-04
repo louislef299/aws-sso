@@ -42,7 +42,7 @@ kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git
 kubectl krew install louislef299/aws-sso
 ```
 
-once installed, you can check your version by running:
+Once installed, you can check your version by running:
 
 ```bash
 $ aws-sso version
@@ -50,8 +50,13 @@ AWS Auth: aws-sso/1.6.2 linux/amd64 built-with/1.25.1
  build-time/2025-09-04T17:04:55Z commit-hash/5f9d4543
 ```
 
-next, we will need to configure the tool, which is documented in the [Local
-Configuration][] page.
+Since `aws-sso` relies on a configuration file, there is a default config file
+that was created if you ran the above command at `$HOME/.aws-sso`. All of the
+config settings can be managed with `aws-sso config`, but you can also manually
+override the configuration settings in this file if you run into bugs.
+
+[Next, let's configure the damn thing so you can move on with your life!][Local
+Configuration]
 
 [v1.6.2]: https://github.com/louislef299/aws-sso/releases/tag/v1.6.2
 [krew]: https://krew.sigs.k8s.io/

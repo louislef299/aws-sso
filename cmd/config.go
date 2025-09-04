@@ -55,7 +55,7 @@ var configGetCmd = &cobra.Command{
 // configListCmd represents the list command
 var configListCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "List your local configuration values.",
+	Short:   "List your core local configuration values.",
 	Aliases: []string{"ls"},
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Println("Current config values:")
@@ -132,7 +132,7 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 
 	configCmd.AddCommand(configListCmd)
-	configListCmd.Flags().BoolVarP(&allConfigValues, "all", "a", false, "List all configuration values, including tool internal values")
+	configListCmd.Flags().BoolVar(&allConfigValues, "all", false, "List all configuration values, including tool internal values")
 
 	configCmd.AddCommand(configSetCmd)
 	configCmd.AddCommand(configUnsetCmd)
