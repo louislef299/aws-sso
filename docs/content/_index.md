@@ -7,6 +7,12 @@ title = 'Local Configuration'
 Welcome and thanks for trying out my authentication tool. Below is information
 for getting started with `aws-sso`. If you are experiencing any problems and
 need to reach out to me, feel free to [create an issue][] and I'll try to get
-back as soon as possible. Happy hacking!
+back as soon as possible.
+
+For releases, you can find important notes per release in the [official release
+notes][] and the `--help` command is your friend.
+
+Happy hacking!
 
 [create an issue]: https://github.com/louislef299/aws-sso/issues
+[official release notes]: https://github.com/louislef299/aws-sso/releases

@@ -53,7 +53,7 @@ var accountAddCmd = &cobra.Command{
 			}
 		}
 		if accountURL == "" {
-			accountURL = lacct.GetAccountURL(args[0])
+			accountURL = lacct.GetAccountURL(accountName)
 		}
 
 		err = lacct.AddAccount(accountName, &lacct.Account{
@@ -144,13 +144,13 @@ func init() {
 	if err := accountAddCmd.MarkFlagRequired("name"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
 	}
-	accountAddCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
-	if err := accountAddCmd.MarkFlagRequired("number"); err != nil {
+	accountAddCmd.Flags().StringVar(&accountNumber, "id", "", "The account id of the account associated to the account name")
+	if err := accountAddCmd.MarkFlagRequired("id"); err != nil {
 		log.Fatal("couldn't mark flag as required:", err)
 	}
 
 	accountSetCmd.Flags().StringVarP(&accountRegion, "region", "r", "", "The default region to associate to the account")
-	accountSetCmd.Flags().StringVar(&accountNumber, "number", "", "The account number of the account associated to the account name")
+	accountSetCmd.Flags().StringVar(&accountNumber, "id", "", "The account id of the account associated to the account name")
 	accountSetCmd.Flags().StringVarP(&accountToken, "token", "t", "default", "The token to use for the account")
 	accountSetCmd.Flags().StringVar(&accountURL, "url", "", "The SSO URL to use for the account")
 	accountSetCmd.Flags().BoolVarP(&accountPrivate, "private", "p", false, "The account is a private account")

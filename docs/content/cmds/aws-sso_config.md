@@ -21,7 +21,7 @@ Local configuration used for aws-sso
 
 * [aws-sso](../aws-sso)	 - AWS Auth
 * [aws-sso config get](../aws-sso_config_get)	 - Get a configuration value.
-* [aws-sso config list](../aws-sso_config_list)	 - List your local configuration values.
+* [aws-sso config list](../aws-sso_config_list)	 - List your core local configuration values.
 * [aws-sso config set](../aws-sso_config_set)	 - Set a local configuration value.
 * [aws-sso config unset](../aws-sso_config_unset)	 - Unset your config settings
 * [aws-sso config values](../aws-sso_config_values)	 - Get the possible configuration values.

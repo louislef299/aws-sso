@@ -20,6 +20,8 @@ const (
 	ACCOUNT_URL    = "url"
 )
 
+// Represents an AWS
+// Account(https://docs.aws.amazon.com/accounts/latest/reference/accounts-welcome.html)
 type Account struct {
 	ID      string
 	Private bool

@@ -150,7 +150,6 @@ id = '000000000000'
 private = false
 region = 'us-east-2'
 token = 'default'
-url = 'https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html'
 
 # Core represents all configurations that can be used across Accounts and
 # Plugins. These are useful to aws-sso functioning on your local system.
@@ -159,6 +158,7 @@ browser = 'chrome'
 defaultregion = 'us-east-1'
 plugins = ['oidc', 'eks', 'ecr']
 ssoregion = 'us-east-1'
+url = 'https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html'
 
 # The Session and Token sections are managed by the aws-sso CLI tool. You
 # typically shouldn't have to mess with these unless there are some low-level
