@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
@@ -34,7 +35,15 @@ func init() {
 }
 
 func docsAction(out io.Writer, dir string) error {
-	if err := doc.GenMarkdownTree(rootCmd, dir); err != nil {
+	if err := doc.GenMarkdownTreeCustom(rootCmd, dir,
+		func(s string) string { return s },
+		func(s string) string {
+			b, found := strings.CutSuffix(s, ".md")
+			if !found {
+				panic("could not find .md suffix")
+			}
+			return "../" + b
+		}); err != nil {
 		return err
 	}
 

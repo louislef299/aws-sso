@@ -19,7 +19,7 @@ default: lint test clean $(BINARY_NAME)
 
 docs:
 	@echo "Generating command documentation in docs/cmd"
-	@go run main.go docs --dir docs/cmds
+	@go run main.go docs --dir docs/content/cmds
 
 local: lint test $(BINARY_NAME)
 	@echo "Installing $(BINARY_NAME) on your machine..."
