@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.6.2](https://github.com/louislef299/aws-sso/compare/v1.6.1...v1.6.2) (2025-09-04)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2 from 1.38.2 to 1.38.3 ([#612](https://github.com/louislef299/aws-sso/issues/612)) ([cb2ffb8](https://github.com/louislef299/aws-sso/commit/cb2ffb8c7ee4f40afe2abda2e9dbabc04471ca75))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.5 to 1.31.6 ([#619](https://github.com/louislef299/aws-sso/issues/619)) ([527b6c8](https://github.com/louislef299/aws-sso/commit/527b6c8cde27a7b39271b0d2d80eedaca7180805))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.0 to 1.50.1 ([#623](https://github.com/louislef299/aws-sso/issues/623)) ([31682dc](https://github.com/louislef299/aws-sso/commit/31682dcdc9e5bc83de8c7074f9aff34fccd0aed5))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.73.0 to 1.73.1 ([#618](https://github.com/louislef299/aws-sso/issues/618)) ([9306b71](https://github.com/louislef299/aws-sso/commit/9306b71240811716bd7c78f26fef3dc65f070222))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.73.0 to 1.73.1 ([#624](https://github.com/louislef299/aws-sso/issues/624)) ([6093982](https://github.com/louislef299/aws-sso/commit/609398269d3226455ecaefb68c7b35e75d20da18))
+* bump github.com/aws/aws-sdk-go-v2/service/sso from 1.29.0 to 1.29.1 ([#616](https://github.com/louislef299/aws-sso/issues/616)) ([6de7630](https://github.com/louislef299/aws-sso/commit/6de76306696f91c54235b66fb741958136ac5962))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#615](https://github.com/louislef299/aws-sso/issues/615)) ([2a0bc5c](https://github.com/louislef299/aws-sso/commit/2a0bc5c8004f5f326d8f6d8bc59eba62bc42d507))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.38.1 to 1.38.2 ([#617](https://github.com/louislef299/aws-sso/issues/617)) ([76fbb65](https://github.com/louislef299/aws-sso/commit/76fbb65f0ab73d14541b74b1471df9ad5919a683))
+* bump github.com/docker/cli ([#628](https://github.com/louislef299/aws-sso/issues/628)) ([13ba542](https://github.com/louislef299/aws-sso/commit/13ba542e8ad1b4545f9e9821bde1592688113673))
+* bump github.com/docker/docker ([#627](https://github.com/louislef299/aws-sso/issues/627)) ([0da6369](https://github.com/louislef299/aws-sso/commit/0da63690ef293f8471cc8ae80a5a33d0a58c8f12))
+* bump github.com/onsi/ginkgo/v2 from 2.25.1 to 2.25.2 ([#614](https://github.com/louislef299/aws-sso/issues/614)) ([01aa2c0](https://github.com/louislef299/aws-sso/commit/01aa2c0943ce44e3b11d8c8add805c1b69799f5b))
+* bump github.com/spf13/cobra from 1.9.1 to 1.10.1 ([#622](https://github.com/louislef299/aws-sso/issues/622)) ([87e5cbe](https://github.com/louislef299/aws-sso/commit/87e5cbe719e863ed75f3ba31c6d3a1fb5bc94baa))
+* bump github.com/spf13/pflag from 1.0.9 to 1.0.10 ([#625](https://github.com/louislef299/aws-sso/issues/625)) ([c00caa4](https://github.com/louislef299/aws-sso/commit/c00caa4d0482178b462e45742c856f852fba9e6b))
+* Support Firefox Developer Edition browser ([#629](https://github.com/louislef299/aws-sso/issues/629)) ([c9f3fab](https://github.com/louislef299/aws-sso/commit/c9f3fab3c62995eba7656bb55ff56ad21c4230b6))
+
 ## [1.6.1](https://github.com/louislef299/aws-sso/compare/v1.6.0...v1.6.1) (2025-08-29)
 
 
