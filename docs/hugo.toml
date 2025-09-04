@@ -1,0 +1,4 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'aws-sso docs'
+theme = 'hugo-theme-nostyleplease'

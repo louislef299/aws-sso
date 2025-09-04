@@ -26,3 +26,7 @@ go.work
 
 # Trivy Results
 *cyclonedx*
+
+# Hugo Static Site
+.hugo_build.lock
+public/

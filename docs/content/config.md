@@ -1,4 +1,8 @@
-# Local Configuration
++++
+date = '2025-09-04T12:46:44-05:00'
+draft = false
+title = 'Local Configuration'
++++
 
 There are certain configurations you can set in your local environment to make
 the `aws-sso` cli experience smoother. You can always list all of the
