@@ -177,11 +177,11 @@ prod:
   SSO URL: https://your_subdomain.awsapps.com/start
 ```
 
-[`account add` command]: ./cmds/aws-sso_account_add.md
-[`account set` command]: ./cmds/aws-sso_account_set.md
 [Accounts]: https://pkg.go.dev/github.com/louislef299/aws-sso/internal/account
 [AWS Organization region]: https://docs.aws.amazon.com/organizations/latest/userguide/region-support.html
 [default SSO start url]: https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.html
 [issue #626]: https://github.com/louislef299/aws-sso/issues/626
 [let their team know]: https://forms.gle/R6faU74qPRPAzchZ9
 [viper]: https://pkg.go.dev/github.com/spf13/viper
+[`account add` command]: {{< ref "cmds/aws-sso_account_add" >}}
+[`account set` command]: {{< ref "cmds/aws-sso_account_set" >}}
