@@ -20,7 +20,7 @@ and having to debug and troubleshoot other engineer's local aws configuration to
 ensure they had their SSO setup properly as well as having issues authenticating
 to different accounts... I decided to fix my problems to make my life easier.
 
-Currently([v1.6.2][]), `aws-sso` streamlines the authentication process by
+Currently([v1.6][]), `aws-sso` streamlines the authentication process by
 authenticating to:
 
 - the AWS account itself
@@ -58,7 +58,7 @@ override the configuration settings in this file if you run into bugs.
 [Next, let's configure the damn thing so you can move on with your life!][Local
 Configuration]
 
-[v1.6.2]: https://github.com/louislef299/aws-sso/releases/tag/v1.6.2
+[v1.6]: https://github.com/louislef299/aws-sso/releases/tag/v1.6.2
 [krew]: https://krew.sigs.k8s.io/
 [homebrew]: https://brew.sh/
 [Local Configuration]: /config

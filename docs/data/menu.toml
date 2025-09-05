@@ -9,3 +9,7 @@ url = "getting-started"
   [[entries.entries]]
   title = "Commands"
   url = "cmds"
+
+  [[entries.entries]]
+  title = "Plugin Architecture"
+  url = "arch"
