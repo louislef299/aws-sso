@@ -4,46 +4,46 @@ kind: Plugin
 metadata:
   name: aws-sso
 spec:
-  version: v1.6.3
+  version: v1.6.4
   platforms:
     - bin: kubectl-aws_sso.exe
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Windows_x86_64.tar.gz
-      sha256: 51c58bd95c3248e10814825a68ec04f2d03ea6b1e6f78b69523247ea05a66b25
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Windows_x86_64.tar.gz
+      sha256: f0e254f0f2190f2d8c9cc9b27de71b55919811c4a771f44b6652de642d68fef7
       selector:
         matchLabels:
           os: windows
           arch: amd64
     - bin: kubectl-aws_sso.exe
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Windows_arm64.tar.gz
-      sha256: bbc2f74b738d6cced18c364617d24c0ec6b6655b098d0b013babdd736881cf77
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Windows_arm64.tar.gz
+      sha256: 781609b7c99c21bcf9c9069a8a95e64366d4fce8ab6205abf4380ac486bd4714
       selector:
         matchLabels:
           os: windows
           arch: arm64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Linux_x86_64.tar.gz
-      sha256: 01d9bf0cbe5d49de942839e1f587053ac0992eff5878828bca00fad66bdeea21
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Linux_x86_64.tar.gz
+      sha256: 8a100dd3eaeb26fd960cb711771e5dc69d2dd307c64e658f5cd160ad9b4a5e7b
       selector:
         matchLabels:
           os: linux
           arch: amd64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Linux_arm64.tar.gz
-      sha256: d497500d30190041076e5cc6e04a8a0f99ebb45a12bb8f68e636dd56d27fea8c
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Linux_arm64.tar.gz
+      sha256: b7439eb4ef4288ac97eb742d775fe55b71e0ca845454a20e7c6d57208d02ffd8
       selector:
         matchLabels:
           os: linux
           arch: arm64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Darwin_x86_64.tar.gz
-      sha256: 23c3a6567c6dc6d3d1a4d7bfa3061ad3058e415b50c69780a3ff545eacbc9275
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Darwin_x86_64.tar.gz
+      sha256: 60899ba084a0305c82ceefb53c9ad76ea136a2e24773796582a540da262a5220
       selector:
         matchLabels:
           os: darwin
           arch: amd64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.3/kubectl-aws-sso_1.6.3_Darwin_arm64.tar.gz
-      sha256: 1b49ba2c154a478d1443d6cadc22fe821efac86b4caf65ad86f28597b7f54085
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.4/kubectl-aws-sso_1.6.4_Darwin_arm64.tar.gz
+      sha256: aec50487928c4499a80cef63eac73f1685ac7a383c5aaee1229b77f0d8985b2a
       selector:
         matchLabels:
           os: darwin
