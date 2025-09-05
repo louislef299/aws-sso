@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: 'stable'
       - name: Check out code
@@ -29,7 +29,7 @@ jobs:
       with:
         fetch-depth: 0
     - run: git fetch --force --tags
-    - uses: actions/setup-go@v5
+    - uses: actions/setup-go@v6
       id: go-setup
       with:
         go-version: 'stable'
@@ -47,7 +47,7 @@ jobs:
     steps:
     - uses: actions/checkout@v5
     - name: Set up Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v6
       with:
         go-version: 'stable'
         check-latest: true
