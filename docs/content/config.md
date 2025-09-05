@@ -52,9 +52,11 @@ your [AWS Organization region][], it's time to setup your first account!
 ## Accounts
 
 [Accounts][] in `aws-sso` represents the actual AWS Account to target when
-signing in. The only required input is the actual Account ID, otherwise the tool
-defaults are used. Defaults can be overridden at the Account level, so setting
-them with account for that specific Account only.
+signing in. The only required inputs are the actual Account ID and the Account
+name(alias), otherwise the tool defaults are used. Core defaults can be
+overridden at the Account level, so that they only apply to that specific
+account. These include things like SSO URL, region and whether to enable private
+browsing or not.
 
 Accounts can be added to `aws-sso` by running the [`account add` command][].
 Here is an example:
@@ -67,7 +69,6 @@ $ aws-sso acct add --name prod --id 111111111111
 # Note: accts is a hidden command
 $ aws-sso accts
 Account mapping:
-Account mapping:
 dev:
   ID: 000000000000
   Region: us-east-2
@@ -76,7 +77,7 @@ dev:
   SSO URL: (default) https://your_subdomain.awsapps.com/start
 prod:
   ID: 111111111111
-  Region: 
+  Region: us-east-1
   Private: false
   Token: default
   SSO URL: https://your_subdomain.awsapps.com/start
@@ -130,6 +131,51 @@ brave             | ✅    | ✅     | ✅
 chrome            | ✅    | ✅     | ✅
 firefox           | ✅    | ✅     | ❌
 firefox-developer | ✅    | ✅     | ❌
+
+## Token Usage
+
+If you have multiple SSO sessions you need to manage, you can create additional
+tokens to allow authentication caching across multiple AWS Organizations. Let's
+say you have your development account in one Organization and a production
+account in another. It would be nice to associate the session to a specific
+token so that you don't have to login and logout all the time.
+
+In this example, we will keep the `default` token as representing our dev org
+and `prod` will be our prod org token. Let's list our existing tokens, add a
+prod token, and associate the prod token with our prod account:
+
+```bash
+$ aws-sso tokens
+Local Tokens:
+* default
+
+$ aws-sso token add prod
+2025/09/05 09:31:56 successfully added token prod!
+
+# Notice that creating the token associates it with the current session
+$ aws-sso tokens        
+Local Tokens:
+  default
+* prod
+
+$ aws-sso acct set prod --token prod
+account values have been set for prod
+
+$ aws-sso accts
+Account mapping:
+dev:
+  ID: 000000000000
+  Region: us-east-2
+  Private: false
+  Token: default
+  SSO URL: (default) https://your_subdomain.awsapps.com/start
+prod:
+  ID: 111111111111
+  Region: us-east-1
+  Private: false
+  Token: prod
+  SSO URL: https://your_subdomain.awsapps.com/start
+```
 
 [`account add` command]: ./cmds/aws-sso_account_add.md
 [`account set` command]: ./cmds/aws-sso_account_set.md

@@ -23,14 +23,16 @@ var tokenCmd = &cobra.Command{
 	Aliases: []string{"tok", "to", "ken"},
 	Short:   "Manage multiple SSO access tokens",
 	Long: `Manages multiple cached SSO tokens for reuse. Beneficial
-when dealing with multiple AWS accounts.`,
+when dealing with multiple AWS Organizations.`,
+	PersistentPreRun: checkTokenV,
 }
 
 // tokensCmd represents the list command
 var tokensCmd = &cobra.Command{
-	Use:    "tokens",
-	Hidden: true,
-	Short:  "List your tokens.",
+	Use:              "tokens",
+	Hidden:           true,
+	Short:            "List your tokens.",
+	PersistentPreRun: checkTokenV,
 	Run: func(cmd *cobra.Command, args []string) {
 		listTokens()
 	},
@@ -126,6 +128,9 @@ func setToken(name string) {
 		log.Fatal("couldn't write config:", err)
 	}
 }
+
+// Viper wrapper
+func checkTokenV(cmd *cobra.Command, args []string) { checkToken() }
 
 // Quick check to make sure the session token is set
 func checkToken() {
