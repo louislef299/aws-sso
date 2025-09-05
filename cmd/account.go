@@ -46,8 +46,8 @@ var accountAddCmd = &cobra.Command{
 	Example: "  aws-sso account add --name env1 --number 000000000 --region us-west-2",
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
-		if region == "" {
-			region, err = lregion.GetRegion(lregion.EKS)
+		if accountRegion == "" {
+			accountRegion, err = lregion.GetRegion(lregion.EKS)
 			if err != nil {
 				log.Fatal("couldn't get default region:", err)
 			}
