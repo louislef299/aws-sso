@@ -20,6 +20,7 @@ import (
 )
 
 var (
+	debug              bool
 	region, cmdTimeout string
 	commandTimeout     time.Duration
 )
@@ -33,9 +34,13 @@ const (
 var rootCmd = &cobra.Command{
 	Use:   "aws-sso",
 	Short: "AWS Auth",
-	Long:  `An AWS login helper to make authentication easier`,
+	Long: `An AWS SSO helper CLI to streamline authentication.
+
+more information at: https://aws-sso.netlify.app/`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+		if debug {
+			log.SetFlags(log.Ltime | log.Ldate | log.Llongfile)
+		}
 
 		// Force parse flags manually before using viper-bound values
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
@@ -70,12 +75,13 @@ func Execute(ctx context.Context) {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "1m", "the default timeout for network commands executed")
+	rootCmd.PersistentFlags().StringVar(&cmdTimeout, "commandTimeout", "1m", "timeout for network commands executed")
 	var err error
 	commandTimeout, err = time.ParseDuration(cmdTimeout)
 	if err != nil {
 		log.Fatal("could not parse commandTimeout: ", err)
 	}
+	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "add debug message headers to logger")
 
 	// Find home directory.
 	home, err := os.UserHomeDir()

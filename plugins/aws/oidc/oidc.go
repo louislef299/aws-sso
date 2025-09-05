@@ -55,7 +55,8 @@ func (a *OIDCLogin) Login(ctx context.Context, config any) error {
 	}
 
 	if lc {
-		log.Println("using existing configuration profile", cfg.Profile)
+		log.Printf("\n\nWARNING: using existing configuration profile %s from %s instead of a native account!(could be a name conflict)\n\n",
+			cfg.Profile, awsConf.DefaultSharedConfigFilename())
 		awsCfg, err := awsConf.LoadDefaultConfig(ctx,
 			awsConf.WithSharedConfigProfile(cfg.Profile),
 		)

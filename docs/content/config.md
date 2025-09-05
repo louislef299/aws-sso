@@ -123,7 +123,7 @@ Hopefully you find this tool useful!
 
 Setting the `core.browser` config value allows the user to open their browser in
 private(incognito) mode for gathering tokens. The currently supported browsers
-alongside operating systems as of v1.6.2 are:
+alongside operating systems as of v1.6 are:
 
 browser           | linux | darwin | windows
  ---------------- | ----- | ------ | -------
