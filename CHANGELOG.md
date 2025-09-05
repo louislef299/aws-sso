@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.4](https://github.com/louislef299/aws-sso/compare/v1.6.3...v1.6.4) (2025-09-05)
+
+
+### Bug Fixes
+
+* bump github.com/onsi/ginkgo/v2 from 2.25.2 to 2.25.3 ([#642](https://github.com/louislef299/aws-sso/issues/642)) ([47bc97e](https://github.com/louislef299/aws-sso/commit/47bc97e0fe2bc10a7963066df6d7eaabd302d563))
+* Enable default token at start ([#644](https://github.com/louislef299/aws-sso/issues/644)) ([5ae7b4c](https://github.com/louislef299/aws-sso/commit/5ae7b4ce0413fdd85a1ec6274a50a26c96f03623))
+
 ## [1.6.3](https://github.com/louislef299/aws-sso/compare/v1.6.2...v1.6.3) (2025-09-04)
 
 
