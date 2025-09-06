@@ -16,7 +16,7 @@ aws ecr get-login-password --region us-east-1 |\
 docker login --username AWS --password-stdin account.dkr.ecr.us-east-1.amazonaws.com
 ```
 
-and having to debug and troubleshoot other engineer's local aws configuration to
+and having to debug and troubleshoot other engineers local aws configuration to
 ensure they had their SSO setup properly as well as having issues authenticating
 to different accounts... I decided to fix my problems to make my life easier.
 
