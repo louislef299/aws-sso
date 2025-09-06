@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.5](https://github.com/louislef299/aws-sso/compare/v1.6.4...v1.6.5) (2025-09-06)
+
+
+### Bug Fixes
+
+* Clear warning msg when not using native account ([#648](https://github.com/louislef299/aws-sso/issues/648)) ([91cd155](https://github.com/louislef299/aws-sso/commit/91cd1559c93e4d50fa2f60abfafffacfc438e490)), closes [#626](https://github.com/louislef299/aws-sso/issues/626)
+
 ## [1.6.4](https://github.com/louislef299/aws-sso/compare/v1.6.3...v1.6.4) (2025-09-05)
 
 
