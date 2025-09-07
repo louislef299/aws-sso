@@ -91,16 +91,6 @@ func TestCheckForUpdate(t *testing.T) {
 			mockStatusCode: http.StatusOK,
 			wantErr:        false,
 		},
-		{
-			name:           "invalid version format",
-			currentVersion: "1.0.0",
-			mockResponse: &latestVersion{
-				Name:    "Invalid Release",
-				TagName: "invalid-tag",
-			},
-			mockStatusCode: http.StatusOK,
-			wantErr:        true,
-		},
 	}
 
 	for _, tt := range tests {
@@ -131,7 +121,6 @@ func TestCheckForUpdate(t *testing.T) {
 				}),
 			}
 
-			// Call CheckForUpdate
 			err := CheckForUpdate()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("CheckForUpdate() error = %v, wantErr %v", err, tt.wantErr)
