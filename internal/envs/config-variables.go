@@ -15,6 +15,7 @@ const (
 	CORE_URL               = "core.url"
 	CORE_PLUGINS           = "core.plugins"
 	CORE_DISABLE_EKS_LOGIN = "core.disableEKSLogin"
+	CORE_LAST_VCHECK       = "core.lastVersionCheck"
 
 	// Session variables
 	SESSION_HEADER  = "session"

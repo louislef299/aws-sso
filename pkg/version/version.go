@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"time"
 
 	"text/template"
 
@@ -51,6 +52,7 @@ type CommandVersion struct {
 type latestVersion struct {
 	Name    string `json:"name"`
 	TagName string `json:"tag_name"`
+	URL     string `json:"html_url"`
 }
 
 func CheckForUpdate() error {
@@ -60,7 +62,10 @@ func CheckForUpdate() error {
 	}
 	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
 
-	resp, err := http.DefaultClient.Do(req)
+	c := http.Client{
+		Timeout: time.Second * 2,
+	}
+	resp, err := c.Do(req)
 	if err != nil {
 		return err
 	}
@@ -83,7 +88,9 @@ func CheckForUpdate() error {
 
 	r := semver.Compare("v"+Version, releaseVersion)
 	if r < 0 {
-		log.Printf("A new version of aws-sso is available(%s)!\n", releaseVersion)
+		log.Printf("A new version of aws-sso is available(%s)!\n%s\n\n", releaseVersion, release.URL)
+	} else {
+		log.Printf("version looks good!\n\n")
 	}
 	return nil
 }
