@@ -58,7 +58,7 @@ more information at: https://aws-sso.netlify.app/`,
 		cmd.SetContext(ctx)
 
 		// Only check for new version once a week
-		lastCheck := viper.GetString(envs.CORE_LAST_VCHECK)
+		lastCheck := viper.GetString(envs.SESSION_LAST_VCHECK)
 		t, err := time.Parse(time.RFC3339, lastCheck)
 		if err != nil && debug {
 			log.Println(err)
@@ -68,7 +68,7 @@ more information at: https://aws-sso.netlify.app/`,
 			if err != nil && debug {
 				log.Println(err)
 			}
-			viper.Set(envs.CORE_LAST_VCHECK, time.Now().Format(time.RFC3339))
+			viper.Set(envs.SESSION_LAST_VCHECK, time.Now().Format(time.RFC3339))
 			return viper.WriteConfig()
 		}
 		return nil
