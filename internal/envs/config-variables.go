@@ -17,13 +17,14 @@ const (
 	CORE_DISABLE_EKS_LOGIN = "core.disableEKSLogin"
 
 	// Session variables
-	SESSION_HEADER  = "session"
-	SESSION_PROFILE = "session.profile"
-	SESSION_CLUSTER = "session.cluster"
-	SESSION_REGION  = "session.region"
-	SESSION_URL     = "session.url"
-	SESSION_ROLE    = "session.role"
-	SESSION_TOKEN   = "session.token"
+	SESSION_HEADER      = "session"
+	SESSION_PROFILE     = "session.profile"
+	SESSION_CLUSTER     = "session.cluster"
+	SESSION_REGION      = "session.region"
+	SESSION_URL         = "session.url"
+	SESSION_ROLE        = "session.role"
+	SESSION_TOKEN       = "session.token"
+	SESSION_LAST_VCHECK = "session.lastVersionCheck"
 
 	// Token variables
 	TOKEN_HEADER       = "token"

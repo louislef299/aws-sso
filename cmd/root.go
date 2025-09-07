@@ -12,6 +12,7 @@ import (
 	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
+	"github.com/louislef299/aws-sso/pkg/version"
 	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	_ "github.com/louislef299/aws-sso/plugins/aws/eks"
 	_ "github.com/louislef299/aws-sso/plugins/aws/oidc"
@@ -28,6 +29,8 @@ var (
 const (
 	AO_CONFIG_NAME = ".aws-sso"
 	AO_ENV_PREFIX  = "AWS_SSO"
+
+	oneWeek = time.Hour * 24 * 7
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -52,8 +55,22 @@ more information at: https://aws-sso.netlify.app/`,
 			<-ctx.Done()
 			cancel()
 		}()
-
 		cmd.SetContext(ctx)
+
+		// Only check for new version once a week
+		lastCheck := viper.GetString(envs.SESSION_LAST_VCHECK)
+		t, err := time.Parse(time.RFC3339, lastCheck)
+		if err != nil && debug {
+			log.Println(err)
+		}
+		if lastCheck == "" || weekOld(t) {
+			err = version.CheckForUpdate()
+			if err != nil && debug {
+				log.Println(err)
+			}
+			viper.Set(envs.SESSION_LAST_VCHECK, time.Now().Format(time.RFC3339))
+			return viper.WriteConfig()
+		}
 		return nil
 	},
 }
@@ -174,4 +191,10 @@ url = 'https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.
 
 [token]
 `
+}
+
+// weekOld returns true if the time duration provided is over a week older than
+// time.Now() and false otherwise.
+func weekOld(t time.Time) bool {
+	return time.Since(t) > oneWeek
 }
