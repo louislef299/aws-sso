@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	lacct "github.com/louislef299/aws-sso/internal/account"
 	"github.com/louislef299/aws-sso/internal/envs"
@@ -16,6 +17,7 @@ import (
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
+	"github.com/louislef299/aws-sso/pkg/version"
 	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	peks "github.com/louislef299/aws-sso/plugins/aws/eks"
 	poidc "github.com/louislef299/aws-sso/plugins/aws/oidc"
@@ -46,6 +48,23 @@ If the account has an EKS cluster, authenticates with
 the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		// Only check for new version once a week
+		lastCheck := viper.GetString(envs.SESSION_LAST_VCHECK)
+		t, err := time.Parse(time.RFC3339, lastCheck)
+		if err != nil && debug {
+			log.Println(err)
+		}
+		if lastCheck == "" || weekOld(t) {
+			err = version.CheckForUpdate()
+			if err != nil && debug {
+				log.Println(err)
+			}
+			viper.Set(envs.SESSION_LAST_VCHECK, time.Now().Format(time.RFC3339))
+			return viper.WriteConfig()
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		var requestProfile string
 		var err error
