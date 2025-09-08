@@ -12,7 +12,6 @@ import (
 	"github.com/louislef299/aws-sso/internal/envs"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
-	"github.com/louislef299/aws-sso/pkg/version"
 	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	_ "github.com/louislef299/aws-sso/plugins/aws/eks"
 	_ "github.com/louislef299/aws-sso/plugins/aws/oidc"
@@ -56,21 +55,6 @@ more information at: https://aws-sso.netlify.app/`,
 			cancel()
 		}()
 		cmd.SetContext(ctx)
-
-		// Only check for new version once a week
-		lastCheck := viper.GetString(envs.SESSION_LAST_VCHECK)
-		t, err := time.Parse(time.RFC3339, lastCheck)
-		if err != nil && debug {
-			log.Println(err)
-		}
-		if lastCheck == "" || weekOld(t) {
-			err = version.CheckForUpdate()
-			if err != nil && debug {
-				log.Println(err)
-			}
-			viper.Set(envs.SESSION_LAST_VCHECK, time.Now().Format(time.RFC3339))
-			return viper.WriteConfig()
-		}
 		return nil
 	},
 }
@@ -112,7 +96,15 @@ func init() {
 			panic(err)
 		}
 		defer f.Close()
-		tmpl, err := template.New("config").Parse(getConfigTemplate())
+		funcMap := template.FuncMap{
+			"now": func() string {
+				return time.Now().Format(time.RFC3339)
+			},
+			"date": func() string {
+				return time.Now().Format(time.RFC822)
+			},
+		}
+		tmpl, err := template.New("config").Funcs(funcMap).Parse(getConfigTemplate())
 		if err != nil {
 			panic(err)
 		}
@@ -177,7 +169,9 @@ token = 'default'
 # Core represents all configurations that can be used across Accounts and
 # Plugins. These are useful to aws-sso functioning on your local system.
 [core]
-browser = 'chrome'
+# Can be set to chrome, firefox, brave or firefox-developer. Required if 
+# you would like to use Private browsing options.
+browser = ''
 defaultregion = 'us-east-1'
 plugins = ['oidc', 'eks', 'ecr']
 ssoregion = 'us-east-1'
@@ -187,7 +181,9 @@ url = 'https://docs.aws.amazon.com/signin/latest/userguide/sign-in-urls-defined.
 # typically shouldn't have to mess with these unless there are some low-level
 # errors happening on your machine. To get rid of your current session
 # altogether, feel free to run aws-sso logout --clean.
+# Generated on: {{date}}
 [session]
+lastversioncheck = '{{now}}'
 
 [token]
 `
