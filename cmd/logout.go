@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/aws-sso/internal/envs"
@@ -59,9 +60,18 @@ Center sign in session, and removes the token locally.`,
 			log.Println("cleaned out your old sso profiles")
 		}
 
-		// reset viper session configs
+		// reset viper session configs(except for lastVersionCheck)
 		sessionTree := viper.Sub(envs.SESSION_HEADER)
+		lastVCheck, found := strings.CutPrefix(envs.SESSION_LAST_VCHECK, envs.SESSION_HEADER+".")
+		if !found {
+			log.Printf("couldn't find the session header prefix %s\n", envs.SESSION_HEADER+".")
+		}
+		lastVCheck = strings.ToLower(lastVCheck)
+
 		for _, k := range sessionTree.AllKeys() {
+			if k == lastVCheck {
+				continue
+			}
 			viper.Set(fmt.Sprintf("%s.%s", envs.SESSION_HEADER, k), "")
 		}
 		err = viper.WriteConfig()
