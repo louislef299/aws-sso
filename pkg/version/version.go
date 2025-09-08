@@ -89,8 +89,6 @@ func CheckForUpdate() error {
 	r := semver.Compare("v"+Version, releaseVersion)
 	if r < 0 {
 		log.Printf("A new version of aws-sso is available(%s)!\n%s\n\n", releaseVersion, release.URL)
-	} else {
-		log.Printf("version looks good!\n\n")
 	}
 	return nil
 }
