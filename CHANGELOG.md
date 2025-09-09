@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.6](https://github.com/louislef299/aws-sso/compare/v1.6.5...v1.6.6) (2025-09-08)
+
+
+### Bug Fixes
+
+* bump golang.org/x/mod from 0.27.0 to 0.28.0 ([#656](https://github.com/louislef299/aws-sso/issues/656)) ([2df09ab](https://github.com/louislef299/aws-sso/commit/2df09abd482a5857aa52e52824cc11261be535ae))
+* Don't remove lastVersionCheck on logout from session ([#659](https://github.com/louislef299/aws-sso/issues/659)) ([349b0a6](https://github.com/louislef299/aws-sso/commit/349b0a63bf6d05ade65f64039f664f0e826c8175)), closes [#655](https://github.com/louislef299/aws-sso/issues/655)
+* Update default browser to empty string ([#660](https://github.com/louislef299/aws-sso/issues/660)) ([2d591c7](https://github.com/louislef299/aws-sso/commit/2d591c70917dac939430790579622c46a0c4fadc)), closes [#655](https://github.com/louislef299/aws-sso/issues/655)
+
 ## [1.6.5](https://github.com/louislef299/aws-sso/compare/v1.6.4...v1.6.5) (2025-09-07)
 
 
