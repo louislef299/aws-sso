@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.6.7](https://github.com/louislef299/aws-sso/compare/v1.6.6...v1.6.7) (2025-09-11)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.6 to 1.31.7 ([#669](https://github.com/louislef299/aws-sso/issues/669)) ([77ac946](https://github.com/louislef299/aws-sso/commit/77ac946daa027de92294e65ffb974b8c71c6df3a))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.7 to 1.31.8 ([#674](https://github.com/louislef299/aws-sso/issues/674)) ([22edb52](https://github.com/louislef299/aws-sso/commit/22edb52fa800e0a0bbec8820da1dda85c7a9eb8d))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#663](https://github.com/louislef299/aws-sso/issues/663)) ([781ea42](https://github.com/louislef299/aws-sso/commit/781ea42412a9683eb0c06d42aef409f6e5f5e77a))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.1 to 1.50.2 ([#671](https://github.com/louislef299/aws-sso/issues/671)) ([2c73f20](https://github.com/louislef299/aws-sso/commit/2c73f20b1d6e60697cc7d379e57a6aeb70456564))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.2 to 1.50.3 ([#673](https://github.com/louislef299/aws-sso/issues/673)) ([63b3118](https://github.com/louislef299/aws-sso/commit/63b3118fc0aa80828cdd250f14256762a95422f3))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.73.1 to 1.73.2 ([#666](https://github.com/louislef299/aws-sso/issues/666)) ([ad88ec9](https://github.com/louislef299/aws-sso/commit/ad88ec9fde36c2e003164c37bcb3ad534f54e8fe))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.73.2 to 1.73.3 ([#675](https://github.com/louislef299/aws-sso/issues/675)) ([372ee2d](https://github.com/louislef299/aws-sso/commit/372ee2db20904ba87ed9aac6442bdbb07834eab0))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#662](https://github.com/louislef299/aws-sso/issues/662)) ([7121eff](https://github.com/louislef299/aws-sso/commit/7121eff86895279750e0ab60c5b34a437b1ecb60))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#672](https://github.com/louislef299/aws-sso/issues/672)) ([0146d89](https://github.com/louislef299/aws-sso/commit/0146d890925852df7084bbe5e945dfa2948636a5))
+* bump github.com/spf13/viper from 1.20.1 to 1.21.0 ([#664](https://github.com/louislef299/aws-sso/issues/664)) ([1d3b2c0](https://github.com/louislef299/aws-sso/commit/1d3b2c091872071177009845023aca02c69ab4f7))
+* Update version to print with go prefix ([#679](https://github.com/louislef299/aws-sso/issues/679)) ([61441b0](https://github.com/louislef299/aws-sso/commit/61441b056e02c0000f2848cd4079ae26be9d3684))
+
 ## [1.6.6](https://github.com/louislef299/aws-sso/compare/v1.6.5...v1.6.6) (2025-09-08)
 
 
