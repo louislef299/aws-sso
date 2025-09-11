@@ -94,7 +94,7 @@ func CheckForUpdate() error {
 }
 
 func GetTemplate() string {
-	return `{{printf "%s: %s/%s %s/%s built-with/%s\n build-time/%s commit-hash/%s\n" .Short .Name .Version .BuildOS .BuildArch .GoVersion .BuildTime .CommitHash}}`
+	return `{{printf "%s: %s/%s %s/%s built-with/go-%s\n build-time/%s commit-hash/%s\n" .Short .Name .Version .BuildOS .BuildArch .GoVersion .BuildTime .CommitHash}}`
 }
 
 // String prints the version of lnet
