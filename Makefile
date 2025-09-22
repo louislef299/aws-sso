@@ -63,4 +63,4 @@ license-scan:
 	trivy fs --scanners license --license-full  .
 
 clean:
-	@rm -rf $(BINARY_NAME) $(BINARY_NAME).cyclonedx.json dist
+	@rm -rf $(BINARY_NAME) $(BINARY_NAME).cyclonedx.json dist .hugo_build.lock
