@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.8](https://github.com/louislef299/aws-sso/compare/v1.6.7...v1.6.8) (2025-09-22)
+
+
+### Bug Fixes
+
+* Update BuildOs and BuildArch variables ([#681](https://github.com/louislef299/aws-sso/issues/681)) ([cb4d190](https://github.com/louislef299/aws-sso/commit/cb4d190f0d94660cc94dd358d4329424f0ed81e6))
+
 ## [1.6.7](https://github.com/louislef299/aws-sso/compare/v1.6.6...v1.6.7) (2025-09-11)
 
 
