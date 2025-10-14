@@ -64,6 +64,20 @@ func (c *ClientInformation) IsExpired() bool {
 	return c.AccessTokenExpiresAt.Before(time.Now())
 }
 
+func IsAccessTokenExpired() (bool, error) {
+	infoDest, err := ClientInfoFileDestination()
+	if err != nil {
+		return false, err
+	}
+
+	clientInfo, err := ReadClientInformation(infoDest)
+	if err != nil {
+		return false, err
+	}
+
+	return clientInfo.IsExpired(), nil
+}
+
 func GetAccessToken() string {
 	t := viper.GetString(envs.SESSION_TOKEN)
 	if t == DEFAULT_ACCESS_TOKEN || t == "" {
