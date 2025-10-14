@@ -50,6 +50,14 @@ aws sts get-caller-identity`,
 		ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)
 		defer cancel()
 
+		isExpired, err := laws.IsAccessTokenExpired()
+		if err != nil {
+			log.Fatal("could not check if AWS token was expired:", err)
+		}
+		if isExpired {
+			log.Fatal("AWS token is expired! please re-authenticate with a \"login\" command")
+		}
+
 		callerID, err := laws.GetCallerIdentity(ctx, &cfg)
 		if err != nil {
 			log.Fatal("couldn't gather sts identity information: ", err)
