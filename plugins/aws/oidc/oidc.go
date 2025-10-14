@@ -87,7 +87,7 @@ func (a *OIDCLogin) Login(ctx context.Context, config any) error {
 
 	p, err := loginAWS(ctx, awsCfg, acctID, cfg)
 	if err != nil {
-		log.Fatal("couldn't log into AWS: ", err)
+		log.Fatal("couldn't log into AWS(try running with --refresh flag?): ", err)
 	}
 	lconfig.DeepSet(envs.SESSION_PROFILE, p)
 
