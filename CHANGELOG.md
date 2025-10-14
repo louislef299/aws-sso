@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.6.10](https://github.com/louislef299/aws-sso/compare/v1.6.9...v1.6.10) (2025-10-14)
+
+
+### Bug Fixes
+
+* Add check in whoami to validate token isn't expired ([#720](https://github.com/louislef299/aws-sso/issues/720)) ([d3ad0da](https://github.com/louislef299/aws-sso/commit/d3ad0daeb2366b145c13ec5e26bbbeee6e416a0a)), closes [#719](https://github.com/louislef299/aws-sso/issues/719)
+* Add suggestion to AWS authentication error ([#721](https://github.com/louislef299/aws-sso/issues/721)) ([6130130](https://github.com/louislef299/aws-sso/commit/6130130c49ab64e998553b1b20b105b807c3b604)), closes [#718](https://github.com/louislef299/aws-sso/issues/718)
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.10 to 1.31.12 ([#706](https://github.com/louislef299/aws-sso/issues/706)) ([08b0a52](https://github.com/louislef299/aws-sso/commit/08b0a5205c456f5f1f0044db3a1929d145e7892b))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.4 to 1.50.5 ([#705](https://github.com/louislef299/aws-sso/issues/705)) ([d713fcf](https://github.com/louislef299/aws-sso/commit/d713fcf5163cba7f655ee93bb8d018470ed5f50d))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.74.1 to 1.74.2 ([#709](https://github.com/louislef299/aws-sso/issues/709)) ([924a3be](https://github.com/louislef299/aws-sso/commit/924a3bec1e575ffdeb9c2599f238a525418c1e8d))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.38.5 to 1.38.6 ([#699](https://github.com/louislef299/aws-sso/issues/699)) ([449be2b](https://github.com/louislef299/aws-sso/commit/449be2b8d37c96b0ed3ce83c54c66b6ca2064e8c))
+* bump github.com/docker/cli ([#711](https://github.com/louislef299/aws-sso/issues/711)) ([6442787](https://github.com/louislef299/aws-sso/commit/644278751ee83a114d675c5218f81fc6b62ca615))
+* bump github.com/docker/cli ([#717](https://github.com/louislef299/aws-sso/issues/717)) ([1ca7944](https://github.com/louislef299/aws-sso/commit/1ca7944db89751a8adeaf3189baf052cd271da67))
+* bump github.com/docker/docker ([#710](https://github.com/louislef299/aws-sso/issues/710)) ([27ce0b2](https://github.com/louislef299/aws-sso/commit/27ce0b253b8c53ba96391fa4ce5e873043791a81))
+* bump github.com/docker/docker ([#715](https://github.com/louislef299/aws-sso/issues/715)) ([cf29e80](https://github.com/louislef299/aws-sso/commit/cf29e80a26cfe7f0e47459e28c390f91cd969536))
+* bump github.com/onsi/ginkgo/v2 from 2.25.3 to 2.26.0 ([#712](https://github.com/louislef299/aws-sso/issues/712)) ([ba1a7a9](https://github.com/louislef299/aws-sso/commit/ba1a7a9ff1491a283ef5cff28fe8a6579a9b8e31))
+* bump golang.org/x/mod from 0.28.0 to 0.29.0 ([#713](https://github.com/louislef299/aws-sso/issues/713)) ([289c9b8](https://github.com/louislef299/aws-sso/commit/289c9b855553d8f4daf2a3f95e8fe6ba46eeb598))
+* bump k8s.io/cli-runtime from 0.35.0-alpha.0 to 0.35.0-alpha.1 ([#716](https://github.com/louislef299/aws-sso/issues/716)) ([3e2b685](https://github.com/louislef299/aws-sso/commit/3e2b685d68d1107262a719890bef607be4e9c10b))
+* bump k8s.io/client-go from 0.35.0-alpha.0 to 0.35.0-alpha.1 ([#714](https://github.com/louislef299/aws-sso/issues/714)) ([ae6887c](https://github.com/louislef299/aws-sso/commit/ae6887c9bac83b0eff2414c451873ce2bf78e2f5))
+
 ## [1.6.9](https://github.com/louislef299/aws-sso/compare/v1.6.8...v1.6.9) (2025-09-26)
 
 
