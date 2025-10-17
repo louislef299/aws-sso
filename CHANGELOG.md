@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.6.11](https://github.com/louislef299/aws-sso/compare/v1.6.10...v1.6.11) (2025-10-17)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.12 to 1.31.13 ([#724](https://github.com/louislef299/aws-sso/issues/724)) ([6235db1](https://github.com/louislef299/aws-sso/commit/6235db1dc55c09884160ecf95d44f13e521203a1))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.5 to 1.50.6 ([#723](https://github.com/louislef299/aws-sso/issues/723)) ([ba146ab](https://github.com/louislef299/aws-sso/commit/ba146ab6c8aa831ccc775615b079ab99635d12e5))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.74.2 to 1.74.3 ([#727](https://github.com/louislef299/aws-sso/issues/727)) ([8e944c7](https://github.com/louislef299/aws-sso/commit/8e944c764802f3ad8c1279589fd18004f82224cd))
+
 ## [1.6.10](https://github.com/louislef299/aws-sso/compare/v1.6.9...v1.6.10) (2025-10-14)
 
 
