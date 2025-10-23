@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/aws/aws-sdk-go-v2 v1.39.3
 	github.com/aws/aws-sdk-go-v2/config v1.31.13
-	github.com/aws/aws-sdk-go-v2/credentials v1.18.17
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.18
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.50.6
 	github.com/aws/aws-sdk-go-v2/service/eks v1.74.3
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.7
