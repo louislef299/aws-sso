@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.11](https://github.com/louislef299/aws-sso/compare/v1.6.10...v1.6.11) (2025-10-24)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.12 to 1.31.13 ([#724](https://github.com/louislef299/aws-sso/issues/724)) ([6235db1](https://github.com/louislef299/aws-sso/commit/6235db1dc55c09884160ecf95d44f13e521203a1))
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.13 to 1.31.15 ([#739](https://github.com/louislef299/aws-sso/issues/739)) ([e5d9b2a](https://github.com/louislef299/aws-sso/commit/e5d9b2af91877570ff592fc3420402732faf0d20))
+* bump github.com/aws/aws-sdk-go-v2/credentials ([#735](https://github.com/louislef299/aws-sso/issues/735)) ([c74cc01](https://github.com/louislef299/aws-sso/commit/c74cc0188bfce82acf54df181672616bd42a4d4a))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.5 to 1.50.6 ([#723](https://github.com/louislef299/aws-sso/issues/723)) ([ba146ab](https://github.com/louislef299/aws-sso/commit/ba146ab6c8aa831ccc775615b079ab99635d12e5))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.6 to 1.50.7 ([#733](https://github.com/louislef299/aws-sso/issues/733)) ([e834963](https://github.com/louislef299/aws-sso/commit/e8349634f88bfedb13187e9cad59b2b20bcec7ad))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.74.2 to 1.74.3 ([#727](https://github.com/louislef299/aws-sso/issues/727)) ([8e944c7](https://github.com/louislef299/aws-sso/commit/8e944c764802f3ad8c1279589fd18004f82224cd))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.74.3 to 1.74.4 ([#738](https://github.com/louislef299/aws-sso/issues/738)) ([905a405](https://github.com/louislef299/aws-sso/commit/905a40544dfaa5c3c2d919a2bb224f04972c8468))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.38.7 to 1.38.8 ([#732](https://github.com/louislef299/aws-sso/issues/732)) ([1410876](https://github.com/louislef299/aws-sso/commit/14108766b4423b114684ea2181635d9b1824038c))
+* bump github.com/onsi/ginkgo/v2 from 2.26.0 to 2.27.1 ([#734](https://github.com/louislef299/aws-sso/issues/734)) ([2bdd164](https://github.com/louislef299/aws-sso/commit/2bdd1649138e7c6cc950e6cdecdf0fed708a13f2))
+* bump k8s.io/cli-runtime from 0.35.0-alpha.1 to 0.35.0-alpha.2 ([#737](https://github.com/louislef299/aws-sso/issues/737)) ([1fe83f7](https://github.com/louislef299/aws-sso/commit/1fe83f7b0657b24429af8ebcef3df2294a338fd1))
+
 ## [1.6.10](https://github.com/louislef299/aws-sso/compare/v1.6.9...v1.6.10) (2025-10-14)
 
 
