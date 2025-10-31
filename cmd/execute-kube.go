@@ -1,5 +1,4 @@
 //go:build kube
-// +build kube
 
 package cmd
 
