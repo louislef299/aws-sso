@@ -20,6 +20,9 @@ builds:
     - "arm"
     - "arm64"
     - "386"
+    ignore:
+    - goos: windows
+      goarch: arm
     ldflags:
     - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
     - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Env.GOOS}}'
@@ -42,6 +45,9 @@ builds:
     - "arm"
     - "arm64"
     - "386"
+    ignore:
+    - goos: windows
+      goarch: arm
     flags:
     - -tags=kube
     ldflags:
