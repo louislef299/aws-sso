@@ -40,13 +40,13 @@ var rootCmd = &cobra.Command{
 
 more information at: https://aws-sso.netlify.app/`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		if debug {
-			log.SetFlags(log.Ltime | log.Ldate | log.Llongfile)
-		}
-
 		// Force parse flags manually before using viper-bound values
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {
 			return err
+		}
+
+		if debug {
+			log.SetFlags(log.Ltime | log.Ldate | log.Llongfile)
 		}
 
 		ctx, cancel := context.WithTimeout(cmd.Context(), commandTimeout)

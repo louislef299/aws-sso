@@ -29,4 +29,5 @@ const (
 	// Token variables
 	TOKEN_HEADER       = "token"
 	DEFAULT_TOKEN_NAME = "default"
+	TOKEN_LOCK         = "token.lock"
 )
