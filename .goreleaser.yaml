@@ -5,78 +5,87 @@ before:
     - go mod tidy
     - go generate ./...
 
+binary_signs:
+- cmd: gpg
+  artifacts: binary
+  args: ["-u", "{{.Env.GPGKEYID}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+  ids:
+  - aws-sso
+  - kubectl-aws_sso
+  output: false
+
 builds:
-  # Used by homebrew
-  - env:
-    - CGO_ENABLED=0
-    id: "aws-sso"
-    binary: "aws-sso"
-    goos:
-    - linux
-    - darwin
-    - windows
-    goarch:
-    - "amd64"
-    - "arm"
-    - "arm64"
-    - "386"
-    ignore:
-    - goos: windows
-      goarch: arm
-    ldflags:
-    - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Env.GOOS}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Env.GOARCH}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
+# Used by homebrew
+- env:
+  - CGO_ENABLED=0
+  id: "aws-sso"
+  binary: "aws-sso"
+  goos:
+  - linux
+  - darwin
+  - windows
+  goarch:
+  - "amd64"
+  - "arm"
+  - "arm64"
+  - "386"
+  ignore:
+  - goos: windows
+    goarch: arm
+  ldflags:
+  - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Env.GOOS}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Env.GOARCH}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
   
-  # Used by krew
-  - env:
-    - CGO_ENABLED=0
-    id: "kubectl-aws_sso"
-    binary: "kubectl-aws_sso"
-    goos:
-    - linux
-    - darwin
-    - windows
-    goarch:
-    - "amd64"
-    - "arm"
-    - "arm64"
-    - "386"
-    ignore:
-    - goos: windows
-      goarch: arm
-    flags:
-    - -tags=kube
-    ldflags:
-    - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Runtime.Goos}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Runtime.Goarch}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
-    - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
+# Used by krew
+- env:
+  - CGO_ENABLED=0
+  id: "kubectl-aws_sso"
+  binary: "kubectl-aws_sso"
+  goos:
+  - linux
+  - darwin
+  - windows
+  goarch:
+  - "amd64"
+  - "arm"
+  - "arm64"
+  - "386"
+  ignore:
+  - goos: windows
+    goarch: arm
+  flags:
+  - -tags=kube
+  ldflags:
+  - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Runtime.Goos}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Runtime.Goarch}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
+  - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
       
 archives:
-  - ids:
-    - aws-sso
-    name_template: >-
-      {{ .ProjectName }}_{{ .Version }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
-    id: aws-sso
-  - ids:
-    - kubectl-aws_sso
-    name_template: >-
-      kubectl-{{ .ProjectName }}_{{ .Version }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
-    id: kubectl-aws_sso
+- ids:
+  - aws-sso
+  name_template: >-
+    {{ .ProjectName }}_{{ .Version }}_
+    {{- title .Os }}_
+    {{- if eq .Arch "amd64" }}x86_64
+    {{- else if eq .Arch "386" }}i386
+    {{- else }}{{ .Arch }}{{ end }}
+  id: aws-sso
+- ids:
+  - kubectl-aws_sso
+  name_template: >-
+    kubectl-{{ .ProjectName }}_{{ .Version }}_
+    {{- title .Os }}_
+    {{- if eq .Arch "amd64" }}x86_64
+    {{- else if eq .Arch "386" }}i386
+    {{- else }}{{ .Arch }}{{ end }}
+  id: kubectl-aws_sso
 checksum:
   name_template: 'checksums.txt'
 snapshot:
