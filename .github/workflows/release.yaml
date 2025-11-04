@@ -1,0 +1,33 @@
+---
+name: Release
+on:
+  push:
+    tags:
+    - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      OUTPUT: CHANGES.md
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        fetch-tags: true
+        submodules: true
+    - name: Generate changelog with git-cliff
+      id: changelog
+      uses: orhun/git-cliff-action@v4
+      with:
+        config: .github/cliff.toml
+        args: --verbose --latest
+      env:
+        OUTPUT: ${{ env.OUTPUT }}
+    - name: Update Changelog
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: gh release edit ${{ github.ref_name }} --notes-file ${{ env.OUTPUT }}
