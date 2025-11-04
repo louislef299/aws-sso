@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.12](https://github.com/louislef299/aws-sso/compare/v1.6.11...v1.6.12) (2025-11-04)
+
+
+### Bug Fixes
+
+* bump github.com/aws/aws-sdk-go-v2/config from 1.31.15 to 1.31.16 ([#757](https://github.com/louislef299/aws-sso/issues/757)) ([78092cb](https://github.com/louislef299/aws-sso/commit/78092cb474b104f6f0f82ca06c09d1a21933483e))
+* bump github.com/aws/aws-sdk-go-v2/service/ecr from 1.50.7 to 1.51.1 ([#755](https://github.com/louislef299/aws-sso/issues/755)) ([7e989dc](https://github.com/louislef299/aws-sso/commit/7e989dc48e57f3c76b29394068c146d205e3b8f8))
+* bump github.com/aws/aws-sdk-go-v2/service/eks from 1.74.4 to 1.74.6 ([#754](https://github.com/louislef299/aws-sso/issues/754)) ([85a7cfb](https://github.com/louislef299/aws-sso/commit/85a7cfb14343a60da0ff7c49dbac4b8c8daca095))
+* bump github.com/aws/aws-sdk-go-v2/service/sso from 1.29.8 to 1.30.0 ([#753](https://github.com/louislef299/aws-sso/issues/753)) ([6a5be74](https://github.com/louislef299/aws-sso/commit/6a5be74c37df71d2803331f5bdc5db750a4783db))
+* bump github.com/aws/aws-sdk-go-v2/service/ssooidc ([#752](https://github.com/louislef299/aws-sso/issues/752)) ([cd925dc](https://github.com/louislef299/aws-sso/commit/cd925dc3c0ab868611fdbc17620057db6ed0e75c))
+* bump github.com/aws/aws-sdk-go-v2/service/sts from 1.38.9 to 1.39.0 ([#751](https://github.com/louislef299/aws-sso/issues/751)) ([6495ffb](https://github.com/louislef299/aws-sso/commit/6495ffbf060fa965ae0ddf9e9b62ebad82706b3a))
+* bump github.com/onsi/ginkgo/v2 from 2.27.1 to 2.27.2 ([#747](https://github.com/louislef299/aws-sso/issues/747)) ([e6247d4](https://github.com/louislef299/aws-sso/commit/e6247d49ced065cd14407701c069e404ba250d00))
+* Replace token use cmd for lock & unlock ([#760](https://github.com/louislef299/aws-sso/issues/760)) ([ac000f4](https://github.com/louislef299/aws-sso/commit/ac000f4506d30c357ff6563e738d71bf077b03ae))
+
 ## [1.6.11](https://github.com/louislef299/aws-sso/compare/v1.6.10...v1.6.11) (2025-10-24)
 
 
