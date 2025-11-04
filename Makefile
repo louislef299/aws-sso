@@ -1,7 +1,9 @@
 .DEFAULT_GOAL := default
 .PHONY: clean assembly docs
 
-BINARY_NAME= aws-sso
+BINARY_NAME = aws-sso
+BUILD_TARGET ?= ci
+RELEASE_IDS ?= aws-sso,kubectl-aws_sso
 
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 GOBIN = ${HOME}/go/bin
@@ -49,14 +51,15 @@ releaser-lint: .goreleaser.yaml
 	@goreleaser check
 
 release: lint test login
-	@echo "the build won't get signed if GPGKEYID isn't set"
+	@echo "WARNING: the build won't get signed if GPGKEYID isn't set"
+	@echo "building release against IDs $(RELEASE_IDS)"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
-	  GPG_TTY=$(shell tty) goreleaser release --clean
+	  GPG_TTY=$(shell tty) goreleaser release --clean --id $(RELEASE_IDS)
 
 build: lint test
-	@echo "the build won't get signed if GPGKEYID isn't set"
-	@GOVERSION=$(GOVERSION) GPG_TTY=$(shell tty) \
-	  goreleaser build --clean --skip=validate
+    @echo "Building binaries against release target $(BUILD_TARGET)"
+	@GOVERSION=$(GOVERSION) \
+	  goreleaser build --clean --skip=validate --id $(BUILD_TARGET)
 
 scan: $(BINARY_NAME) license-scan
 	trivy rootfs --scanners vuln --format cyclonedx --output $(BINARY_NAME).cyclonedx.json .
