@@ -8,8 +8,8 @@ permissions:
     contents: write
 
 jobs:
-  goreleaser-build:
-    name: GoReleaser Build & Scan
+  go-build:
+    name: Go Build & Scan
     runs-on: ubuntu-latest
     steps:
     - name: Setup Go
@@ -27,14 +27,8 @@ jobs:
       with:
         path: dist/
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-    - name: Build Binaries with GoReleaser
-      uses: goreleaser/goreleaser-action@v6
-      env:
-        GOVERSION: ${{ steps.go-setup.outputs.go-version }}
-      with:
-        distribution: goreleaser
-        version: "~> v2"
-        args: build --snapshot --timeout 90m --clean --id ci
+    - name: Build Binary
+      run: make aws-sso
     # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
     - name: Run Trivy SBOM mode and submit results to Dependency Graph
       uses: aquasecurity/trivy-action@0.33.1
