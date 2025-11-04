@@ -20,7 +20,7 @@ const (
 // tokenCmd represents the token command
 var tokenCmd = &cobra.Command{
 	Use:     "token",
-	Aliases: []string{"tok", "to", "ken"},
+	Aliases: []string{"tok"},
 	Short:   "Manage multiple SSO access tokens",
 	Long: `Manages multiple cached SSO tokens for reuse. Beneficial
 when dealing with multiple AWS Organizations.`,
@@ -89,18 +89,43 @@ var tokenRemoveCmd = &cobra.Command{
 	},
 }
 
-// tokenUseCmd represents the use command
-var tokenUseCmd = &cobra.Command{
-	Use:   "use",
-	Short: "Use a token.",
+// tokenLockCmd represents the lock command
+var tokenLockCmd = &cobra.Command{
+	Use:     "lock",
+	Short:   "Lock token usage, which ignores Account defaults.",
+	Args:    cobra.ExactArgs(1),
+	Aliases: []string{"use"},
+	Run: func(cmd *cobra.Command, args []string) {
+		if l := getLockToken(); l != "" {
+			log.Fatalf("token is already locked on %s! unlock the token to switch\n", l)
+		}
+
+		if !doesTokenExist(args[0]) {
+			log.Printf("token '%s' was not found\n", args[0])
+			return
+		}
+		lockToken(args[0])
+		log.Printf("locked on token %s\n", args[0])
+	},
+}
+
+// tokenUnlockCmd represents the unlock command
+var tokenUnlockCmd = &cobra.Command{
+	Use:   "unlock",
+	Short: "Unlocks token usage, restoring the system to use defaults.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if !doesTokenExist(args[0]) {
 			log.Printf("token '%s' was not found\n", args[0])
 			return
 		}
-		setToken(args[0])
-		log.Printf("using token %s\n", args[0])
+
+		viper.Set(envs.TOKEN_LOCK, "")
+		if err := viper.WriteConfig(); err != nil {
+			log.Fatal("couldn't write config:", err)
+		}
+
+		log.Printf("unlocked token %s, defaults are restored\n", args[0])
 	},
 }
 
@@ -112,7 +137,8 @@ func init() {
 	tokenCmd.AddCommand(tokenAddCmd)
 	tokenCmd.AddCommand(tokenRemoveCmd)
 	tokenCmd.AddCommand(tokenCurrentCmd)
-	tokenCmd.AddCommand(tokenUseCmd)
+	tokenCmd.AddCommand(tokenLockCmd)
+	tokenCmd.AddCommand(tokenUnlockCmd)
 }
 
 func setToken(name string) {
@@ -129,8 +155,24 @@ func setToken(name string) {
 	}
 }
 
+func getLockToken() string { return viper.GetString(envs.TOKEN_LOCK) }
+
+func lockToken(name string) {
+	setToken(name)
+
+	viper.Set(envs.TOKEN_LOCK, name)
+	if err := viper.WriteConfig(); err != nil {
+		log.Fatal("couldn't write config:", err)
+	}
+}
+
 // Viper wrapper
-func checkTokenV(cmd *cobra.Command, args []string) { checkToken() }
+func checkTokenV(cmd *cobra.Command, args []string) {
+	if err := rootCmd.PersistentPreRunE(cmd, args); err != nil {
+		log.Fatal(err)
+	}
+	checkToken()
+}
 
 // Quick check to make sure the session token is set
 func checkToken() {
@@ -145,7 +187,14 @@ func addToken(name string) {
 	setToken(name)
 }
 
-func getCurrentToken() string         { return viper.GetString(envs.SESSION_TOKEN) }
+func getCurrentToken() string {
+	if t := viper.GetString(envs.TOKEN_LOCK); t != "" {
+		viper.Set(envs.SESSION_TOKEN, t)
+		return t
+	}
+	return viper.GetString(envs.SESSION_TOKEN)
+}
+
 func doesTokenExist(name string) bool { return (getToken(name) != "") }
 func getToken(name string) string {
 	return viper.GetString(fmt.Sprintf("%s.%s", envs.TOKEN_HEADER, name))
@@ -165,11 +214,23 @@ func listTokens() {
 	tokenList := tokens.AllKeys()
 	slices.Sort(tokenList)
 	for _, t := range tokenList {
-		if strings.Compare(tokens.GetString(t), ACTIVE_TOKEN_ID) == 0 {
-			fmt.Printf("* %s\n", t)
-		} else if strings.Compare(tokens.GetString(t), INACTIVE_TOKEN_ID) == 0 {
-			fmt.Printf("  %s\n", t)
+		// ignore lock token(used for tracking locked token)
+		if t == "lock" {
+			continue
 		}
+
+		var s string
+		if strings.Compare(tokens.GetString(t), ACTIVE_TOKEN_ID) == 0 {
+			s = fmt.Sprintf("* %s", t)
+		} else if strings.Compare(tokens.GetString(t), INACTIVE_TOKEN_ID) == 0 {
+			s = fmt.Sprintf("  %s", t)
+		}
+
+		// check if current token is locked
+		if c := getLockToken(); strings.Compare(t, c) == 0 {
+			s += " (locked)"
+		}
+		fmt.Printf("%s\n", s)
 	}
 }
 

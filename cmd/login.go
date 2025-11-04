@@ -49,6 +49,10 @@ the cluster and logs you into you ECR in your account.
 EKS and ECR auth can be disabled with configuration
 updates.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := rootCmd.PersistentPreRunE(cmd, args); err != nil {
+			log.Fatal(err)
+		}
+
 		// Only check for new version once a week
 		lastCheck := viper.GetString(envs.SESSION_LAST_VCHECK)
 		t, err := time.Parse(time.RFC3339, lastCheck)
@@ -98,14 +102,22 @@ updates.`,
 				private = lacct.GetAccountPrivate(requestProfile)
 			}
 
+			locked := false
 			if token != "" {
 				setToken(token)
+			} else if l := getLockToken(); l != "" {
+				setToken(l)
+				locked = true
 			} else if t := lacct.GetAccountToken(requestProfile); t != "" {
 				setToken(t)
 			} else {
 				checkToken()
 			}
-			log.Println("using token", getCurrentToken())
+			if locked {
+				log.Printf("using token %s (locked)\n", getCurrentToken())
+			} else {
+				log.Println("using token", getCurrentToken())
+			}
 
 			profileToSet = los.GetProfile(requestProfile)
 		} else {
