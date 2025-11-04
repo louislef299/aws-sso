@@ -56,7 +56,7 @@ check-tag:
 release: check-tag lint test login
 	@echo "WARNING: the build won't get signed if GPGKEYID isn't set"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
-	  GPG_TTY=$(shell tty) goreleaser release --clean --id $(RELEASE_IDS)
+	  GPG_TTY=$(shell tty) goreleaser release --clean
 
 build: lint test
 	@GOVERSION=$(GOVERSION) \
