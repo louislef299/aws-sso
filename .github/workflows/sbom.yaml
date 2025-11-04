@@ -1,8 +1,8 @@
 ---
 name: Validate Binaries
 on:
-  pull_request:
-    branches: [ "*" ]
+  push:
+    branches: [ "main" ]
 
 permissions:
     contents: write
@@ -11,7 +11,6 @@ jobs:
   goreleaser-build:
     name: GoReleaser Build & Scan
     runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'release-please--branches--main')
     steps:
     - name: Setup Go
       uses: actions/setup-go@v6
