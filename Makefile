@@ -57,7 +57,7 @@ release: lint test login
 	  GPG_TTY=$(shell tty) goreleaser release --clean --id $(RELEASE_IDS)
 
 build: lint test
-    @echo "Building binaries against release target $(BUILD_TARGET)"
+	@echo "Building binaries against release target $(BUILD_TARGET)"
 	@GOVERSION=$(GOVERSION) \
 	  goreleaser build --clean --skip=validate --id $(BUILD_TARGET)
 
