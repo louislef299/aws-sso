@@ -9,17 +9,17 @@ jobs:
     name: Go Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: 'stable'
-      - name: Check out code
-        uses: actions/checkout@v5
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v8
-        with:
-          args: --config=.golangci.yml
-          version: latest
+    - name: Setup Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: 'stable'
+    - name: Check out code
+      uses: actions/checkout@v5
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v8
+      with:
+        args: --config=.golangci.yml
+        version: latest
 
   check-goreleaser:
     name: Check Goreleaser
