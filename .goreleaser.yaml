@@ -8,7 +8,8 @@ before:
 binary_signs:
 - cmd: gpg
   artifacts: binary
-  args: ["-u", "{{.Env.GPGKEYID}}", "--output", "${signature}.sig", "--detach-sign", "${artifact}"]
+  signature: "${artifact}.sig"
+  args: ["-u", "{{.Env.GPGKEYID}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
   ids:
   - aws-sso
   - kubectl-aws_sso
@@ -94,8 +95,8 @@ changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+    - '^docs:'
+    - '^test:'
 
 homebrew_casks:
 - name: aws-sso
