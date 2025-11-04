@@ -50,7 +50,12 @@ releaser-lint: .goreleaser.yaml
 	@echo "Checking goreleaser spec"
 	@goreleaser check
 
-release: lint test login
+check-tag:
+	@echo "Ensuring HEAD commit is tagged"
+	@git tag --points-at HEAD | grep -q . || \
+	  (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
+
+release: check-tag lint test login
 	@echo "WARNING: the build won't get signed if GPGKEYID isn't set"
 	@echo "building release against IDs $(RELEASE_IDS)"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
