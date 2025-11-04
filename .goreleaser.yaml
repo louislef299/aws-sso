@@ -8,7 +8,7 @@ before:
 binary_signs:
 - cmd: gpg
   artifacts: binary
-  signature: "${artifact}.sig"
+  signature: "${artifact}_{{ .Os }}_{{ .Arch }}.sig"
   args: ["-u", "{{.Env.GPGKEYID}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
   ids:
   - aws-sso
