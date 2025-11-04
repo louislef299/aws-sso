@@ -20,7 +20,7 @@ const (
 // tokenCmd represents the token command
 var tokenCmd = &cobra.Command{
 	Use:     "token",
-	Aliases: []string{"tok", "to", "ken"},
+	Aliases: []string{"tok"},
 	Short:   "Manage multiple SSO access tokens",
 	Long: `Manages multiple cached SSO tokens for reuse. Beneficial
 when dealing with multiple AWS Organizations.`,
@@ -111,10 +111,9 @@ var tokenLockCmd = &cobra.Command{
 
 // tokenUnlockCmd represents the unlock command
 var tokenUnlockCmd = &cobra.Command{
-	Use:     "unlock",
-	Short:   "Unlocks token usage, restoring the system to use defaults.",
-	Args:    cobra.ExactArgs(1),
-	Aliases: []string{"use"},
+	Use:   "unlock",
+	Short: "Unlocks token usage, restoring the system to use defaults.",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if !doesTokenExist(args[0]) {
 			log.Printf("token '%s' was not found\n", args[0])
