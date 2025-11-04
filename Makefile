@@ -49,11 +49,14 @@ releaser-lint: .goreleaser.yaml
 	@goreleaser check
 
 release: lint test login
+	@echo "the build won't get signed if GPGKEYID isn't set"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
-	 goreleaser release --clean
+	  GPG_TTY=$(shell tty) goreleaser release --clean
 
 build: lint test
-	@GOVERSION=$(GOVERSION) goreleaser build --skip=validate
+	@echo "the build won't get signed if GPGKEYID isn't set"
+	@GOVERSION=$(GOVERSION) GPG_TTY=$(shell tty) \
+	  goreleaser build --clean --skip=validate
 
 scan: $(BINARY_NAME) license-scan
 	trivy rootfs --scanners vuln --format cyclonedx --output $(BINARY_NAME).cyclonedx.json .

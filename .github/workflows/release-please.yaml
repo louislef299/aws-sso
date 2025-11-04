@@ -21,27 +21,3 @@ jobs:
       with:
         release-type: simple
         token: ${{ secrets.RELEASE_TOKEN }}
-
-  go-release:
-    environment: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
-    needs: release-please
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v5
-      with:
-        fetch-depth: 0
-    - run: git fetch --force --tags
-    - uses: actions/setup-go@v6
-      id: go-setup
-      with:
-        go-version: 'stable'
-        check-latest: true
-    - uses: goreleaser/goreleaser-action@v6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GORELEASER_SECRET }}
-        GOVERSION: ${{ steps.go-setup.outputs.go-version }}
-      with:
-        distribution: goreleaser
-        version: latest
-        args: release --clean
