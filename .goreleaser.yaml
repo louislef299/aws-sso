@@ -4,6 +4,11 @@ before:
   hooks:
     - go mod tidy
     - go generate ./...
+report_sizes: true
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  version_template: "{{ incpatch .Version }}"
 
 builds:
 # Used by homebrew
@@ -58,6 +63,26 @@ builds:
   - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
   - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
 
+archives:
+- ids:
+  - aws-sso
+  - brew-sig
+  id: aws-sso
+  files:
+  - LICENSE
+  - src: dist/{{.ProjectName}}_{{.Os}}_{{.Arch}}*/*.sig
+    strip_parent: true
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+- ids:
+  - kubectl-aws_sso
+  - krew-sig
+  id: kubectl-aws_sso
+  files:
+  - LICENSE
+  - src: dist/kubectl*{{.Os}}*{{.Arch}}*/*.sig
+    strip_parent: true
+  name_template: "kubectl-{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
 binary_signs:
 - id: brew-sig
   cmd: gpg
@@ -90,7 +115,6 @@ homebrew_casks:
   homepage: "https://github.com/louislef299/aws-sso"
   ids: 
   - aws-sso
-  - brew-sig
   repository:
     owner: louislef299
     name: homebrew-aws-sso
@@ -107,7 +131,6 @@ krews:
 - name: aws-sso
   ids:
   - kubectl-aws_sso
-  - krew-sig
   commit_author:
     name: Louis Lefebvre
     email: louislefebvre1999@gmail.com
@@ -125,33 +148,3 @@ krews:
       branch: release-krew
       pull_request:
         enabled: true
-
-archives:
-- ids:
-  - aws-sso
-  name_template: >-
-    {{ .ProjectName }}_{{ .Version }}_
-    {{- title .Os }}_
-    {{- if eq .Arch "amd64" }}x86_64
-    {{- else if eq .Arch "386" }}i386
-    {{- else }}{{ .Arch }}{{ end }}
-  id: aws-sso
-- ids:
-  - kubectl-aws_sso
-  name_template: >-
-    kubectl-{{ .ProjectName }}_{{ .Version }}_
-    {{- title .Os }}_
-    {{- if eq .Arch "amd64" }}x86_64
-    {{- else if eq .Arch "386" }}i386
-    {{- else }}{{ .Arch }}{{ end }}
-  id: kubectl-aws_sso
-checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  version_template: "{{ incpatch .Version }}"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
