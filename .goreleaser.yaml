@@ -131,7 +131,7 @@ homebrew_casks:
         if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
           system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-sso"]
         end
-        gpg --verify #{staged_path}/aws-sso*.sig #{staged_path}/aws-sso
+        system_command "gpg", args: ["--verify" "#{staged_path}/aws-sso*.sig", "#{staged_path}/aws-sso"]
 
 krews:
 - name: aws-sso
