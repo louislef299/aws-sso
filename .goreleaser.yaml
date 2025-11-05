@@ -105,7 +105,9 @@ homebrew_casks:
 - name: aws-sso
   description: >-
     Thanks for installing aws-sso! You can get configured by going to
-    https://aws-sso.netlify.app.
+    https://aws-sso.netlify.app. The binary you have installed came with
+    a binary signature if you would like to verify the install. More
+    information can be found on the website
   commit_author:
     name: Louis Lefebvre
     email: louislefebvre1999@gmail.com
@@ -123,17 +125,11 @@ homebrew_casks:
     name: homebrew-aws-sso
     branch: main
     token: "{{ .Env.GITHUB_TOKEN }}"
-  dependencies:
-  - formula: gnupg
   hooks:
     post:
       install: |
         if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
           system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-sso"]
-        end
-        
-        if system_command("/usr/bin/which", args: ["gpg"]).exit_status == 0
-          system_command "gpg", args: ["--verify", "#{staged_path}/aws-sso*.sig", "#{staged_path}/aws-sso"]
         end
 
 krews:
