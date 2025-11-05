@@ -15,15 +15,32 @@ instructions, visit:
 Install with [homebrew][]:
 
 ```bash
-brew tap louislef299/aws-sso
-brew install --cask aws-sso
+brew tap louislef299/aws-sso && brew install --cask aws-sso
 ```
 
 Or with [krew][]:
 
 ```bash
-kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git
+kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git && \
 kubectl krew install louislef299/aws-sso
+```
+
+Or build from source: `make aws-sso`
+
+Or manually download from [release assets][]
+
+### Verify the Binary
+
+This strategy uses [GnuPG][] and is only required if you installed `aws-sso`
+with brew, krew or manually from the release assets. You basically need to
+import my public key and then verify the signature of the binary. In the
+example, `$BINPATH` will represent the path to the `aws-sso` binary.
+
+```bash
+# Import my PGP
+curl -s https://louislefebvre.net/public-key.txt | gpg --import
+
+gpg --verify $BINPATH/aws-sso*.sig aws-sso
 ```
 
 ## Basic Usage
@@ -47,5 +64,7 @@ kubectl krew install louislef299/aws-sso
 Feel free to open up Issues or Feature Requests on GitHub.
 
 [Configure your system]: https://aws-sso.netlify.app/config/
+[GnuPG]: https://www.gnupg.org/gph/en/manual/book1.html
 [homebrew]: https://brew.sh/
 [krew]: https://krew.sigs.k8s.io/
+[release assets]: https://github.com/louislef299/aws-sso/releases
