@@ -5,16 +5,6 @@ before:
     - go mod tidy
     - go generate ./...
 
-binary_signs:
-- cmd: gpg
-  artifacts: binary
-  signature: "${artifact}_{{ .Os }}_{{ .Arch }}.sig"
-  args: ["-u", "{{.Env.GPGKEYID}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
-  ids:
-  - aws-sso
-  - kubectl-aws_sso
-  output: false
-
 builds:
 # Used by homebrew
 - env:
@@ -68,6 +58,74 @@ builds:
   - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
   - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
 
+binary_signs:
+- id: brew-sig
+  cmd: gpg
+  artifacts: binary
+  signature: "${artifact}_{{ .Os }}_{{ .Arch }}.sig"
+  args: ["-u", "{{.Env.GPG_SIGNING_KEY}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+  ids:
+  - aws-sso
+  output: false
+- id: krew-sig
+  cmd: gpg
+  artifacts: binary
+  signature: "${artifact}_{{ .Os }}_{{ .Arch }}.sig"
+  args: ["-u", "{{.Env.GPG_SIGNING_KEY}}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+  ids:
+  - kubectl-aws_sso
+  output: false
+
+homebrew_casks:
+- name: aws-sso
+  commit_author:
+    name: Louis Lefebvre
+    email: louislefebvre1999@gmail.com
+    signing:
+      enabled: true
+      key: "{{ .Env.GPG_SIGNING_KEY }}"
+      program: gpg
+      format: openpgp
+  commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+  homepage: "https://github.com/louislef299/aws-sso"
+  ids: 
+  - aws-sso
+  - brew-sig
+  repository:
+    owner: louislef299
+    name: homebrew-aws-sso
+    branch: main
+    token: "{{ .Env.GITHUB_TOKEN }}"
+  hooks:
+    post:
+      install: |
+        if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+          system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-sso"]
+        end
+
+krews:
+- name: aws-sso
+  ids:
+  - kubectl-aws_sso
+  - krew-sig
+  commit_author:
+    name: Louis Lefebvre
+    email: louislefebvre1999@gmail.com
+    signing:
+      enabled: true
+      key: "{{ .Env.GPG_SIGNING_KEY }}"
+      program: gpg
+      format: openpgp
+  commit_msg_template: "chore: Krew plugin update for {{ .ProjectName }} version {{ .Tag }}"
+  description: "A simplified AWS SSO manager to make authenticating to EKS and ECR easier."
+  short_description: "A simplified AWS SSO manager."
+  repository:
+      owner: louislef299
+      name: aws-sso
+      branch: release-krew
+      pull_request:
+        enabled: true
+
 archives:
 - ids:
   - aws-sso
@@ -97,41 +155,3 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
-
-homebrew_casks:
-- name: aws-sso
-  commit_author:
-    name: Louis Lefebvre
-    email: louislefebvre1999@gmail.com
-  commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-  homepage: "https://github.com/louislef299/aws-sso"
-  ids: 
-  - aws-sso
-  repository:
-    owner: louislef299
-    name: homebrew-aws-sso
-    branch: main
-    token: "{{ .Env.GITHUB_TOKEN }}"
-  hooks:
-    post:
-      install: |
-        if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
-          system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-sso"]
-        end
-
-krews:
-- name: aws-sso
-  ids:
-  - kubectl-aws_sso
-  commit_author:
-    name: Louis Lefebvre
-    email: louislefebvre1999@gmail.com
-  commit_msg_template: "chore: Krew plugin update for {{ .ProjectName }} version {{ .Tag }}"
-  description: "A simplified AWS SSO manager to make authenticating to EKS and ECR easier."
-  short_description: "A simplified AWS SSO manager."
-  repository:
-      owner: louislef299
-      name: aws-sso
-      branch: release-krew
-      pull_request:
-        enabled: true

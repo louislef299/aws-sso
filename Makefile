@@ -54,13 +54,12 @@ check-tag:
 	  (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
 
 release: check-tag lint test login
-	@echo "WARNING: the build won't get signed if GPGKEYID isn't set"
+	@echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
 	  GPG_TTY=$(shell tty) goreleaser release --clean
 
 build: lint test
-	@GOVERSION=$(GOVERSION) \
-	  goreleaser build --clean --skip=validate
+	@GOVERSION=$(GOVERSION) goreleaser build --clean --skip=validate --id aws-sso
 
 scan: $(BINARY_NAME) license-scan
 	trivy rootfs --scanners vuln --format cyclonedx --output $(BINARY_NAME).cyclonedx.json .
