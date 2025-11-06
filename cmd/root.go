@@ -35,7 +35,7 @@ const (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "aws-sso",
-	Short: "AWS Auth",
+	Short: "knot",
 	Long: `An AWS SSO helper CLI to streamline authentication.
 
 more information at: https://aws-sso.netlify.app/`,

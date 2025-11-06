@@ -13,11 +13,11 @@ import (
 
 	lacct "github.com/louislef299/aws-sso/internal/account"
 	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/aws-sso/internal/version"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
 	"github.com/louislef299/aws-sso/pkg/dlogin"
 	los "github.com/louislef299/aws-sso/pkg/os"
-	"github.com/louislef299/aws-sso/pkg/version"
 	pecr "github.com/louislef299/aws-sso/plugins/aws/ecr"
 	peks "github.com/louislef299/aws-sso/plugins/aws/eks"
 	poidc "github.com/louislef299/aws-sso/plugins/aws/oidc"
