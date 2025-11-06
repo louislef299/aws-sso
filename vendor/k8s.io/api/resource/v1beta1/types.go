@@ -149,10 +149,11 @@ type ResourceSliceSpec struct {
 
 	// Devices lists some or all of the devices in this pool.
 	//
-	// Must not have more than 128 entries.
+	// Must not have more than 128 entries. If any device uses taints the limit is 64.
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	Devices []Device `json:"devices" protobuf:"bytes,6,name=devices"`
 
 	// PerDeviceNodeSelection defines whether the access from nodes to
@@ -255,6 +256,7 @@ type ResourcePool struct {
 
 const ResourceSliceMaxSharedCapacity = 128
 const ResourceSliceMaxDevices = 128
+const ResourceSliceMaxDevicesWithTaints = 64
 const PoolNameMaxLength = validation.DNS1123SubdomainMaxLength // Same as for a single node name.
 const BindingConditionsMaxSize = 4
 const BindingFailureConditionsMaxSize = 4
@@ -342,7 +344,9 @@ type BasicDevice struct {
 
 	// If specified, these are the driver-defined taints.
 	//
-	// The maximum number of taints is 4.
+	// The maximum number of taints is 16. If taints are set for
+	// any device in a ResourceSlice, then the maximum number of
+	// allowed devices per ResourceSlice is 64 instead of 128.
 	//
 	// This is an alpha field and requires enabling the DRADeviceTaints
 	// feature gate.
@@ -379,6 +383,8 @@ type BasicDevice struct {
 	// +optional
 	// +listType=atomic
 	// +featureGate=DRADeviceBindingConditions,DRAResourceClaimDeviceStatus
+	// +k8s:optional
+	// +k8s:maxItems=4
 	BindingConditions []string `json:"bindingConditions,omitempty" protobuf:"bytes,9,rep,name=bindingConditions"`
 
 	// BindingFailureConditions defines the conditions for binding failure.
@@ -395,6 +401,8 @@ type BasicDevice struct {
 	// +optional
 	// +listType=atomic
 	// +featureGate=DRADeviceBindingConditions,DRAResourceClaimDeviceStatus
+	// +k8s:optional
+	// +k8s:maxItems=4
 	BindingFailureConditions []string `json:"bindingFailureConditions,omitempty" protobuf:"bytes,10,rep,name=bindingFailureConditions"`
 
 	// AllowMultipleAllocations marks whether the device is allowed to be allocated to multiple DeviceRequests.
@@ -563,6 +571,9 @@ const ResourceSliceMaxDeviceCountersPerSlice = 1024 // 64 * 16
 type QualifiedName string
 
 // FullyQualifiedName is a QualifiedName where the domain is set.
+// Format validation cannot be added to this type because one of its usages,
+// DistinctAttribute, is validated conditionally. This conditional validation
+// cannot be expressed declaratively.
 type FullyQualifiedName string
 
 // DeviceMaxDomainLength is the maximum length of the domain prefix in a fully-qualified name.
@@ -580,34 +591,38 @@ type DeviceAttribute struct {
 	// IntValue is a number.
 	//
 	// +optional
-	// +oneOf=ValueType
+	// +k8s:optional
+	// +k8s:unionMember
 	IntValue *int64 `json:"int,omitempty" protobuf:"varint,2,opt,name=int"`
 
 	// BoolValue is a true/false value.
 	//
 	// +optional
-	// +oneOf=ValueType
+	// +k8s:optional
+	// +k8s:unionMember
 	BoolValue *bool `json:"bool,omitempty" protobuf:"varint,3,opt,name=bool"`
 
 	// StringValue is a string. Must not be longer than 64 characters.
 	//
 	// +optional
-	// +oneOf=ValueType
+	// +k8s:optional
+	// +k8s:unionMember
 	StringValue *string `json:"string,omitempty" protobuf:"bytes,4,opt,name=string"`
 
 	// VersionValue is a semantic version according to semver.org spec 2.0.0.
 	// Must not be longer than 64 characters.
 	//
 	// +optional
-	// +oneOf=ValueType
+	// +k8s:optional
+	// +k8s:unionMember
 	VersionValue *string `json:"version,omitempty" protobuf:"bytes,5,opt,name=version"`
 }
 
 // DeviceAttributeMaxValueLength is the maximum length of a string or version attribute value.
 const DeviceAttributeMaxValueLength = 64
 
-// DeviceTaintsMaxLength is the maximum number of taints per device.
-const DeviceTaintsMaxLength = 4
+// DeviceTaintsMaxLength is the maximum number of taints per Device.
+const DeviceTaintsMaxLength = 16
 
 // The device this taint is attached to has the "effect" on
 // any claim which does not tolerate the taint and, through the claim,
@@ -629,16 +644,27 @@ type DeviceTaint struct {
 
 	// The effect of the taint on claims that do not tolerate the taint
 	// and through such claims on the pods using them.
-	// Valid effects are NoSchedule and NoExecute. PreferNoSchedule as used for
-	// nodes is not valid here.
+	//
+	// Valid effects are None, NoSchedule and NoExecute. PreferNoSchedule as used for
+	// nodes is not valid here. More effects may get added in the future.
+	// Consumers must treat unknown effects like None.
 	//
 	// +required
+	// +k8s:required
 	Effect DeviceTaintEffect `json:"effect" protobuf:"bytes,3,name=effect,casttype=DeviceTaintEffect"`
 
 	// ^^^^
 	//
 	// Implementing PreferNoSchedule would depend on a scoring solution for DRA.
 	// It might get added as part of that.
+	//
+	// A possible future new effect is NoExecuteWithPodDisruptionBudget:
+	// honor the pod disruption budget instead of simply deleting pods.
+	// This is currently undecided, it could also be a separate field.
+	//
+	// Validation must be prepared to allow unknown enums in stored objects,
+	// which will enable adding new enums within a single release without
+	// ratcheting.
 
 	// TimeAdded represents the time at which the taint was added.
 	// Added automatically during create or update if not set.
@@ -658,6 +684,9 @@ type DeviceTaint struct {
 type DeviceTaintEffect string
 
 const (
+	// No effect, the taint is purely informational.
+	DeviceTaintEffectNone DeviceTaintEffect = "None"
+
 	// Do not allow new pods to schedule which use a tainted device unless they tolerate the taint,
 	// but allow all pods submitted to Kubelet without going through the scheduler
 	// to start, and allow all already-running pods to continue running.
@@ -730,6 +759,7 @@ type DeviceClaim struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:listType=atomic
 	// +k8s:unique=map
 	// +k8s:listMapKey=name
@@ -741,6 +771,7 @@ type DeviceClaim struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:maxItems=32
 	Constraints []DeviceConstraint `json:"constraints,omitempty" protobuf:"bytes,2,opt,name=constraints"`
 
@@ -750,6 +781,7 @@ type DeviceClaim struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:maxItems=32
 	Config []DeviceClaimConfiguration `json:"config,omitempty" protobuf:"bytes,3,opt,name=config"`
 
@@ -817,6 +849,7 @@ type DeviceRequest struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:maxItems=32
 	Selectors []DeviceSelector `json:"selectors,omitempty" protobuf:"bytes,3,name=selectors"`
 
@@ -893,6 +926,7 @@ type DeviceRequest struct {
 	// +oneOf=deviceRequestType
 	// +listType=atomic
 	// +featureGate=DRAPrioritizedList
+	// +k8s:optional
 	// +k8s:listType=atomic
 	// +k8s:unique=map
 	// +k8s:listMapKey=name
@@ -1213,6 +1247,7 @@ type DeviceConstraint struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:listType=atomic
 	// +k8s:unique=set
 	// +k8s:maxItems=32
@@ -1233,6 +1268,8 @@ type DeviceConstraint struct {
 	//
 	// +optional
 	// +oneOf=ConstraintType
+	// +k8s:optional
+	// +k8s:format=k8s-resource-fully-qualified-name
 	MatchAttribute *FullyQualifiedName `json:"matchAttribute,omitempty" protobuf:"bytes,2,opt,name=matchAttribute"`
 
 	// Potential future extension, not part of the current design:
@@ -1273,6 +1310,7 @@ type DeviceClaimConfiguration struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:listType=atomic
 	// +k8s:unique=set
 	// +k8s:maxItems=32
@@ -1506,6 +1544,7 @@ type DeviceAllocationResult struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:maxItems=32
 	Results []DeviceRequestAllocationResult `json:"results,omitempty" protobuf:"bytes,1,opt,name=results"`
 
@@ -1519,6 +1558,7 @@ type DeviceAllocationResult struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
 	// +k8s:maxItems=64
 	Config []DeviceAllocationConfiguration `json:"config,omitempty" protobuf:"bytes,2,opt,name=config"`
 }
@@ -1592,6 +1632,7 @@ type DeviceRequestAllocationResult struct {
 	// +optional
 	// +listType=atomic
 	// +featureGate=DRADeviceTaints
+	// +k8s:optional
 	// +k8s:maxItems=16
 	Tolerations []DeviceToleration `json:"tolerations,omitempty" protobuf:"bytes,6,opt,name=tolerations"`
 
@@ -1604,6 +1645,7 @@ type DeviceRequestAllocationResult struct {
 	// +optional
 	// +listType=atomic
 	// +featureGate=DRADeviceBindingConditions,DRAResourceClaimDeviceStatus
+	// +k8s:optional
 	// +k8s:maxItems=4
 	BindingConditions []string `json:"bindingConditions,omitempty" protobuf:"bytes,7,rep,name=bindingConditions"`
 
@@ -1616,6 +1658,7 @@ type DeviceRequestAllocationResult struct {
 	// +optional
 	// +listType=atomic
 	// +featureGate=DRADeviceBindingConditions,DRAResourceClaimDeviceStatus
+	// +k8s:optional
 	// +k8s:maxItems=4
 	BindingFailureConditions []string `json:"bindingFailureConditions,omitempty" protobuf:"bytes,8,rep,name=bindingFailureConditions"`
 
@@ -1663,6 +1706,10 @@ type DeviceAllocationConfiguration struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
+	// +k8s:listType=atomic
+	// +k8s:unique=set
+	// +k8s:maxItems=32
 	Requests []string `json:"requests,omitempty" protobuf:"bytes,2,opt,name=requests"`
 
 	DeviceConfiguration `json:",inline" protobuf:"bytes,3,name=deviceConfiguration"`
@@ -1708,6 +1755,8 @@ type DeviceClass struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata
 	// +optional
+	// +k8s:subfield(name)=+k8s:optional
+	// +k8s:subfield(name)=+k8s:format=k8s-long-name
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
 
 	// Spec defines what can be allocated and how to configure it.
@@ -1913,6 +1962,7 @@ type AllocatedDeviceStatus struct {
 	// NetworkData contains network-related information specific to the device.
 	//
 	// +optional
+	// +k8s:optional
 	NetworkData *NetworkDeviceData `json:"networkData,omitempty" protobuf:"bytes,6,opt,name=networkData"`
 }
 
@@ -1927,6 +1977,8 @@ type NetworkDeviceData struct {
 	// Must not be longer than 256 characters.
 	//
 	// +optional
+	// +k8s:optional
+	// +k8s:maxLength=256
 	InterfaceName string `json:"interfaceName,omitempty" protobuf:"bytes,1,opt,name=interfaceName"`
 
 	// IPs lists the network addresses assigned to the device's network interface.
@@ -1939,6 +1991,10 @@ type NetworkDeviceData struct {
 	//
 	// +optional
 	// +listType=atomic
+	// +k8s:optional
+	// +k8s:listType=atomic
+	// +k8s:unique=set
+	// +k8s:maxItems=16
 	IPs []string `json:"ips,omitempty" protobuf:"bytes,2,opt,name=ips"`
 
 	// HardwareAddress represents the hardware address (e.g. MAC Address) of the device's network interface.
@@ -1946,5 +2002,7 @@ type NetworkDeviceData struct {
 	// Must not be longer than 128 characters.
 	//
 	// +optional
+	// +k8s:optional
+	// +k8s:maxLength=128
 	HardwareAddress string `json:"hardwareAddress,omitempty" protobuf:"bytes,3,opt,name=hardwareAddress"`
 }
