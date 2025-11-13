@@ -2,6 +2,7 @@
 .PHONY: clean assembly docs
 
 BINARY_NAME = aws-sso
+GPG_SIGNING_KEY ?= $(shell git config user.signingkey)
 
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 GOBIN = ${HOME}/go/bin
@@ -56,7 +57,8 @@ check-tag:
 release: check-tag lint test login
 	@echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
 	@GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
-	  GPG_TTY=$(shell tty) goreleaser release --clean
+	  GPG_TTY=$(shell tty) GPG_SIGNING_KEY=$(GPG_SIGNING_KEY) \
+	  goreleaser release --clean
 
 build: lint test
 	@GOVERSION=$(GOVERSION) goreleaser build --clean --skip=validate --id aws-sso
