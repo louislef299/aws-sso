@@ -11,27 +11,12 @@ jobs:
     name: Go Lint
     runs-on: ubuntu-latest
     steps:
-    - name: Setup Go
-      uses: actions/setup-go@v6
-      with:
-        go-version: 'stable'
-    - name: Check out code
-      uses: actions/checkout@v5
-    - name: golangci-lint
-      uses: golangci/golangci-lint-action@v8
-      with:
-        args: --config=.golangci.yml
-        version: latest
-
-  check-goreleaser:
-    name: Check Goreleaser
-    runs-on: ubuntu-latest
-    steps:
     - uses: actions/checkout@v5
       with:
         fetch-depth: 0
     - run: git fetch --force --tags
-    - uses: actions/setup-go@v6
+    - name: Setup Go
+      uses: actions/setup-go@v6
       id: go-setup
       with:
         go-version: 'stable'
@@ -42,6 +27,11 @@ jobs:
         distribution: goreleaser
         version: latest
         args: check
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v8
+      with:
+        args: --config=.golangci.yml
+        version: latest
 
   test:
     name: Go Test
@@ -55,10 +45,21 @@ jobs:
         check-latest: true
     - name: Test
       run: go test -v -race ./...
-
-  conventional-commits:
-    name: Validate Conventional Commits
+  
+  trivy-vuln-scan:
+    name: Trivy Scan Filesystem Vulnerabilities
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: webiny/action-conventional-commits@v1.3.0
+    - name: Check out code
+      uses: actions/checkout@v5
+    - uses: webiny/action-conventional-commits@v1.3.0
+    - name: Trivy Security Scan
+      uses: aquasecurity/trivy-action@0.33.1
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        hide-progress: false
+        format: 'table'
+        exit-code: '1'
+        severity: 'MEDIUM,HIGH,CRITICAL'
+        scanners: vuln,secret,license
