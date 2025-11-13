@@ -8,12 +8,12 @@ COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 GOBIN = ${HOME}/go/bin
 GOTRACEBACK = 'crash'
 GOVERSION= $(shell go version | awk '{print $$3}')
-GOFLAGS= -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version=$(shell cat version.txt)' \
--X 'github.com/louislef299/aws-sso/pkg/version.BuildOS=$(shell go env GOOS)' \
--X 'github.com/louislef299/aws-sso/pkg/version.BuildArch=$(shell go env GOARCH)' \
--X 'github.com/louislef299/aws-sso/pkg/version.GoVersion=$(GOVERSION)' \
--X 'github.com/louislef299/aws-sso/pkg/version.BuildTime=$(shell date)' \
--X 'github.com/louislef299/aws-sso/pkg/version.CommitHash=$(COMMIT_HASH)'
+GOFLAGS= -s -w -X 'github.com/louislef299/aws-sso/internal/version.Version=local.dev' \
+-X 'github.com/louislef299/aws-sso/internal/version.BuildOS=$(shell go env GOOS)' \
+-X 'github.com/louislef299/aws-sso/internal/version.BuildArch=$(shell go env GOARCH)' \
+-X 'github.com/louislef299/aws-sso/internal/version.GoVersion=$(GOVERSION)' \
+-X 'github.com/louislef299/aws-sso/internal/version.BuildTime=$(shell date)' \
+-X 'github.com/louislef299/aws-sso/internal/version.CommitHash=$(COMMIT_HASH)'
 
 default: lint test clean $(BINARY_NAME)
 	@echo "Run './$(BINARY_NAME) -h' to get started"
@@ -61,7 +61,8 @@ release: check-tag lint test login
 	  goreleaser release --clean
 
 build: lint test
-	@GOVERSION=$(GOVERSION) goreleaser build --clean --skip=validate --id aws-sso
+	@GOVERSION=$(GOVERSION) GPG_SIGNING_KEY=$(GPG_SIGNING_KEY) \
+	 goreleaser build --clean --skip=validate --id aws-sso
 
 scan: $(BINARY_NAME) license-scan
 	trivy rootfs --scanners vuln --format cyclonedx --output $(BINARY_NAME).cyclonedx.json .
