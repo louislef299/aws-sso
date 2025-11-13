@@ -29,12 +29,12 @@ builds:
   - goos: windows
     goarch: arm
   ldflags:
-  - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Env.GOOS}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Env.GOARCH}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
+  - -s -w -X 'github.com/louislef299/aws-sso/internal/version.Version={{.Version}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildOS={{.Env.GOOS}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildArch={{.Env.GOARCH}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.GoVersion={{.Env.GOVERSION}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildTime={{.Date}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.CommitHash={{.ShortCommit}}'
   
 # Used by krew
 - env:
@@ -56,12 +56,12 @@ builds:
   flags:
   - -tags=kube
   ldflags:
-  - -s -w -X 'github.com/louislef299/aws-sso/pkg/version.Version={{.Version}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildOS={{.Runtime.Goos}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildArch={{.Runtime.Goarch}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.GoVersion={{.Env.GOVERSION}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.BuildTime={{.Date}}'
-  - -X 'github.com/louislef299/aws-sso/pkg/version.CommitHash={{.ShortCommit}}'
+  - -s -w -X 'github.com/louislef299/aws-sso/internal/version.Version={{.Version}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildOS={{.Runtime.Goos}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildArch={{.Runtime.Goarch}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.GoVersion={{.Env.GOVERSION}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.BuildTime={{.Date}}'
+  - -X 'github.com/louislef299/aws-sso/internal/version.CommitHash={{.ShortCommit}}'
 
 archives:
 - ids:
