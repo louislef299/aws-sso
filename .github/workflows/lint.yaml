@@ -28,7 +28,7 @@ jobs:
         version: latest
         args: check
     - name: golangci-lint
-      uses: golangci/golangci-lint-action@v8
+      uses: golangci/golangci-lint-action@v9
       with:
         args: --config=.golangci.yml
         version: latest
