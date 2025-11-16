@@ -34,6 +34,11 @@ func init() {
 }
 
 func (e *ECRLogin) Init(cmd *cobra.Command) error {
+	err := dlogin.Activate("ecr")
+	if err != nil {
+		return err
+	}
+
 	cmd.Flags().Bool("disableECRLogin", false, "Disables automatic detection and login for ECR")
 	lconfig.AddConfigValue(ECR_DISABLE_ECR_LOGIN, "Disables automatic detection and login for ECR")
 

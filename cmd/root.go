@@ -62,6 +62,8 @@ more information at: https://aws-sso.netlify.app/`,
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute(ctx context.Context) {
+	// Safety default to ensure proper functionality is guaranteed
+	viper.SetDefault(envs.CORE_PLUGINS, []string{"oidc", "eks", "ecr"})
 	// we need to always initConfig due to plugin flags needing to get
 	// registered with help and usage commands
 	initConfig()
@@ -145,7 +147,6 @@ func initConfig() {
 
 // Initialize all the plugins with the loginCmd
 func initPlugins() {
-	viper.SetDefault(envs.CORE_PLUGINS, []string{"oidc", "eks", "ecr"})
 	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
 	for _, p := range plugins {
 		err := dlogin.Init(p, loginCmd)

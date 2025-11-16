@@ -28,7 +28,7 @@ import (
 )
 
 func main() {
-	// Create a context that intercepts SIGINT
+	// Create a context that intercepts OS signals
 	ctx, cancel := signal.NotifyContext(context.Background(), sigs.Signals...)
 	go func() {
 		<-ctx.Done()

@@ -39,7 +39,7 @@ func init() {
 }
 
 func (e *OIDCLogin) Init(cmd *cobra.Command) error {
-	return nil
+	return dlogin.Activate("oidc")
 }
 
 func (a *OIDCLogin) Login(ctx context.Context, config any) error {

@@ -11,15 +11,15 @@ var pluginsCmd = &cobra.Command{
 	Use:   "plugins",
 	Short: "List active plugins.",
 	Run: func(cmd *cobra.Command, args []string) {
-		drivers := dlogin.Drivers()
-		if len(drivers) == 0 {
+		plugs := dlogin.Plugins()
+		if len(plugs) == 0 {
 			fmt.Println("There aren't any active plugins!")
 			return
 		}
 
 		fmt.Println("The following plugins are active:")
-		for _, d := range drivers {
-			fmt.Println(d)
+		for _, p := range plugs {
+			fmt.Println(p)
 		}
 	},
 }
