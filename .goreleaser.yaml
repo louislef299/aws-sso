@@ -136,20 +136,21 @@ krews:
 - name: aws-sso
   ids:
   - kubectl-aws_sso
+  homepage: "https://aws-sso.netlify.app"
+  commit_msg_template: "chore: Krew plugin update for {{ .ProjectName }} version {{ .Tag }}"
+  description: "A simplified AWS SSO manager to make authenticating to EKS and ECR easier."
+  short_description: "A simplified AWS SSO manager."
+  repository:
+    owner: louislef299
+    name: aws-sso
+    branch: release-krew-{{ .Tag }}
+    pull_request:
+      enabled: true
   commit_author:
-    name: Louis Lefebvre
+    name: Louis LeFebvre
     email: louislefebvre1999@gmail.com
     signing:
       enabled: true
       key: "{{ .Env.GPG_SIGNING_KEY }}"
       program: gpg
       format: openpgp
-  commit_msg_template: "chore: Krew plugin update for {{ .ProjectName }} version {{ .Tag }}"
-  description: "A simplified AWS SSO manager to make authenticating to EKS and ECR easier."
-  short_description: "A simplified AWS SSO manager."
-  repository:
-      owner: louislef299
-      name: aws-sso
-      branch: release-krew
-      pull_request:
-        enabled: true
