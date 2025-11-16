@@ -24,11 +24,12 @@ import (
 	"os/signal"
 
 	"github.com/louislef299/aws-sso/cmd"
+	sigs "github.com/louislef299/aws-sso/pkg/os"
 )
 
 func main() {
 	// Create a context that intercepts SIGINT
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	ctx, cancel := signal.NotifyContext(context.Background(), sigs.Signals...)
 	go func() {
 		<-ctx.Done()
 		log.Println("received SIGINT; shutting down...")
