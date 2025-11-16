@@ -4,49 +4,50 @@ kind: Plugin
 metadata:
   name: aws-sso
 spec:
-  version: v1.6.14
+  version: v1.6.15
   platforms:
     - bin: kubectl-aws_sso.exe
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_windows_arm64.tar.gz
-      sha256: 25447138757e947cff44a628b01232cb7e2f152d74a35b75179eceb1fc0f1f7d
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_windows_arm64.tar.gz
+      sha256: 0f6353bd5ded713665229772d6e137a0b3e9544c60b16a621c627eb569aa1a2d
       selector:
         matchLabels:
           os: windows
           arch: arm64
     - bin: kubectl-aws_sso.exe
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_windows_amd64.tar.gz
-      sha256: 156db5ba1133c1db50446bd4b0d7fdcc0eb3cf019959a643c49b9aa2527d98b4
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_windows_amd64.tar.gz
+      sha256: 1de01eefdaee94f6e13818adf68387122172b63016e67b6e7b6cef09371776f3
       selector:
         matchLabels:
           os: windows
           arch: amd64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_linux_arm64.tar.gz
-      sha256: 230d0c23782eae62539b5da76d0f5d40e963ff960d9818096e0c048e26712998
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_linux_arm64.tar.gz
+      sha256: 74cc1f1c69b7afb8e077649bd0545e45e15744d3f50f80f9b8f6c8b40ddee549
       selector:
         matchLabels:
           os: linux
           arch: arm64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_linux_amd64.tar.gz
-      sha256: 5060e235605a4088fc29584ec1ffce9870efe67207d5caeecae4bd2731c3d67f
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_linux_amd64.tar.gz
+      sha256: 7185e461d0247c77d1d68986a76aa993e559ac03ca15d59d6815ed60d3dafb0c
       selector:
         matchLabels:
           os: linux
           arch: amd64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_darwin_arm64.tar.gz
-      sha256: 8b2eaa180216ebf8cb1fb25cdbef1904cc4d0fd7a586352e0ce2e9047e8a5ef1
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_darwin_arm64.tar.gz
+      sha256: 2e8dc49d94aaea42f31f84a1d898c3d8e1a0cd5d11e10d5035e9c04a94e8731a
       selector:
         matchLabels:
           os: darwin
           arch: arm64
     - bin: kubectl-aws_sso
-      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.14/kubectl-aws-sso_1.6.14_darwin_amd64.tar.gz
-      sha256: d3beb621a3972264bdce6428c33763e356c28d38749c76f0d096075a2bb5ffd3
+      uri: https://github.com/louislef299/aws-sso/releases/download/v1.6.15/kubectl-aws-sso_1.6.15_darwin_amd64.tar.gz
+      sha256: 10ba0393813b0ee147cbd74a33ffd8c66d548700feab46e998f66bbe71e236d0
       selector:
         matchLabels:
           os: darwin
           arch: amd64
   shortDescription: A simplified AWS SSO manager.
+  homepage: https://aws-sso.netlify.app
   description: A simplified AWS SSO manager to make authenticating to EKS and ECR easier.
