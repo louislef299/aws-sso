@@ -147,13 +147,32 @@ func initConfig() {
 
 // Initialize all the plugins with the loginCmd
 func initPlugins() {
-	plugins := viper.GetStringSlice(envs.CORE_PLUGINS)
+	plugins := parsePluginsConfig()
+	var failedPlugins []string
+
 	for _, p := range plugins {
 		err := dlogin.Init(p, loginCmd)
 		if err != nil {
-			panic(err)
+			failedPlugins = append(failedPlugins, p)
 		}
 	}
+
+	// If all plugins failed, that's a critical error
+	if len(failedPlugins) > 0 && len(failedPlugins) == len(plugins) {
+		log.Fatalf("All plugins failed to initialize. Please check your core.plugins configuration and fix with a text editor.\nAvailable plugins: %v", dlogin.Drivers())
+	}
+
+	// If some plugins failed but others succeeded, just warn
+	if len(failedPlugins) > 0 {
+		log.Printf("Note: %d plugin(s) failed to load. Available plugins: %v\n", len(failedPlugins), dlogin.Drivers())
+	}
+}
+
+// parsePluginsConfig reads plugin configuration from viper and parses it
+func parsePluginsConfig() []string {
+	// Get the value from viper (could be string or []string depending on TOML format)
+	value := viper.Get(envs.CORE_PLUGINS)
+	return parsePlugins(value)
 }
 
 func getConfigTemplate() string {
