@@ -40,6 +40,11 @@ func init() {
 }
 
 func (e *EKSLogin) Init(cmd *cobra.Command) error {
+	err := dlogin.Activate("eks")
+	if err != nil {
+		return err
+	}
+
 	cmd.Flags().Bool("disableEKSLogin", false, "Disables automatic detection and login for EKS")
 	lconfig.AddConfigValue(EKS_DISABLE_EKS_LOGIN, "Disables automatic detection and login for EKS")
 

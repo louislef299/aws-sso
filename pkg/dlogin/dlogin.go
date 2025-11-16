@@ -13,6 +13,8 @@ import (
 var (
 	driversMu sync.RWMutex
 	drivers   = make(map[string]ILogin)
+
+	plugins []string
 )
 
 // Register makes a login driver available by the provided name.
@@ -22,12 +24,24 @@ func Register(name string, driver ILogin) {
 	driversMu.Lock()
 	defer driversMu.Unlock()
 	if driver == nil {
-		panic("login: Register driver is nil")
+		panic("dlogin: Register driver is nil")
 	}
 	if _, dup := drivers[name]; dup {
-		panic("login: Register called twice for driver " + name)
+		panic("dlogin: Register called twice for driver " + name)
 	}
 	drivers[name] = driver
+}
+
+// Activate will will make a registered driver known to the plugin system. If
+// the driver is not known, an error is thrown.
+func Activate(name string) error {
+	driversMu.Lock()
+	defer driversMu.Unlock()
+	if _, ok := drivers[name]; !ok {
+		return fmt.Errorf("unknown driver provided: %s", name)
+	}
+	plugins = append(plugins, name)
+	return nil
 }
 
 // Drivers returns a sorted list of the names of the registered drivers.
@@ -35,6 +49,11 @@ func Drivers() []string {
 	driversMu.RLock()
 	defer driversMu.RUnlock()
 	return slices.Sorted(maps.Keys(drivers))
+}
+
+// Plugins returns the registered plugins.
+func Plugins() []string {
+	return plugins
 }
 
 type Config struct {
@@ -83,7 +102,7 @@ func Init(driverName string, cmd *cobra.Command) error {
 	driverLogin, ok := drivers[driverName]
 	driversMu.RUnlock()
 	if !ok {
-		return fmt.Errorf("login: unknown driver %q (forgotten import?)", driverName)
+		return fmt.Errorf("dlogin: unknown driver %q (forgotten import?)", driverName)
 	}
 
 	return driverLogin.Init(cmd)
@@ -94,7 +113,7 @@ func DLogin(ctx context.Context, driverName string, config any) error {
 	driverLogin, ok := drivers[driverName]
 	driversMu.RUnlock()
 	if !ok {
-		return fmt.Errorf("login: unknown driver %q (forgotten import?)", driverName)
+		return fmt.Errorf("dlogin: unknown driver %q (forgotten import?)", driverName)
 	}
 
 	return driverLogin.Login(ctx, config)
@@ -105,7 +124,7 @@ func DLogout(ctx context.Context, driverName string, config any) error {
 	driverLogin, ok := drivers[driverName]
 	driversMu.RUnlock()
 	if !ok {
-		return fmt.Errorf("login: unknown driver %q (forgotten import?)", driverName)
+		return fmt.Errorf("dlogin: unknown driver %q (forgotten import?)", driverName)
 	}
 
 	return driverLogin.Logout(ctx, config)
