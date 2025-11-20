@@ -11,65 +11,63 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Creates or updates the image manifest and tags associated with an image.
-//
-// When an image is pushed and all new image layers have been uploaded, the
-// PutImage API is called once to create or update the image manifest and the tags
-// associated with the image.
-//
-// This operation is used by the Amazon ECR proxy and is not generally used by
-// customers for pulling and pushing images. In most cases, you should use the
-// docker CLI to pull, tag, and push images.
-func (c *Client) PutImage(ctx context.Context, params *PutImageInput, optFns ...func(*Options)) (*PutImageOutput, error) {
+// Transitions an image between storage classes. You can transition images from
+// Amazon ECR standard storage class to Amazon ECR archival storage class for
+// long-term storage, or restore archived images back to Amazon ECR standard.
+func (c *Client) UpdateImageStorageClass(ctx context.Context, params *UpdateImageStorageClassInput, optFns ...func(*Options)) (*UpdateImageStorageClassOutput, error) {
 	if params == nil {
-		params = &PutImageInput{}
+		params = &UpdateImageStorageClassInput{}
 	}
 
-	result, metadata, err := c.invokeOperation(ctx, "PutImage", params, optFns, c.addOperationPutImageMiddlewares)
+	result, metadata, err := c.invokeOperation(ctx, "UpdateImageStorageClass", params, optFns, c.addOperationUpdateImageStorageClassMiddlewares)
 	if err != nil {
 		return nil, err
 	}
 
-	out := result.(*PutImageOutput)
+	out := result.(*UpdateImageStorageClassOutput)
 	out.ResultMetadata = metadata
 	return out, nil
 }
 
-type PutImageInput struct {
+type UpdateImageStorageClassInput struct {
 
-	// The image manifest corresponding to the image to be uploaded.
+	// An object with identifying information for an image in an Amazon ECR repository.
 	//
 	// This member is required.
-	ImageManifest *string
+	ImageId *types.ImageIdentifier
 
-	// The name of the repository in which to put the image.
+	// The name of the repository that contains the image to transition.
 	//
 	// This member is required.
 	RepositoryName *string
 
-	// The image digest of the image manifest corresponding to the image.
-	ImageDigest *string
-
-	// The media type of the image manifest. If you push an image manifest that does
-	// not contain the mediaType field, you must specify the imageManifestMediaType in
-	// the request.
-	ImageManifestMediaType *string
-
-	// The tag to associate with the image. This parameter is optional.
-	ImageTag *string
+	// The target storage class for the image.
+	//
+	// This member is required.
+	TargetStorageClass types.TargetStorageClass
 
 	// The Amazon Web Services account ID associated with the registry that contains
-	// the repository in which to put the image. If you do not specify a registry, the
-	// default registry is assumed.
+	// the image to transition. If you do not specify a registry, the default registry
+	// is assumed.
 	RegistryId *string
 
 	noSmithyDocumentSerde
 }
 
-type PutImageOutput struct {
+type UpdateImageStorageClassOutput struct {
 
-	// Details of the image uploaded.
-	Image *types.Image
+	// An object with identifying information for an image in an Amazon ECR repository.
+	ImageId *types.ImageIdentifier
+
+	// The current status of the image after the call to UpdateImageStorageClass is
+	// complete. Valid values are ACTIVE , ARCHIVED , and ACTIVATING .
+	ImageStatus types.ImageStatus
+
+	// The registry ID associated with the request.
+	RegistryId *string
+
+	// The repository name associated with the request.
+	RepositoryName *string
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -77,19 +75,19 @@ type PutImageOutput struct {
 	noSmithyDocumentSerde
 }
 
-func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, options Options) (err error) {
+func (c *Client) addOperationUpdateImageStorageClassMiddlewares(stack *middleware.Stack, options Options) (err error) {
 	if err := stack.Serialize.Add(&setOperationInputMiddleware{}, middleware.After); err != nil {
 		return err
 	}
-	err = stack.Serialize.Add(&awsAwsjson11_serializeOpPutImage{}, middleware.After)
+	err = stack.Serialize.Add(&awsAwsjson11_serializeOpUpdateImageStorageClass{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	err = stack.Deserialize.Add(&awsAwsjson11_deserializeOpPutImage{}, middleware.After)
+	err = stack.Deserialize.Add(&awsAwsjson11_deserializeOpUpdateImageStorageClass{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	if err := addProtocolFinalizerMiddlewares(stack, options, "PutImage"); err != nil {
+	if err := addProtocolFinalizerMiddlewares(stack, options, "UpdateImageStorageClass"); err != nil {
 		return fmt.Errorf("add protocol finalizers: %v", err)
 	}
 
@@ -144,10 +142,10 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
-	if err = addOpPutImageValidationMiddleware(stack); err != nil {
+	if err = addOpUpdateImageStorageClassValidationMiddleware(stack); err != nil {
 		return err
 	}
-	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opPutImage(options.Region), middleware.Before); err != nil {
+	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opUpdateImageStorageClass(options.Region), middleware.Before); err != nil {
 		return err
 	}
 	if err = addRecursionDetection(stack); err != nil {
@@ -177,10 +175,10 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	return nil
 }
 
-func newServiceMetadataMiddleware_opPutImage(region string) *awsmiddleware.RegisterServiceMetadata {
+func newServiceMetadataMiddleware_opUpdateImageStorageClass(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
 		Region:        region,
 		ServiceID:     ServiceID,
-		OperationName: "PutImage",
+		OperationName: "UpdateImageStorageClass",
 	}
 }
