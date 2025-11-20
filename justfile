@@ -10,7 +10,7 @@ GPG_SIGNING_KEY := shell('git config user.signingkey || echo "not set"')
 COMMIT_HASH := shell('git rev-parse --short HEAD')
 GOBIN := env('HOME') + '/go/bin'
 GOTRACEBACK := "crash"
-GOVERSION := shell("go version | awk '{print $3}'")
+export GOVERSION := shell("go version | awk '{print $3}'")
 GOFLAGS := (
     "-s -w " +
     "-X 'github.com/louislef299/aws-sso/internal/version.Version=local.dev' " +
@@ -63,9 +63,9 @@ check-head:
 [macos]
 release: check-head lint test login
     @echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
-    @GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
-      GPG_TTY=$(shell tty) GPG_SIGNING_KEY=$(GPG_SIGNING_KEY) \
-      goreleaser release --clean
+    @GITHUB_TOKEN=`gh auth token`` GOVERSION={{GOVERSION}} \
+      GPG_TTY=`tty`` GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \
+      goreleaser release --clean --snapshot
 
 # Build dist folder, scan binaries & generate SBOM
 scan: dist
