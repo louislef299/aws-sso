@@ -3,12 +3,14 @@
 default: 
     @just --list
 
+go := require("go")
+
 BINARY_NAME := "aws-sso"
-GPG_SIGNING_KEY := `git config user.signingkey`
-COMMIT_HASH := `git rev-parse --short HEAD`
-GOBIN := env_var('HOME') + '/go/bin'
+GPG_SIGNING_KEY := shell('git config user.signingkey || "not set"')
+COMMIT_HASH := shell('git rev-parse --short HEAD')
+GOBIN := env('HOME') + '/go/bin'
 GOTRACEBACK := "crash"
-GOVERSION := `go version | awk '{print $3}'`
+GOVERSION := shell("go version | awk '{print $3}'")
 GOFLAGS := (
     "-s -w " +
     "-X 'github.com/louislef299/aws-sso/internal/version.Version=local.dev' " +
@@ -21,13 +23,13 @@ GOFLAGS := (
 
 # Run the go program with provided inputs
 run *INPUT:
-    @go run main.go {{INPUT}}
+    @{{go}} run main.go {{INPUT}}
 
 alias b := build
 # Build local.dev version of aws-sso
 build:
     @echo "Building {{BINARY_NAME}} binary for your machine..."
-    @go build -mod vendor -ldflags="{{GOFLAGS}}" -o {{BINARY_NAME}}
+    @{{go}} build -mod vendor -ldflags="{{GOFLAGS}}" -o {{BINARY_NAME}}
 
 # Runs the Go linters
 lint:
@@ -39,7 +41,7 @@ lint:
 # Run a verbose Go test with coverage
 test:
 	@echo "Running tests..."
-	@go test -v -race -cover ./...
+	@{{go}} test -v -race -cover ./...
 
 # Run GoReleaser to build local dist folder
 dist: lint test
@@ -57,6 +59,8 @@ check-head:
 	  (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
 
 # Perform a signed release to GitHub
+[linux]
+[macos]
 release: check-head lint test login
     @echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
     @GITHUB_TOKEN=$(shell gh auth token) GOVERSION=$(GOVERSION) \
@@ -73,7 +77,7 @@ scan: dist
 
 # Generate command documentation
 docs:
-	go run main.go docs --dir docs/content/cmds
+	{{go}} run main.go docs --dir docs/content/cmds
 
 # Run hugo docs website
 site:
