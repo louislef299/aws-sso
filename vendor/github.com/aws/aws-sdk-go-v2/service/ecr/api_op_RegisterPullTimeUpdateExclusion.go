@@ -6,70 +6,48 @@ import (
 	"context"
 	"fmt"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
-	"github.com/aws/aws-sdk-go-v2/service/ecr/types"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"time"
 )
 
-// Creates or updates the image manifest and tags associated with an image.
-//
-// When an image is pushed and all new image layers have been uploaded, the
-// PutImage API is called once to create or update the image manifest and the tags
-// associated with the image.
-//
-// This operation is used by the Amazon ECR proxy and is not generally used by
-// customers for pulling and pushing images. In most cases, you should use the
-// docker CLI to pull, tag, and push images.
-func (c *Client) PutImage(ctx context.Context, params *PutImageInput, optFns ...func(*Options)) (*PutImageOutput, error) {
+// Adds an IAM principal to the pull time update exclusion list for a registry.
+// Amazon ECR will not record the pull time if an excluded principal pulls an
+// image.
+func (c *Client) RegisterPullTimeUpdateExclusion(ctx context.Context, params *RegisterPullTimeUpdateExclusionInput, optFns ...func(*Options)) (*RegisterPullTimeUpdateExclusionOutput, error) {
 	if params == nil {
-		params = &PutImageInput{}
+		params = &RegisterPullTimeUpdateExclusionInput{}
 	}
 
-	result, metadata, err := c.invokeOperation(ctx, "PutImage", params, optFns, c.addOperationPutImageMiddlewares)
+	result, metadata, err := c.invokeOperation(ctx, "RegisterPullTimeUpdateExclusion", params, optFns, c.addOperationRegisterPullTimeUpdateExclusionMiddlewares)
 	if err != nil {
 		return nil, err
 	}
 
-	out := result.(*PutImageOutput)
+	out := result.(*RegisterPullTimeUpdateExclusionOutput)
 	out.ResultMetadata = metadata
 	return out, nil
 }
 
-type PutImageInput struct {
+type RegisterPullTimeUpdateExclusionInput struct {
 
-	// The image manifest corresponding to the image to be uploaded.
+	// The ARN of the IAM principal to exclude from having image pull times recorded.
 	//
 	// This member is required.
-	ImageManifest *string
-
-	// The name of the repository in which to put the image.
-	//
-	// This member is required.
-	RepositoryName *string
-
-	// The image digest of the image manifest corresponding to the image.
-	ImageDigest *string
-
-	// The media type of the image manifest. If you push an image manifest that does
-	// not contain the mediaType field, you must specify the imageManifestMediaType in
-	// the request.
-	ImageManifestMediaType *string
-
-	// The tag to associate with the image. This parameter is optional.
-	ImageTag *string
-
-	// The Amazon Web Services account ID associated with the registry that contains
-	// the repository in which to put the image. If you do not specify a registry, the
-	// default registry is assumed.
-	RegistryId *string
+	PrincipalArn *string
 
 	noSmithyDocumentSerde
 }
 
-type PutImageOutput struct {
+type RegisterPullTimeUpdateExclusionOutput struct {
 
-	// Details of the image uploaded.
-	Image *types.Image
+	// The date and time, expressed in standard JavaScript date format, when the
+	// exclusion was created.
+	CreatedAt *time.Time
+
+	// The ARN of the IAM principal that was added to the pull time update exclusion
+	// list.
+	PrincipalArn *string
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -77,19 +55,19 @@ type PutImageOutput struct {
 	noSmithyDocumentSerde
 }
 
-func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, options Options) (err error) {
+func (c *Client) addOperationRegisterPullTimeUpdateExclusionMiddlewares(stack *middleware.Stack, options Options) (err error) {
 	if err := stack.Serialize.Add(&setOperationInputMiddleware{}, middleware.After); err != nil {
 		return err
 	}
-	err = stack.Serialize.Add(&awsAwsjson11_serializeOpPutImage{}, middleware.After)
+	err = stack.Serialize.Add(&awsAwsjson11_serializeOpRegisterPullTimeUpdateExclusion{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	err = stack.Deserialize.Add(&awsAwsjson11_deserializeOpPutImage{}, middleware.After)
+	err = stack.Deserialize.Add(&awsAwsjson11_deserializeOpRegisterPullTimeUpdateExclusion{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	if err := addProtocolFinalizerMiddlewares(stack, options, "PutImage"); err != nil {
+	if err := addProtocolFinalizerMiddlewares(stack, options, "RegisterPullTimeUpdateExclusion"); err != nil {
 		return fmt.Errorf("add protocol finalizers: %v", err)
 	}
 
@@ -144,10 +122,10 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
-	if err = addOpPutImageValidationMiddleware(stack); err != nil {
+	if err = addOpRegisterPullTimeUpdateExclusionValidationMiddleware(stack); err != nil {
 		return err
 	}
-	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opPutImage(options.Region), middleware.Before); err != nil {
+	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opRegisterPullTimeUpdateExclusion(options.Region), middleware.Before); err != nil {
 		return err
 	}
 	if err = addRecursionDetection(stack); err != nil {
@@ -177,10 +155,10 @@ func (c *Client) addOperationPutImageMiddlewares(stack *middleware.Stack, option
 	return nil
 }
 
-func newServiceMetadataMiddleware_opPutImage(region string) *awsmiddleware.RegisterServiceMetadata {
+func newServiceMetadataMiddleware_opRegisterPullTimeUpdateExclusion(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
 		Region:        region,
 		ServiceID:     ServiceID,
-		OperationName: "PutImage",
+		OperationName: "RegisterPullTimeUpdateExclusion",
 	}
 }
