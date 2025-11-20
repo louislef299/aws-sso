@@ -27,8 +27,9 @@ jobs:
       with:
         path: dist/
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+    - uses: taiki-e/install-action@just
     - name: Build Binary
-      run: make aws-sso
+      run: just build
     # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
     - name: Run Trivy SBOM mode and submit results to Dependency Graph
       uses: aquasecurity/trivy-action@0.33.1
