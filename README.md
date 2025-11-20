@@ -25,9 +25,9 @@ kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git &&
 kubectl krew install louislef299/aws-sso
 ```
 
-Or build from source: `make aws-sso`
-
 Or manually download from [release assets][]
+
+Or build from source: `just build`
 
 ### Verify the Binary
 
