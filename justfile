@@ -63,8 +63,8 @@ check-head:
 [macos]
 release: check-head lint test login
     @echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
-    @GITHUB_TOKEN=`gh auth token`` GOVERSION={{GOVERSION}} \
-      GPG_TTY=`tty`` GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \
+    @GITHUB_TOKEN=`gh auth token` GOVERSION={{GOVERSION}} \
+      GPG_TTY=`tty` GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \
       goreleaser release --clean
 
 # Build dist folder, scan binaries & generate SBOM
