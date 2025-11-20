@@ -6,7 +6,7 @@ default:
 go := require("go")
 
 BINARY_NAME := "aws-sso"
-GPG_SIGNING_KEY := shell('git config user.signingkey || "not set"')
+GPG_SIGNING_KEY := shell('git config user.signingkey || echo "not set"')
 COMMIT_HASH := shell('git rev-parse --short HEAD')
 GOBIN := env('HOME') + '/go/bin'
 GOTRACEBACK := "crash"
