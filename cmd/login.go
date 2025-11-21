@@ -119,7 +119,7 @@ updates.`,
 				log.Println("using token", getCurrentToken())
 			}
 
-			profileToSet = los.GetProfile(requestProfile)
+			profileToSet = los.AddProfileSuffix(requestProfile)
 		} else {
 			profileToSet = requestProfile
 		}
@@ -138,7 +138,7 @@ updates.`,
 			SkipDefaults: skipDefaults,
 		}
 		if err = dlogin.DLogin(cmd.Context(), "oidc", oidcCfg); err != nil {
-			panic(err)
+			log.Fatal("failed to login:", err)
 		}
 
 		wg := sync.WaitGroup{}

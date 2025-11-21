@@ -63,6 +63,7 @@ func ClientInfoFileDestination(configDir ...string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	if !exists {
 		log.Println("creating", configPath)
 		f, err := os.Create(configPath)

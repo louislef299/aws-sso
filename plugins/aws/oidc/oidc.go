@@ -120,9 +120,21 @@ func (a *OIDCLogin) Logout(ctx context.Context, config any) error {
 		if err != nil {
 			return err
 		}
+
 		info, err = laws.ReadClientInformation(clientinfo)
 		if err != nil {
-			return fmt.Errorf("couldn't gather client login information: %v", err)
+			log.Printf("couldn't read client info (file may be corrupted): %v\n", err)
+			log.Println("continuing with local cleanup...")
+			if err := os.Remove(clientinfo); err != nil && !os.IsNotExist(err) {
+				log.Printf("couldn't remove cache file: %v\n", err)
+			}
+		} else {
+			if err := laws.Logout(ctx, cfg.Config, info.AccessToken); err != nil {
+				log.Printf("warning: couldn't logout from AWS (token may be expired): %v\n", err)
+			}
+			if err := os.Remove(clientinfo); err != nil && !os.IsNotExist(err) {
+				return fmt.Errorf("couldn't remove cache file: %v", err)
+			}
 		}
 	}
 
@@ -131,14 +143,6 @@ func (a *OIDCLogin) Logout(ctx context.Context, config any) error {
 	}
 	if err := cleanCredentials(); err != nil {
 		return err
-	}
-
-	if cfg.CleanToken {
-		if err := laws.Logout(ctx, cfg.Config, info.AccessToken); err != nil {
-			return fmt.Errorf("failed to logout of account: %v", err)
-		}
-
-		return os.Remove(clientinfo)
 	}
 	return nil
 }

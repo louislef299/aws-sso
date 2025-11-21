@@ -2,7 +2,9 @@ package aws
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -53,7 +55,21 @@ func ReadClientInformation(file string) (*ClientInformation, error) {
 
 	err = json.Unmarshal(content, &c)
 	if err != nil {
-		return nil, err
+		var syntaxError *json.SyntaxError
+		var unmarshalTypeError *json.UnmarshalTypeError
+
+		// if a json unmarshaling error occurs, return ErrNotExist to prompt a
+		// recreation of the ClientInformation
+		switch {
+		case errors.As(err, &syntaxError):
+			log.Printf("invalid JSON syntax at byte offset %d\n", syntaxError.Offset)
+			return nil, os.ErrNotExist
+		case errors.As(err, &unmarshalTypeError):
+			log.Printf("invalid type for field %s\n", unmarshalTypeError.Field)
+			return nil, os.ErrNotExist
+		default:
+			return nil, err
+		}
 	}
 
 	return &c, nil
