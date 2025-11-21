@@ -52,16 +52,18 @@ dist: lint test
 login:
 	@gh auth status || gh auth login --git-protocol https -w -s repo,repo_deployment,workflow
 
-# Validate HEAD is tagged
-check-head:
-	@echo "Ensuring HEAD commit is tagged"
-	@git tag --points-at HEAD | grep -q . || \
-	  (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
+# Validate Git is healthy for release
+check-vcs:
+    @echo "Ensuring HEAD commit is tagged"
+    @git tag --points-at HEAD | grep -q . || \
+      (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
+    @echo "Making sure this is the main branch"
+    @if [[ "$(git branch --show-current)" != "main" ]]; then exit 1 ; fi;
 
 # Perform a signed release to GitHub
 [linux]
 [macos]
-release: check-head lint test login
+release: check-vcs lint test login
     @echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
     @GITHUB_TOKEN=`gh auth token` GOVERSION={{GOVERSION}} \
       GPG_TTY=`tty` GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \
