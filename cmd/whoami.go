@@ -9,10 +9,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/louislef299/aws-sso/internal/envs"
-	lregion "github.com/louislef299/aws-sso/internal/region"
-	laws "github.com/louislef299/aws-sso/pkg/aws"
-	lk8s "github.com/louislef299/aws-sso/pkg/kube"
+	"github.com/louislef299/knot/internal/envs"
+	lregion "github.com/louislef299/knot/internal/region"
+	laws "github.com/louislef299/knot/pkg/aws"
+	lk8s "github.com/louislef299/knot/pkg/kube"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

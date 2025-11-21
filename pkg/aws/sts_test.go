@@ -12,9 +12,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
-	lregion "github.com/louislef299/aws-sso/internal/region"
-	laws "github.com/louislef299/aws-sso/pkg/aws"
-	los "github.com/louislef299/aws-sso/pkg/os"
+	lregion "github.com/louislef299/knot/internal/region"
+	laws "github.com/louislef299/knot/pkg/aws"
+	los "github.com/louislef299/knot/pkg/os"
 )
 
 const testFolder = "testing_files"

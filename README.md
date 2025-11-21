@@ -21,7 +21,7 @@ brew tap louislef299/aws-sso && brew install --cask aws-sso
 Or with [krew][]:
 
 ```bash
-kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git && \
+kubectl krew index add louislef299 https://github.com/louislef299/knot.git && \
 kubectl krew install louislef299/aws-sso
 ```
 
@@ -67,4 +67,4 @@ Feel free to open up Issues or Feature Requests on GitHub.
 [GnuPG]: https://www.gnupg.org/gph/en/manual/book1.html
 [homebrew]: https://brew.sh/
 [krew]: https://krew.sigs.k8s.io/
-[release assets]: https://github.com/louislef299/aws-sso/releases
+[release assets]: https://github.com/louislef299/knot/releases

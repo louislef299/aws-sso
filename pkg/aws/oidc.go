@@ -16,8 +16,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ssooidc"
 	"github.com/aws/aws-sdk-go-v2/service/ssooidc/types"
 	"github.com/briandowns/spinner"
-	browser "github.com/louislef299/aws-sso/internal/browser"
-	los "github.com/louislef299/aws-sso/pkg/os"
+	browser "github.com/louislef299/knot/internal/browser"
+	los "github.com/louislef299/knot/pkg/os"
 )
 
 var (

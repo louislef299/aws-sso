@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/louislef299/aws-sso/internal/version"
+	"github.com/louislef299/knot/internal/version"
 	"github.com/spf13/cobra"
 )
 

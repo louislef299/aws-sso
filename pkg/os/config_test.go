@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	pluginos "github.com/louislef299/aws-sso/pkg/os"
+	pluginos "github.com/louislef299/knot/pkg/os"
 )
 
 var _ = Describe("Config", func() {

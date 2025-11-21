@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/louislef299/aws-sso/internal/envs"
-	los "github.com/louislef299/aws-sso/pkg/os"
+	"github.com/louislef299/knot/internal/envs"
+	los "github.com/louislef299/knot/pkg/os"
 	"github.com/spf13/viper"
 	"gopkg.in/ini.v1"
 )

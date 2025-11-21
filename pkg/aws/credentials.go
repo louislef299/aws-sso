@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
-	los "github.com/louislef299/aws-sso/pkg/os"
+	los "github.com/louislef299/knot/pkg/os"
 	"gopkg.in/ini.v1"
 )
 

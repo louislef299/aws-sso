@@ -6,10 +6,10 @@ import (
 	"slices"
 	"strings"
 
-	lenv "github.com/louislef299/aws-sso/internal/envs"
-	lregion "github.com/louislef299/aws-sso/internal/region"
-	laws "github.com/louislef299/aws-sso/pkg/aws"
-	los "github.com/louislef299/aws-sso/pkg/os"
+	lenv "github.com/louislef299/knot/internal/envs"
+	lregion "github.com/louislef299/knot/internal/region"
+	laws "github.com/louislef299/knot/pkg/aws"
+	los "github.com/louislef299/knot/pkg/os"
 	"github.com/spf13/viper"
 )
 

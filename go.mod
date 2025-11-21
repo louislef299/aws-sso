@@ -1,4 +1,4 @@
-module github.com/louislef299/aws-sso
+module github.com/louislef299/knot
 
 go 1.25.0
 

@@ -5,20 +5,19 @@ default:
 
 go := require("go")
 
-BINARY_NAME := "aws-sso"
+BINARY_NAME := "knot"
 GPG_SIGNING_KEY := shell('git config user.signingkey || echo "not set"')
-COMMIT_HASH := shell('git rev-parse --short HEAD')
 GOBIN := env('HOME') + '/go/bin'
 GOTRACEBACK := "crash"
 export GOVERSION := shell("go version | awk '{print $3}'")
 GOFLAGS := (
     "-s -w " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.Version=local.dev' " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.BuildOS=" + `go env GOOS` + "' " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.BuildArch=" + `go env GOARCH` + "' " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.GoVersion={{GOVERSION}}' " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.BuildTime=" + `date` + "' " +
-    "-X 'github.com/louislef299/aws-sso/internal/version.CommitHash={{COMMIT_HASH}}'"
+    "-X 'github.com/louislef299/knot/internal/version.Version=local.dev' " +
+    "-X 'github.com/louislef299/knot/internal/version.BuildOS=" + `go env GOOS` + "' " +
+    "-X 'github.com/louislef299/knot/internal/version.BuildArch=" + `go env GOARCH` + "' " +
+    "-X 'github.com/louislef299/knot/internal/version.GoVersion=" + GOVERSION + "' " +
+    "-X 'github.com/louislef299/knot/internal/version.BuildTime=" + `date` + "' " +
+    "-X 'github.com/louislef299/knot/internal/version.CommitHash=" + `git rev-parse --short HEAD` + "'"
 )
 
 # Run the go program with provided inputs
@@ -43,6 +42,10 @@ test:
 	@echo "Running tests..."
 	@{{go}} test -v -race -cover ./...
 
+# Install a local.dev version in your go/bin
+install:
+    go install -ldflags="{{GOFLAGS}}"
+
 # Run GoReleaser to build local dist folder
 dist: lint test
 	@GOVERSION={{GOVERSION}} GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \
@@ -52,16 +55,18 @@ dist: lint test
 login:
 	@gh auth status || gh auth login --git-protocol https -w -s repo,repo_deployment,workflow
 
-# Validate HEAD is tagged
-check-head:
-	@echo "Ensuring HEAD commit is tagged"
-	@git tag --points-at HEAD | grep -q . || \
-	  (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
+# Validate Git is healthy for release
+check-vcs:
+    @echo "Ensuring HEAD commit is tagged"
+    @git tag --points-at HEAD | grep -q . || \
+      (echo "ERROR: HEAD commit is not tagged!(run git tag -s)" && exit 1)
+    @echo "Making sure this is the main branch"
+    @if [[ "$(git branch --show-current)" != "main" ]]; then exit 1 ; fi;
 
 # Perform a signed release to GitHub
 [linux]
 [macos]
-release: check-head lint test login
+release: check-vcs lint test login
     @echo "WARNING: the build won't get signed if GPG_SIGNING_KEY isn't set"
     @GITHUB_TOKEN=`gh auth token` GOVERSION={{GOVERSION}} \
       GPG_TTY=`tty` GPG_SIGNING_KEY={{GPG_SIGNING_KEY}} \

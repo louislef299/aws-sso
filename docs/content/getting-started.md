@@ -38,7 +38,7 @@ Installation can be done with either [homebrew][] or [krew][]:
 brew tap louislef299/aws-sso
 brew install --cask aws-sso
 
-kubectl krew index add louislef299 https://github.com/louislef299/aws-sso.git
+kubectl krew index add louislef299 https://github.com/louislef299/knot.git
 kubectl krew install louislef299/aws-sso
 ```
 
@@ -58,8 +58,8 @@ override the configuration settings in this file if you run into bugs.
 [Next, let's configure the damn thing so you can move on with your life!][Local
 Configuration]
 
-[v1.6]: https://github.com/louislef299/aws-sso/releases/tag/v1.6.2
+[v1.6]: https://github.com/louislef299/knot/releases/tag/v1.6.2
 [krew]: https://krew.sigs.k8s.io/
 [homebrew]: https://brew.sh/
 [Local Configuration]: /config
-[open an issue]: https://github.com/louislef299/aws-sso/issues/new
+[open an issue]: https://github.com/louislef299/knot/issues/new

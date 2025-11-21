@@ -2,7 +2,7 @@ package kube
 
 import (
 	"github.com/aws/aws-sdk-go-v2/service/eks/types"
-	"github.com/louislef299/aws-sso/internal/region"
+	"github.com/louislef299/knot/internal/region"
 )
 
 type ClusterOptions struct {
