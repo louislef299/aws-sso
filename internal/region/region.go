@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/knot/internal/envs"
 	"github.com/spf13/viper"
 )
 

@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/louislef299/aws-sso/internal/envs"
-	lconfig "github.com/louislef299/aws-sso/pkg/config"
+	"github.com/louislef299/knot/internal/envs"
+	lconfig "github.com/louislef299/knot/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

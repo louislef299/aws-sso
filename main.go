@@ -23,8 +23,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/louislef299/aws-sso/cmd"
-	sigs "github.com/louislef299/aws-sso/pkg/os"
+	"github.com/louislef299/knot/cmd"
+	sigs "github.com/louislef299/knot/pkg/os"
 )
 
 func main() {

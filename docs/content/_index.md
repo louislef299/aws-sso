@@ -15,6 +15,6 @@ I try to at least deploy dependency fixes once a month.
 
 Happy hacking!
 
-[create an issue]: https://github.com/louislef299/aws-sso/issues
+[create an issue]: https://github.com/louislef299/knot/issues
 [me]: https://louislefebvre.net
-[official release notes]: https://github.com/louislef299/aws-sso/releases
+[official release notes]: https://github.com/louislef299/knot/releases

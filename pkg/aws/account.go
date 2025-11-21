@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/sso/types"
-	"github.com/louislef299/aws-sso/pkg/prompt"
+	"github.com/louislef299/knot/pkg/prompt"
 )
 
 var ErrAccountNotFound = errors.New("account provided couldn't be found")

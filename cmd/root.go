@@ -9,12 +9,12 @@ import (
 	"path"
 	"time"
 
-	"github.com/louislef299/aws-sso/internal/envs"
-	"github.com/louislef299/aws-sso/pkg/dlogin"
-	los "github.com/louislef299/aws-sso/pkg/os"
-	_ "github.com/louislef299/aws-sso/plugins/aws/ecr"
-	_ "github.com/louislef299/aws-sso/plugins/aws/eks"
-	_ "github.com/louislef299/aws-sso/plugins/aws/oidc"
+	"github.com/louislef299/knot/internal/envs"
+	"github.com/louislef299/knot/pkg/dlogin"
+	los "github.com/louislef299/knot/pkg/os"
+	_ "github.com/louislef299/knot/plugins/aws/ecr"
+	_ "github.com/louislef299/knot/plugins/aws/eks"
+	_ "github.com/louislef299/knot/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,17 +26,17 @@ var (
 )
 
 const (
-	AO_CONFIG_NAME = ".aws-sso"
-	AO_ENV_PREFIX  = "AWS_SSO"
+	AO_CONFIG_NAME = ".knot"
+	AO_ENV_PREFIX  = "KNOT"
 
 	oneWeek = time.Hour * 24 * 7
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "aws-sso",
+	Use:   "knot",
 	Short: "knot",
-	Long: `An AWS SSO helper CLI to streamline authentication.
+	Long: `An OIDC CLI to streamline authentication.
 
 more information at: https://aws-sso.netlify.app/`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {

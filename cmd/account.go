@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	lacct "github.com/louislef299/aws-sso/internal/account"
-	lenv "github.com/louislef299/aws-sso/internal/envs"
-	lregion "github.com/louislef299/aws-sso/internal/region"
+	lacct "github.com/louislef299/knot/internal/account"
+	lenv "github.com/louislef299/knot/internal/envs"
+	lregion "github.com/louislef299/knot/internal/region"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

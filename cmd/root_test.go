@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/louislef299/aws-sso/internal/envs"
+	"github.com/louislef299/knot/internal/envs"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
@@ -23,7 +23,7 @@ func TestRootCmdConfig(t *testing.T) {
 
 	err = rootCmd.Execute()
 	assert.NoError(t, err)
-	assert.Equal(t, "aws-sso", rootCmd.Use)
+	assert.Equal(t, "knot", rootCmd.Use)
 
 	// TODO: fix this test case
 	//assert.Equal(t, "firefox", viper.GetString(envs.CORE_BROWSER))

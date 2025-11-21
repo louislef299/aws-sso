@@ -9,9 +9,9 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/louislef299/aws-sso/internal/envs"
-	"github.com/louislef299/aws-sso/pkg/config"
-	"github.com/louislef299/aws-sso/pkg/dlogin"
+	"github.com/louislef299/knot/internal/envs"
+	"github.com/louislef299/knot/pkg/config"
+	"github.com/louislef299/knot/pkg/dlogin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

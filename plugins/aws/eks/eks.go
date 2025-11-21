@@ -9,12 +9,12 @@ import (
 	"slices"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/louislef299/aws-sso/internal/envs"
-	laws "github.com/louislef299/aws-sso/pkg/aws"
-	lconfig "github.com/louislef299/aws-sso/pkg/config"
-	"github.com/louislef299/aws-sso/pkg/dlogin"
-	lk8s "github.com/louislef299/aws-sso/pkg/kube"
-	"github.com/louislef299/aws-sso/pkg/prompt"
+	"github.com/louislef299/knot/internal/envs"
+	laws "github.com/louislef299/knot/pkg/aws"
+	lconfig "github.com/louislef299/knot/pkg/config"
+	"github.com/louislef299/knot/pkg/dlogin"
+	lk8s "github.com/louislef299/knot/pkg/kube"
+	"github.com/louislef299/knot/pkg/prompt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
