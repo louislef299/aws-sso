@@ -1,6 +1,12 @@
-# aws-sso
+# knot
 
-`aws-sso` streamlines local AWS authentication in an idiomatic way, allowing
+🚧 **THIS BRANCH IS UNDER CONSTRUCTION** 🚧
+
+Use at your own risk, but follow along with issue [#817][]
+
+---
+
+`knot` streamlines local AWS authentication in an idiomatic way, allowing
 additional configuration to automatically authenticate to EKS and ECR. This tool
 makes AWS authentication easy and repeatable.
 
@@ -63,6 +69,7 @@ gpg --verify $BINPATH/aws-sso*.sig aws-sso
 
 Feel free to open up Issues or Feature Requests on GitHub.
 
+[#817]: https://github.com/louislef299/aws-sso/issues/817
 [Configure your system]: https://aws-sso.netlify.app/config/
 [GnuPG]: https://www.gnupg.org/gph/en/manual/book1.html
 [homebrew]: https://brew.sh/
