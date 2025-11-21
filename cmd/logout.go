@@ -33,7 +33,8 @@ Center sign in session, and removes the token locally.`,
 
 		profile := laws.CurrentProfile()
 		// Start up new config
-		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region), config.WithSharedConfigProfile(profile))
+		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region),
+			config.WithSharedConfigProfile(profile))
 		if err != nil {
 			log.Fatal("couldn't load new config:", err)
 		}

@@ -41,7 +41,8 @@ aws sts get-caller-identity`,
 			log.Fatal("couldn't find region:", err)
 		}
 
-		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region), config.WithSharedConfigProfile(laws.CurrentProfile()))
+		cfg, err := config.LoadDefaultConfig(cmd.Context(), config.WithRegion(region),
+			config.WithSharedConfigProfile(laws.CurrentProfile()))
 		if err != nil {
 			log.Fatal("couldn't load new config:", err)
 		}

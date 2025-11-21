@@ -138,7 +138,7 @@ updates.`,
 			SkipDefaults: skipDefaults,
 		}
 		if err = dlogin.DLogin(cmd.Context(), "oidc", oidcCfg); err != nil {
-			panic(err)
+			log.Fatal("failed to login:", err)
 		}
 
 		wg := sync.WaitGroup{}

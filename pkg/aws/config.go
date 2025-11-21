@@ -57,7 +57,7 @@ func CurrentProfile() string {
 	if lc {
 		return e
 	}
-	return los.GetProfile(e)
+	return e
 }
 
 func IsLocalConfig(profile string) (bool, error) {
