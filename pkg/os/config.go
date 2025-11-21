@@ -21,7 +21,7 @@ func GetConfigPath() (string, error) {
 	return home + AWS_LOGIN_PATH, nil
 }
 
-func GetProfile(profile string) string {
+func AddProfileSuffix(profile string) string {
 	return fmt.Sprintf("%s-%s", profile, AWS_LOGIN_SUFFIX)
 }
 

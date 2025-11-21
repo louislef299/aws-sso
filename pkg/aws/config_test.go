@@ -70,10 +70,10 @@ var _ = Describe("Account", Ordered, func() {
 var _ = Describe("Config", Ordered, func() {
 	Context("When gathering the current profile", func() {
 		It("should return the correct profile", func() {
-			profileName := "test"
+			profileName := los.AddProfileSuffix("test")
 			viper.Set(envs.SESSION_PROFILE, profileName)
 			p := laws.CurrentProfile()
-			Expect(p).Should(Equal(los.GetProfile(profileName)))
+			Expect(p).Should(Equal("test-aws-sso"))
 		})
 	})
 })

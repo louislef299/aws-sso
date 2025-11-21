@@ -94,7 +94,7 @@ func getConfiguredRole() string {
 
 func saveCredentials(profile, region, output string, roleCredentials *sso.GetRoleCredentialsOutput) (string, error) {
 	// this is where the write to /.aws/credentials happens, going to want to modify this
-	custom_profile := los.GetProfile(profile)
+	custom_profile := los.AddProfileSuffix(profile)
 	if err := WriteAWSCredentialsFile(custom_profile, roleCredentials); err != nil {
 		return "", err
 	}

@@ -119,7 +119,7 @@ updates.`,
 				log.Println("using token", getCurrentToken())
 			}
 
-			profileToSet = los.GetProfile(requestProfile)
+			profileToSet = los.AddProfileSuffix(requestProfile)
 		} else {
 			profileToSet = requestProfile
 		}
