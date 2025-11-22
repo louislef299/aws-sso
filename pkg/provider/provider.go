@@ -1,5 +1,5 @@
 // Package provider defines the interface that all authentication providers must
-// implement to be compatible with the aws-sso provider plugin system.
+// implement to be compatible with the knot provider plugin system.
 //
 // This package replaces the legacy dlogin.ILogin interface with a more
 // comprehensive abstraction that supports credential lifecycle management,
@@ -63,7 +63,7 @@ const (
 type Provider interface {
 	// Name returns the unique identifier for this provider. This name is used
 	// for registration and lookup via provider.Get. It should be lowercase,
-	// hyphen-separated (e.g., "aws-sso", "okta-oidc").
+	// hyphen-separated (e.g., "aws-oidc", "okta-oidc").
 	Name() string
 
 	// Type returns the authentication protocol this provider implements.
