@@ -155,12 +155,6 @@ func All() []Provider {
 // If validation fails, the provider remains inactive and an error is returned.
 // Use MissingConfig to determine what fields are missing before calling Activate.
 //
-// Returns:
-//   - ErrProviderNotFound if the provider is not registered
-//   - ErrProviderAlreadyActive if the provider is already active
-//   - ErrMissingRequiredConfig if required fields are missing (wrapped with details)
-//   - Provider-specific validation errors from ValidateConfig
-//
 // Example:
 //
 //	config := map[string]any{
@@ -238,11 +232,11 @@ func IsActive(name string) bool {
 	return isActive
 }
 
-// Active returns all providers that are currently active and ready for use.
-// These providers have passed configuration validation via Activate.
+// ActiveProviders returns all providers that are currently active and ready for
+// use. These providers have passed configuration validation via Activate.
 //
 // The returned slice is a copy; modifications do not affect the registry.
-func Active() []Provider {
+func ActiveProviders() []Provider {
 	mu.RLock()
 	defer mu.RUnlock()
 	result := make([]Provider, 0, len(active))
