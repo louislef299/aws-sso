@@ -85,7 +85,7 @@ docs:
 	{{go}} run main.go docs --dir docs/content/cmds
 
 # Run hugo docs website
-site:
+serve:
     git submodule update --remote --rebase
     hugo serve -s docs
 

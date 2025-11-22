@@ -9,39 +9,57 @@ import (
 
 // Registry State
 //
-// The provider registry manages three distinct states for each provider:
+// The provider registry manages four distinct states for each provider:
 //
 //  1. Registered: The provider is known to the system (via Register). This
 //     happens at init time when provider packages are imported. A registered
-//     provider is available for inspection (schema, validation) but is not
-//     yet configured for use.
+//     provider is available for inspection (schema, validation) but has never
+//     been activated.
 //
-//  2. Active: The provider has valid configuration that has been validated
-//     (via Activate). This is a transient state during activation.
+//  2. Invalid: The provider failed activation (config validation or Initialize
+//     failed). The error is stored and visible to users via GetInvalidReason().
+//     This state clearly communicates why a provider isn't working.
 //
-//  3. Initialized: The provider has been fully initialized and is ready for
-//     authentication operations. This is the final state after successful
-//     Activate, which validates config AND calls provider.Initialize().
+//  3. Active: The provider has valid configuration that has been validated.
+//     This state is always paired with Initialized (see below).
+//
+//  4. Initialized: The provider has had Initialize() called successfully and
+//     is ready for authentication operations.
 //
 // State transitions:
 //
-//	              ┌─────────────────────────────────────────┐
-//	              │                                         │
-//	              ▼                                         │
-//	┌──────────────────┐    Activate()    ┌─────────────────────┐
-//	│    Registered    │ ───────────────▶ │ Active + Initialized │
-//	└──────────────────┘                  └─────────────────────┘
-//	              ▲                                         │
-//	              │         Deactivate()                    │
-//	              └─────────────────────────────────────────┘
+//	┌──────────────────┐
+//	│    Registered    │◀───────────────────────────────────┐
+//	└──────────────────┘                                    │
+//	        │                                               │
+//	        │ Activate()                                    │ Deactivate()
+//	        ▼                                               │
+//	   ┌─────────┐     success      ┌─────────────────────┐ │
+//	   │ Validate│─────────────────▶│Active + Initialized │─┤
+//	   │   +     │                  └─────────────────────┘ │
+//	   │  Init   │                                          │
+//	   └─────────┘                                          │
+//	        │                                               │
+//	        │ failure                                       │
+//	        ▼                                               │
+//	┌──────────────────┐                                    │
+//	│     Invalid      │────────────────────────────────────┘
+//	│  (stores error)  │
+//	└──────────────────┘
+//	        │       ▲
+//	        │       │ still fails
+//	        └───────┘
+//	     Activate() auto-retries
 //
-// Note: If Initialize() fails during Activate(), the provider is rolled back
-// to Registered state. A provider is never left in an "active but not
-// initialized" state, ensuring callers can safely use any active provider.
+// Key behaviors:
+//   - Activate on Invalid provider auto-retries (clears invalid, tries again)
+//   - Deactivate on Invalid provider clears it back to Registered
+//   - A provider is never left Active without being Initialized
 //
 // This separation allows the CLI to:
 //   - List all available providers (registered)
 //   - Show which providers the user has enabled (active + initialized)
+//   - Show which providers failed and WHY (invalid + error reason)
 //   - Detect missing configuration and prompt/fail helpfully before activation
 //
 // Example flow:
@@ -58,9 +76,13 @@ import (
 //	// Activate validates config AND calls Initialize - one step
 //	err := provider.Activate(ctx, "aws-sso", userConfig)
 //	if err != nil {
-//	    // Config validation failed OR Initialize failed
-//	    // Provider remains in Registered state, not broken
+//	    // Provider is now in Invalid state with error stored
+//	    reason, _ := provider.GetInvalidReason("aws-sso")
+//	    fmt.Printf("Provider failed: %v\n", reason)
 //	}
+//
+//	// Retry is automatic - just call Activate again
+//	err = provider.Activate(ctx, "aws-sso", fixedConfig)
 //
 //	// Now the provider is ready for authentication
 //	for _, p := range provider.ActiveProviders() {
@@ -68,7 +90,7 @@ import (
 //	}
 
 var (
-	// mu protects providers, active, and initialized maps for concurrent access.
+	// mu protects all state maps for concurrent access.
 	// All exported functions acquire this lock appropriately.
 	mu sync.RWMutex
 
@@ -86,6 +108,11 @@ var (
 	// This is set atomically with active during Activate() - a provider is never
 	// left in active without also being initialized.
 	initialized = make(map[string]bool)
+
+	// invalid tracks which providers failed activation, storing the error.
+	// This makes failure visible to users via IsInvalid() and GetInvalidReason().
+	// Calling Activate on an invalid provider auto-retries.
+	invalid = make(map[string]error)
 )
 
 // Sentinel errors for registry operations. These enable callers to use
@@ -111,6 +138,11 @@ var (
 	// that has not been initialized. This should not occur in normal use since
 	// Activate() calls Initialize(), but may occur if Initialize() failed.
 	ErrProviderNotInitialized = errors.New("provider: not initialized")
+
+	// ErrProviderInvalid is returned when attempting to use a provider that
+	// is in the Invalid state (activation failed). Use GetInvalidReason to
+	// retrieve the underlying error, or call Activate to retry.
+	ErrProviderInvalid = errors.New("provider: invalid (activation failed)")
 
 	// ErrMissingRequiredConfig is returned when activation fails due to
 	// missing required configuration fields.
@@ -150,8 +182,8 @@ func Register(p Provider) error {
 }
 
 // Get retrieves a registered provider by name. The provider may or may not
-// be active - use IsActive to check activation status, or IsInitialized to
-// verify it's ready for use.
+// be active - use IsActive to check activation status, IsInvalid to check
+// if activation failed, or IsInitialized to verify it's ready for use.
 //
 // This is useful for inspecting provider capabilities (schema, type) before
 // activation, or for accessing an active provider for authentication.
@@ -169,6 +201,7 @@ func Get(name string) (Provider, error) {
 
 // All returns all registered providers, regardless of activation status.
 // Use ActiveProviders to get only providers that are configured and ready to use.
+// Use InvalidProviders to get providers that failed activation.
 //
 // The returned slice is a copy; modifications do not affect the registry.
 func All() []Provider {
@@ -186,18 +219,20 @@ func All() []Provider {
 // for enabling a provider - after successful Activate, the provider is fully
 // ready for Authenticate, Refresh, and Revoke operations.
 //
-// Activate performs the following steps atomically:
-//  1. Validates all required configuration fields are present
-//  2. Calls provider.ValidateConfig() for provider-specific validation
-//  3. Calls provider.Initialize(ctx, config) to set up the provider
-//  4. Marks the provider as active and initialized
+// Activate performs the following steps:
+//  1. If provider is Invalid, clears that state (auto-retry behavior)
+//  2. Validates all required configuration fields are present
+//  3. Calls provider.ValidateConfig() for provider-specific validation
+//  4. Calls provider.Initialize(ctx, config) to set up the provider
+//  5. On success: marks the provider as Active + Initialized
+//  6. On failure: marks the provider as Invalid with the error stored
 //
-// If any step fails, the provider remains in Registered state (not Active).
-// This ensures a provider is never left in a broken "active but not initialized"
-// state.
+// If the provider is already Active, returns ErrProviderAlreadyActive.
+// If the provider is Invalid, it automatically retries activation.
 //
 // Use MissingConfig to determine what fields are missing before calling Activate.
 // Use Deactivate to disable a provider and allow reconfiguration.
+// Use GetInvalidReason to see why a provider failed activation.
 //
 // Returns:
 //   - ErrProviderNotFound if the provider is not registered
@@ -217,6 +252,7 @@ func All() []Provider {
 //	        // Prompt user for missing fields
 //	    } else if errors.Is(err, provider.ErrInitializationFailed) {
 //	        // Provider setup failed (network, credentials, etc.)
+//	        // Provider is now Invalid - check GetInvalidReason()
 //	    }
 //	}
 func Activate(ctx context.Context, name string, config map[string]any) error {
@@ -229,10 +265,13 @@ func Activate(ctx context.Context, name string, config map[string]any) error {
 		return ErrProviderNotFound
 	}
 
-	// Check if already active
+	// Check if already active (success state)
 	if _, isActive := active[name]; isActive {
 		return ErrProviderAlreadyActive
 	}
+
+	// Clear invalid state if present - this enables auto-retry
+	delete(invalid, name)
 
 	// Check for missing required configuration
 	missing := getMissingConfigLocked(p, config)
@@ -242,18 +281,24 @@ func Activate(ctx context.Context, name string, config map[string]any) error {
 		for i, f := range missing {
 			names[i] = f.Name
 		}
-		return fmt.Errorf("%w: %v", ErrMissingRequiredConfig, names)
+		err := fmt.Errorf("%w: %v", ErrMissingRequiredConfig, names)
+		invalid[name] = err
+		return err
 	}
 
 	// Run provider-specific validation
 	if err := p.ValidateConfig(config); err != nil {
-		return fmt.Errorf("provider %s: %w", name, err)
+		wrappedErr := fmt.Errorf("provider %s: %w", name, err)
+		invalid[name] = wrappedErr
+		return wrappedErr
 	}
 
 	// Call Initialize - this is where the provider sets up connections,
-	// loads credentials, etc. If this fails, we do NOT mark as active.
+	// loads credentials, etc. If this fails, mark as Invalid.
 	if err := p.Initialize(ctx, config); err != nil {
-		return fmt.Errorf("%w: %s: %w", ErrInitializationFailed, name, err)
+		wrappedErr := fmt.Errorf("%w: %s: %w", ErrInitializationFailed, name, err)
+		invalid[name] = wrappedErr
+		return wrappedErr
 	}
 
 	// Success - mark as both active and initialized atomically
@@ -262,18 +307,20 @@ func Activate(ctx context.Context, name string, config map[string]any) error {
 	return nil
 }
 
-// Deactivate removes a provider from the active and initialized sets. The
-// provider remains registered and can be reactivated with new configuration.
+// Deactivate removes a provider from the active, initialized, and invalid sets.
+// The provider returns to the Registered state and can be reactivated with new
+// configuration.
 //
 // This is useful when:
 //   - User wants to disable a provider without uninstalling
 //   - Configuration needs to be changed (deactivate, then reactivate)
 //   - Cleaning up during logout or reset operations
+//   - Clearing an Invalid provider to retry with different config
 //
 // Note: Deactivate does NOT call provider.Revoke() - that is for credential
 // cleanup and should be called separately before Deactivate if needed.
 //
-// Deactivate is idempotent - calling it on an inactive provider is a no-op.
+// Deactivate is idempotent - calling it on a Registered provider is a no-op.
 //
 // Returns ErrProviderNotFound if the provider is not registered.
 func Deactivate(name string) error {
@@ -286,12 +333,13 @@ func Deactivate(name string) error {
 
 	delete(active, name)
 	delete(initialized, name)
+	delete(invalid, name)
 	return nil
 }
 
 // IsActive returns whether the named provider is currently active.
 // An active provider has valid configuration and has been initialized.
-// Returns false if the provider is not registered or not active.
+// Returns false if the provider is not registered, not active, or invalid.
 func IsActive(name string) bool {
 	mu.RLock()
 	defer mu.RUnlock()
@@ -311,6 +359,65 @@ func IsInitialized(name string) bool {
 	return initialized[name]
 }
 
+// IsInvalid returns whether the named provider is in the Invalid state
+// (activation was attempted but failed). Use GetInvalidReason to retrieve
+// the error that caused the failure.
+//
+// Returns false if the provider is not registered or not invalid.
+func IsInvalid(name string) bool {
+	mu.RLock()
+	defer mu.RUnlock()
+	_, isInvalid := invalid[name]
+	return isInvalid
+}
+
+// GetInvalidReason returns the error that caused the provider to enter the
+// Invalid state. This is useful for displaying to users why a provider
+// couldn't be activated.
+//
+// Returns:
+//   - ErrProviderNotFound if the provider is not registered
+//   - nil if the provider is not in the Invalid state
+//   - The activation error if the provider is Invalid
+func GetInvalidReason(name string) (error, error) {
+	mu.RLock()
+	defer mu.RUnlock()
+
+	if _, ok := providers[name]; !ok {
+		return nil, ErrProviderNotFound
+	}
+
+	reason, isInvalid := invalid[name]
+	if !isInvalid {
+		return nil, nil
+	}
+
+	return reason, nil
+}
+
+// Status returns the current state of a provider as a human-readable string.
+// Possible values: "registered", "active", "invalid", or "" if not found.
+//
+// This is useful for CLI commands that list provider status.
+func Status(name string) string {
+	mu.RLock()
+	defer mu.RUnlock()
+
+	if _, ok := providers[name]; !ok {
+		return ""
+	}
+
+	if _, isActive := active[name]; isActive {
+		return "active"
+	}
+
+	if _, isInvalid := invalid[name]; isInvalid {
+		return "invalid"
+	}
+
+	return "registered"
+}
+
 // ActiveProviders returns all providers that are currently active and
 // initialized, ready for authentication operations.
 //
@@ -320,6 +427,22 @@ func ActiveProviders() []Provider {
 	defer mu.RUnlock()
 	result := make([]Provider, 0, len(active))
 	for name := range active {
+		if p, ok := providers[name]; ok {
+			result = append(result, p)
+		}
+	}
+	return result
+}
+
+// InvalidProviders returns all providers that are in the Invalid state
+// (activation was attempted but failed).
+//
+// The returned slice is a copy; modifications do not affect the registry.
+func InvalidProviders() []Provider {
+	mu.RLock()
+	defer mu.RUnlock()
+	result := make([]Provider, 0, len(invalid))
+	for name := range invalid {
 		if p, ok := providers[name]; ok {
 			result = append(result, p)
 		}
@@ -460,8 +583,8 @@ func getMissingConfigLocked(p Provider, config map[string]any) []ConfigField {
 	return missing
 }
 
-// Reset clears all registry state, removing all registered, active, and
-// initialized providers. This is primarily useful for testing.
+// Reset clears all registry state, removing all registered, active,
+// initialized, and invalid providers. This is primarily useful for testing.
 //
 // WARNING: This will break any code holding references to providers
 // obtained before the reset. Use with caution.
@@ -471,4 +594,5 @@ func Reset() {
 	providers = make(map[string]Provider)
 	active = make(map[string]map[string]any)
 	initialized = make(map[string]bool)
+	invalid = make(map[string]error)
 }
