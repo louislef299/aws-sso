@@ -3,6 +3,8 @@
 default: 
     @just --list
 
+set shell := ["zsh", "-uc"]
+
 go := require("go")
 
 BINARY_NAME := "knot"
@@ -19,6 +21,7 @@ GOFLAGS := (
     "-X 'github.com/louislef299/knot/internal/version.BuildTime=" + `date` + "' " +
     "-X 'github.com/louislef299/knot/internal/version.CommitHash=" + `git rev-parse --short HEAD` + "'"
 )
+GO_LOCATIONS := "cmd internal pkg plugins main.go"
 
 # Run the go program with provided inputs
 run *INPUT:
@@ -29,6 +32,14 @@ alias b := build
 build:
     @echo "Building {{BINARY_NAME}} binary for your machine..."
     @{{go}} build -mod vendor -ldflags="{{GOFLAGS}}" -o {{BINARY_NAME}}
+
+# Formats Go targets defined by GO_LOCATIONS
+fmt:
+    #!/usr/bin/env zsh
+    for tgt in {{GO_LOCATIONS}}; do \
+        gofmt -s -w $tgt &
+    done
+    wait
 
 # Runs the Go linters
 lint:

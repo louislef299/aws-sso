@@ -8,11 +8,11 @@ import (
 
 // mockProvider implements the Provider interface for testing.
 type mockProvider struct {
-	name           string
-	providerType   Type
-	schema         ConfigSchema
-	validateErr    error
-	initializeErr  error
+	name            string
+	providerType    Type
+	schema          ConfigSchema
+	validateErr     error
+	initializeErr   error
 	initializeCalls int
 }
 
