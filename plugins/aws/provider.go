@@ -10,7 +10,10 @@ import (
 	"github.com/louislef299/knot/pkg/provider"
 )
 
-type AWS struct{}
+type AWS struct {
+	startURL  string
+	ssoRegion string
+}
 
 const (
 	SSO_START_URL = "sso_start_url"
@@ -31,11 +34,13 @@ func (p *AWS) Type() provider.Type {
 	return provider.TypeOIDC
 }
 
-// Initialize stores the provider configuration (passed via Activate) so that
-// subsequent Authenticate calls can use it without needing config passed again.
-func (p *AWS) Initialize(ctx context.Context,
-	config map[string]any) error {
-	return nil
+func (p *AWS) Initialize(ctx context.Context, config map[string]any) (err error) {
+	p.startURL, err = provider.ConfigGet[string](config, SSO_START_URL)
+	if err != nil {
+		return
+	}
+	p.ssoRegion, err = provider.ConfigGet[string](config, SSO_REGION)
+	return
 }
 
 func (p *AWS) Authenticate(ctx context.Context,
