@@ -222,6 +222,10 @@ type ConfigField struct {
 	Description string
 }
 
+// ConfigGet extracts a typed field from a config map, returning an error if the
+// field is missing or cannot be cast to type T. Typically used in
+// ValidateConfig to safely extract config values (e.g.,
+// provider.ConfigGet[string](config, "field")).
 func ConfigGet[T any](config map[string]any, field string) (T, error) {
 	var zilch T
 
