@@ -281,6 +281,9 @@ func Activate(ctx context.Context, name string, config map[string]any) error {
 		for i, f := range missing {
 			names[i] = f.Name
 		}
+
+		// TODO: Enable prompting for users?
+
 		err := fmt.Errorf("%w: %v", ErrMissingRequiredConfig, names)
 		invalid[name] = err
 		return err
