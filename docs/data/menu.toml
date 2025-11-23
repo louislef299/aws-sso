@@ -13,3 +13,7 @@ url = "getting-started"
   [[entries.entries]]
   title = "Plugin Architecture"
   url = "arch"
+
+  [[entries.entries]]
+  title = "Contributor Guide"
+  url = "contributor-guide"

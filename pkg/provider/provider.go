@@ -26,6 +26,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -219,4 +220,22 @@ type ConfigField struct {
 	// Description explains what this field configures. Used for help text
 	// and documentation generation. Should be a complete sentence.
 	Description string
+}
+
+// ConfigGet extracts a typed field from a config map, returning an error if the
+// field is missing or cannot be cast to type T. Typically used in
+// ValidateConfig to safely extract config values (e.g.,
+// provider.ConfigGet[string](config, "field")).
+func ConfigGet[T any](config map[string]any, field string) (T, error) {
+	var zilch T
+
+	val, exists := config[field]
+	if !exists {
+		return zilch, fmt.Errorf("%s: not provided", field)
+	}
+	s, ok := val.(T)
+	if !ok {
+		return zilch, fmt.Errorf("%s: expected string, got %T", field, val)
+	}
+	return s, nil
 }
