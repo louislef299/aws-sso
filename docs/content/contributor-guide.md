@@ -210,6 +210,107 @@ allowing optional integration with native tooling. Providers that only need
 token-based authentication don't have to implement file writing logic they'll
 never use.
 
+### 6. Implement Refresh
+
+The `Refresh()` method handles credential renewal. The approach varies by
+provider type and the authentication mechanism used.
+
+#### Refresh Method Signature
+
+```go
+Refresh(ctx context.Context, creds *Credentials, opts AuthOptions) (*Credentials, error)
+```
+
+The `opts` parameter provides context for providers that require re-authentication,
+allowing them to preserve user preferences (private browser, skip defaults, etc.).
+
+#### Implementation Patterns
+
+**For providers with refresh tokens (OAuth2, OIDC with offline_access):**
+
+These providers can refresh credentials silently without user interaction:
+
+```go
+func (p *GenericOIDC) Refresh(ctx context.Context, creds *provider.Credentials, opts provider.AuthOptions) (*provider.Credentials, error) {
+    // Check if still valid
+    if creds.Expiry.After(time.Now()) {
+        return creds, nil
+    }
+    
+    // Extract refresh token
+    refreshToken := creds.RefreshToken
+    if refreshToken == "" {
+        return nil, fmt.Errorf("no refresh token available")
+    }
+    
+    // Use OAuth2 token refresh
+    newToken, err := p.oauthClient.RefreshToken(ctx, refreshToken)
+    if err != nil {
+        return nil, fmt.Errorf("token refresh failed: %w", err)
+    }
+    
+    // Return updated credentials
+    return &provider.Credentials{
+        Type:         creds.Type,
+        AccessToken:  newToken.AccessToken,
+        RefreshToken: newToken.RefreshToken, // May be rotated
+        Expiry:       newToken.Expiry,
+        Metadata:     creds.Metadata, // Preserve existing metadata
+    }, nil
+}
+```
+
+**For providers requiring re-authentication (AWS SSO, device flow):**
+
+These providers need user interaction, so they reuse `Authenticate()` with
+preserved context:
+
+```go
+func (p *AWS) Refresh(ctx context.Context, creds *provider.Credentials, opts provider.AuthOptions) (*provider.Credentials, error) {
+    // Check if still valid
+    if creds.Expiry.After(time.Now()) {
+        log.Printf("token still valid until %s, no refresh needed", creds.Expiry)
+        return creds, nil
+    }
+    
+    log.Println("token expired, performing re-authentication")
+    
+    // Extract context from old credentials to minimize user prompts
+    if opts.Extra == nil {
+        opts.Extra = make(map[string]any)
+    }
+    
+    // Reuse account_id to skip account selection
+    if accountID, ok := creds.Metadata["account_id"].(string); ok {
+        opts.Extra["account_id"] = accountID
+    }
+    
+    // Set refresh flag
+    opts.Extra["refresh"] = true
+    
+    // Reuse region if not specified
+    if opts.Region == "" {
+        if region, ok := creds.Metadata["region"].(string); ok {
+            opts.Region = region
+        }
+    }
+    
+    // Delegate to Authenticate() which handles the device flow
+    return p.Authenticate(ctx, opts)
+}
+```
+
+#### Key Principles
+
+1. **Always check if still valid first** - If credentials haven't expired, return
+   them immediately to avoid unnecessary work
+2. **Preserve context** - Extract account IDs, regions, or other context from old
+   credentials to minimize user prompts
+3. **Use opts for preferences** - Respect browser preferences, defaults, etc. from
+   the opts parameter
+4. **Be clear about user interaction** - Log when user interaction is required
+5. **Return detailed errors** - Help users understand why refresh failed
+
 ### The Full Lifecycle
 
 ```

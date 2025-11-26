@@ -28,7 +28,7 @@ func (m *mockProvider) Authenticate(ctx context.Context, opts AuthOptions) (*Cre
 	return nil, nil
 }
 
-func (m *mockProvider) Refresh(ctx context.Context, creds *Credentials) (*Credentials, error) {
+func (m *mockProvider) Refresh(ctx context.Context, creds *Credentials, opts AuthOptions) (*Credentials, error) {
 	return nil, nil
 }
 

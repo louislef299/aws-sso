@@ -96,16 +96,29 @@ type Provider interface {
 	Authenticate(ctx context.Context, opts AuthOptions) (*Credentials, error)
 
 	// Refresh obtains new credentials using an existing credential's refresh
-	// token or equivalent mechanism. Callers should invoke Refresh proactively
-	// before the credential's Expiry time, not after credentials have expired.
+	// token or equivalent mechanism. The opts parameter provides context for
+	// providers that require re-authentication (e.g., AWS SSO device flow).
 	//
-	// If the provider does not support refresh (e.g., SAML assertions), or if
-	// the credential cannot be refreshed, return an error. The caller should
-	// then fall back to a full Authenticate flow.
+	// Implementations should:
+	//   1. Check if credentials are still valid (not expired)
+	//   2. If valid, return as-is
+	//   3. If expired and provider supports refresh tokens, use them
+	//   4. If expired and provider requires re-auth, use Authenticate with opts
+	//
+	// For providers with refresh tokens (OAuth2, OIDC with offline_access):
+	//   - The opts parameter may be ignored
+	//   - Refresh should be silent (no user interaction)
+	//
+	// For providers requiring re-authentication (AWS SSO, SAML):
+	//   - Use opts to control the re-auth flow (browser preferences, etc.)
+	//   - Extract context from creds (account_id, region) to minimize prompts
+	//   - User interaction may be required
 	//
 	// The returned Credentials may have a new RefreshToken; callers should
 	// persist the updated credentials.
-	Refresh(ctx context.Context, creds *Credentials) (*Credentials, error)
+	//
+	// Returns an error if refresh/re-authentication fails.
+	Refresh(ctx context.Context, creds *Credentials, opts AuthOptions) (*Credentials, error)
 
 	// Revoke invalidates the given credentials. This serves dual purposes:
 	//   - Logout cleanup: Called during logout to clean up local state and

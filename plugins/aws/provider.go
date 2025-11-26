@@ -7,6 +7,7 @@ import (
 	"log"
 	"slices"
 	"strings"
+	"time"
 
 	awsConf "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/sso"
@@ -156,8 +157,53 @@ func (p *AWS) Authenticate(ctx context.Context,
 }
 
 func (p *AWS) Refresh(ctx context.Context,
-	creds *provider.Credentials) (*provider.Credentials, error) {
-	return nil, nil
+	creds *provider.Credentials, opts provider.AuthOptions) (*provider.Credentials, error) {
+
+	// Check if the access token is still valid
+	if creds.Expiry.After(time.Now()) {
+		log.Printf("AWS SSO token still valid until %s, no refresh needed", creds.Expiry.Format(time.RFC3339))
+		return creds, nil
+	}
+
+	log.Println("AWS SSO token expired, performing re-authentication")
+
+	// AWS SSO uses OIDC device code flow which doesn't support traditional
+	// refresh tokens. When the token expires, we need to perform a full
+	// re-authentication with user approval. We'll extract context from the
+	// old credentials to minimize user prompts.
+
+	// Extract account_id from credentials to skip account selection prompt
+	if accountID, ok := creds.Metadata["account_id"].(string); ok && accountID != "" {
+		if opts.Extra == nil {
+			opts.Extra = make(map[string]any)
+		}
+		opts.Extra["account_id"] = accountID
+		log.Printf("reusing account_id: %s", accountID)
+	}
+
+	// Set refresh flag to force new device authorization
+	if opts.Extra == nil {
+		opts.Extra = make(map[string]any)
+	}
+	opts.Extra["refresh"] = true
+
+	// Extract region from credentials if not already specified in opts
+	if opts.Region == "" {
+		if region, ok := creds.Metadata["region"].(string); ok && region != "" {
+			opts.Region = region
+			log.Printf("reusing region: %s", region)
+		}
+	}
+
+	// Perform full re-authentication using the Authenticate flow
+	// This will start a new device authorization and require user approval
+	newCreds, err := p.Authenticate(ctx, opts)
+	if err != nil {
+		return nil, fmt.Errorf("refresh re-authentication failed: %w", err)
+	}
+
+	log.Println("successfully refreshed AWS SSO credentials")
+	return newCreds, nil
 }
 
 func (p *AWS) Revoke(ctx context.Context, creds *provider.Credentials) error {
