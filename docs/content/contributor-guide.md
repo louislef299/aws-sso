@@ -98,6 +98,118 @@ func (p *AWS) Initialize(ctx context.Context, config map[string]any) error {
 With config stored, `Authenticate()` can perform the actual authentication flow
 using the values set during `Initialize()`.
 
+The `Authenticate()` method should return a `provider.Credentials` struct
+containing:
+
+- **AccessToken**: The primary authentication token (e.g., SSO access token)
+- **RefreshToken**: Optional token for refreshing credentials
+- **Expiry**: When the access token expires
+- **Metadata**: Provider-specific data as `map[string]any`
+
+For the Metadata field, include any information needed for:
+- Credential refresh operations
+- Native CLI integration (if applicable)
+- Additional provider-specific context
+
+Example:
+
+```go
+func (p *AWS) Authenticate(ctx context.Context, opts provider.AuthOptions) (*provider.Credentials, error) {
+    // Perform authentication flow...
+    
+    return &provider.Credentials{
+        Type:         string(provider.TypeOIDC),
+        AccessToken:  clientInfo.AccessToken,
+        RefreshToken: "", // If not using refresh tokens
+        Expiry:       clientInfo.AccessTokenExpiresAt,
+        Metadata: map[string]any{
+            // Client information for future operations
+            "client_id":     clientInfo.ClientId,
+            "client_secret": clientInfo.ClientSecret,
+            
+            // Native CLI credentials (if implementing NativeCLIIntegration)
+            "aws_access_key_id":     roleCredentials.AccessKeyId,
+            "aws_secret_access_key": roleCredentials.SecretAccessKey,
+            "aws_session_token":     roleCredentials.SessionToken,
+            
+            // Additional context
+            "account_id": accountID,
+            "role_name":  roleName,
+        },
+    }, nil
+}
+```
+
+### 5. Optional: Implement NativeCLIIntegration
+
+The `provider.NativeCLIIntegration` interface is **optional** and should only be
+implemented if your provider needs to integrate with a native CLI tool that
+expects credentials in a specific file format.
+
+#### When to Implement NativeCLIIntegration
+
+Implement this interface if:
+
+- Your provider has a native CLI tool (e.g., AWS CLI, Azure CLI, gcloud)
+- The CLI expects credentials in a specific file location/format
+- Users will want seamless integration with existing CLI workflows
+- Credentials need to be written beyond knot's internal cache
+
+#### When NOT to Implement NativeCLIIntegration
+
+Skip this interface if:
+
+- Your provider is a generic OIDC/OAuth provider without a CLI
+- Your provider only needs token caching in knot's credential store
+- The provider is for a custom/enterprise SSO without external tools
+- Credentials are only used within knot itself
+
+#### Implementation Example
+
+```go
+// WriteNativeCredentials writes credentials in the format expected by
+// the provider's native CLI tool.
+func (p *AWS) WriteNativeCredentials(ctx context.Context, creds *provider.Credentials, profile string) error {
+    // Extract credentials from metadata
+    accessKeyID, ok := creds.Metadata["aws_access_key_id"].(string)
+    if !ok {
+        return fmt.Errorf("missing aws_access_key_id in credentials")
+    }
+    
+    // Write to native CLI format (e.g., ~/.aws/credentials)
+    return writeAWSCredentialsFile(profile, accessKeyID, ...)
+}
+
+// CleanNativeCredentials removes credentials written by WriteNativeCredentials
+func (p *AWS) CleanNativeCredentials(ctx context.Context, profile string) error {
+    // Remove credentials from native CLI files
+    return cleanAWSCredentialsFile(profile)
+}
+```
+
+#### Usage in the Authentication Flow
+
+When a provider implements `NativeCLIIntegration`, knot will automatically
+detect and use it:
+
+```go
+// Authenticate with provider
+creds, err := provider.Authenticate(ctx, opts)
+
+// Save to knot's credential cache
+credStore.Save(profile, creds)
+
+// If provider supports native CLI integration, write those too
+if nativeCLI, ok := provider.(NativeCLIIntegration); ok {
+    nativeCLI.WriteNativeCredentials(ctx, creds, profile)
+}
+```
+
+This design keeps the core `Provider` interface focused on authentication while
+allowing optional integration with native tooling. Providers that only need
+token-based authentication don't have to implement file writing logic they'll
+never use.
+
 ### The Full Lifecycle
 
 ```
@@ -110,4 +222,14 @@ provider.Activate(ctx, "aws", config)
 
 ... later ...
 
-provider.Authenticate(ctx, opts)  → Uses stored config from Initialize
+```
+provider.Authenticate(ctx, opts)
+    → Returns credentials with tokens and metadata
+
+credStore.Save(profile, creds)
+    → Caches credentials in knot's storage
+
+if provider implements NativeCLIIntegration:
+    provider.WriteNativeCredentials(ctx, creds, profile)
+        → Writes to native CLI format (e.g., ~/.aws/credentials)
+```
