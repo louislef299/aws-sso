@@ -311,6 +311,116 @@ func (p *AWS) Refresh(ctx context.Context, creds *provider.Credentials, opts pro
 4. **Be clear about user interaction** - Log when user interaction is required
 5. **Return detailed errors** - Help users understand why refresh failed
 
+### 7. Implement Revoke
+
+The `Revoke()` method handles server-side credential revocation. It should
+**only** handle revoking tokens with the identity provider, not local file
+cleanup (that's handled by `CleanCredentials()` in NativeCLIIntegration).
+
+#### Revoke Method Signature
+
+```go
+Revoke(ctx context.Context, creds *Credentials) error
+```
+
+#### Implementation Guidelines
+
+**Revoke should:**
+- Call the provider's token revocation endpoint (if available)
+- Clean up provider-specific cached state (e.g., cached OIDC client info)
+- Be idempotent (revoking already-revoked credentials should not error)
+- Return wrapped errors with helpful context
+
+**Revoke should NOT:**
+- Clean native CLI credential files (use `CleanCredentials()` for that)
+- Require user interaction
+- Fail if the token is already expired/invalid
+
+#### Separation of Concerns
+
+- **`Revoke()`**: Server-side token revocation + provider-specific cache cleanup
+- **`CleanCredentials()`** (NativeCLIIntegration): Local native CLI file cleanup
+
+The caller orchestrates: `provider.Revoke()` → `provider.CleanCredentials()`
+
+#### Example Implementation (AWS SSO)
+
+```go
+func (p *AWS) Revoke(ctx context.Context, creds *provider.Credentials) error {
+    log.Println("revoking AWS SSO credentials")
+    
+    // Extract access token
+    accessToken := creds.AccessToken
+    if accessToken == "" {
+        return fmt.Errorf("no access token available in credentials")
+    }
+    
+    // Load AWS config
+    awsCfg, err := awsConfig.LoadDefaultConfig(ctx, awsConfig.WithRegion(p.ssoRegion))
+    if err != nil {
+        return fmt.Errorf("failed to load AWS config for revocation: %w", err)
+    }
+    
+    // Call AWS SSO Logout API (server-side revocation)
+    if err := awsSDK.Logout(ctx, &awsCfg, accessToken); err != nil {
+        return fmt.Errorf("failed to revoke AWS SSO token: %w", err)
+    }
+    
+    // Clean up cached OIDC client info (provider-specific state)
+    clientInfoPath, err := getClientInfoPath()
+    if err != nil {
+        return fmt.Errorf("failed to determine client info path: %w", err)
+    }
+    
+    // Remove cache file (idempotent)
+    if err := os.Remove(clientInfoPath); err != nil && !os.IsNotExist(err) {
+        return fmt.Errorf("failed to remove cached client info: %w", err)
+    }
+    
+    log.Println("successfully revoked AWS SSO credentials")
+    return nil
+}
+```
+
+#### Example CleanCredentials (NativeCLIIntegration)
+
+```go
+func (p *AWS) CleanCredentials(ctx context.Context, profile string) error {
+    log.Printf("cleaning native credentials for profile: %s", profile)
+    
+    homeDir, err := os.UserHomeDir()
+    if err != nil {
+        return fmt.Errorf("failed to get home directory: %w", err)
+    }
+    
+    // Clean ~/.aws/credentials
+    credentialsFile := homeDir + "/.aws/credentials"
+    if err := removeProfileFromINI(credentialsFile, profile); err != nil {
+        return fmt.Errorf("failed to clean credentials file: %w", err)
+    }
+    
+    // Clean ~/.aws/config (profiles are prefixed with "profile ")
+    configFile := homeDir + "/.aws/config"
+    configProfile := profile
+    if profile != "default" {
+        configProfile = "profile " + profile
+    }
+    if err := removeProfileFromINI(configFile, configProfile); err != nil {
+        return fmt.Errorf("failed to clean config file: %w", err)
+    }
+    
+    return nil
+}
+```
+
+#### Key Principles
+
+1. **Separation of concerns** - Revoke handles server-side, CleanCredentials handles local files
+2. **Idempotent** - Multiple calls should not fail
+3. **Graceful failure** - Expired tokens should not cause revocation to fail
+4. **Wrapped errors** - Return helpful error messages with context
+5. **Log progress** - Help users understand what's happening
+
 ### The Full Lifecycle
 
 ```

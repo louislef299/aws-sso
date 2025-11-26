@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"slices"
 	"strings"
 	"time"
@@ -18,6 +19,7 @@ import (
 	laws "github.com/louislef299/knot/pkg/aws"
 	"github.com/louislef299/knot/pkg/provider"
 	"github.com/spf13/viper"
+	"gopkg.in/ini.v1"
 )
 
 type AWS struct {
@@ -169,8 +171,8 @@ func (p *AWS) Refresh(ctx context.Context,
 
 	// AWS SSO uses OIDC device code flow which doesn't support traditional
 	// refresh tokens. When the token expires, we need to perform a full
-	// re-authentication with user approval. We'll extract context from the
-	// old credentials to minimize user prompts.
+	// re-authentication with user approval. We'll extract context from the old
+	// credentials to minimize user prompts.
 
 	// Extract account_id from credentials to skip account selection prompt
 	if accountID, ok := creds.Metadata["account_id"].(string); ok && accountID != "" {
@@ -195,8 +197,8 @@ func (p *AWS) Refresh(ctx context.Context,
 		}
 	}
 
-	// Perform full re-authentication using the Authenticate flow
-	// This will start a new device authorization and require user approval
+	// Perform full re-authentication using the Authenticate flow This will
+	// start a new device authorization and require user approval
 	newCreds, err := p.Authenticate(ctx, opts)
 	if err != nil {
 		return nil, fmt.Errorf("refresh re-authentication failed: %w", err)
@@ -207,6 +209,47 @@ func (p *AWS) Refresh(ctx context.Context,
 }
 
 func (p *AWS) Revoke(ctx context.Context, creds *provider.Credentials) error {
+	log.Println("revoking AWS SSO credentials")
+
+	// Extract access token from credentials
+	accessToken := creds.AccessToken
+	if accessToken == "" {
+		return fmt.Errorf("no access token available in credentials")
+	}
+
+	// Determine SSO region for API calls
+	ssoRegion := p.ssoRegion
+	if region, ok := creds.Metadata["region"].(string); ok && region != "" {
+		// Check for China regions
+		if region == "cn-north-1" || region == "cn-northwest-1" {
+			ssoRegion = "cn-north-1"
+		}
+	}
+
+	// Load AWS config for SSO operations
+	awsCfg, err := awsConf.LoadDefaultConfig(ctx, awsConf.WithRegion(ssoRegion))
+	if err != nil {
+		return fmt.Errorf("failed to load AWS config for revocation: %w", err)
+	}
+
+	// Call AWS SSO Logout API to revoke the token server-side
+	if err := laws.Logout(ctx, &awsCfg, accessToken); err != nil {
+		return fmt.Errorf("failed to revoke AWS SSO token: %w", err)
+	}
+
+	// Clean up cached client information file This file contains the OIDC
+	// client credentials and tokens
+	clientInfoPath, err := laws.ClientInfoFileDestination()
+	if err != nil {
+		return fmt.Errorf("failed to determine client info file path: %w", err)
+	}
+
+	// Remove the cache file (idempotent - no error if doesn't exist)
+	if err := os.Remove(clientInfoPath); err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("failed to remove cached client info: %w", err)
+	}
+
+	log.Println("successfully revoked AWS SSO credentials")
 	return nil
 }
 
@@ -262,7 +305,7 @@ func (p *AWS) ValidateConfig(config map[string]any) error {
 // WriteCredentials implements provider.NativeCLIIntegration by writing AWS
 // credentials to ~/.aws/credentials and ~/.aws/config in the format expected by
 // the AWS CLI.
-func (p *AWS) WriteNativeCredentials(ctx context.Context, creds *provider.Credentials, profile string) error {
+func (p *AWS) WriteCredentials(ctx context.Context, creds *provider.Credentials, profile string) error {
 	// Extract AWS credentials from metadata
 	accessKeyID, ok := creds.Metadata["aws_access_key_id"].(string)
 	if !ok {
@@ -309,11 +352,65 @@ func (p *AWS) WriteNativeCredentials(ctx context.Context, creds *provider.Creden
 }
 
 // CleanCredentials implements provider.NativeCLIIntegration by removing AWS
-// credentials from ~/.aws/credentials and ~/.aws/config.
+// credentials from ~/.aws/credentials and ~/.aws/config for the specified
+// profile.
 func (p *AWS) CleanCredentials(ctx context.Context, profile string) error {
-	// The existing clean logic in plugins/aws/oidc/oidc.go handles this For
-	// now, return nil as cleanup will be handled separately TODO: Extract the
-	// clean logic from oidc.go into a shared function
 	log.Printf("cleaning native credentials for profile: %s", profile)
+
+	// Get home directory
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("failed to get home directory: %w", err)
+	}
+
+	// Clean ~/.aws/credentials
+	credentialsFile := homeDir + "/.aws/credentials"
+	if err := cleanProfileFromFile(credentialsFile, profile); err != nil {
+		return fmt.Errorf("failed to clean credentials file: %w", err)
+	}
+
+	// Clean ~/.aws/config In config files, non-default profiles are prefixed
+	// with "profile "
+	configFile := homeDir + "/.aws/config"
+	configProfileName := profile
+	if profile != "default" {
+		configProfileName = "profile " + profile
+	}
+	if err := cleanProfileFromFile(configFile, configProfileName); err != nil {
+		return fmt.Errorf("failed to clean config file: %w", err)
+	}
+
+	log.Printf("successfully cleaned native credentials for profile: %s", profile)
+	return nil
+}
+
+// cleanProfileFromFile removes a specific profile section from an INI file.
+// This is idempotent - returns nil if the file or section doesn't exist.
+func cleanProfileFromFile(filePath, sectionName string) error {
+	// Check if file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		// File doesn't exist, nothing to clean (idempotent)
+		return nil
+	} else if err != nil {
+		return fmt.Errorf("failed to stat file: %w", err)
+	}
+
+	// Load the INI file
+	cfg, err := ini.Load(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to load file: %w", err)
+	}
+
+	// Delete the section if it exists
+	if cfg.HasSection(sectionName) {
+		cfg.DeleteSection(sectionName)
+		log.Printf("removed section '%s' from %s", sectionName, filePath)
+	}
+
+	// Save the file
+	if err := cfg.SaveTo(filePath); err != nil {
+		return fmt.Errorf("failed to save file: %w", err)
+	}
+
 	return nil
 }
