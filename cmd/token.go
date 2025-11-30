@@ -6,8 +6,8 @@ import (
 	"slices"
 	"strings"
 
+	lconfig "github.com/louislef299/knot/internal/config"
 	"github.com/louislef299/knot/internal/envs"
-	lconfig "github.com/louislef299/knot/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

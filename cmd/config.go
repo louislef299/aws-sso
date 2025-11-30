@@ -9,8 +9,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/louislef299/knot/internal/config"
 	"github.com/louislef299/knot/internal/envs"
-	"github.com/louislef299/knot/pkg/config"
 	"github.com/louislef299/knot/pkg/dlogin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

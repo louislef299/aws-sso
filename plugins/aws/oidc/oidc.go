@@ -10,12 +10,11 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsConf "github.com/aws/aws-sdk-go-v2/config"
-	lacct "github.com/louislef299/knot/internal/account"
 	"github.com/louislef299/knot/internal/browser"
+	lconfig "github.com/louislef299/knot/internal/config"
 	"github.com/louislef299/knot/internal/envs"
 	lregion "github.com/louislef299/knot/internal/region"
 	laws "github.com/louislef299/knot/pkg/aws"
-	lconfig "github.com/louislef299/knot/pkg/config"
 	"github.com/louislef299/knot/pkg/dlogin"
 	los "github.com/louislef299/knot/pkg/os"
 	"github.com/spf13/cobra"
@@ -79,7 +78,7 @@ func (a *OIDCLogin) Login(ctx context.Context, config any) error {
 	}
 	log.Println("using sso region", ssoRegion, "to login")
 
-	acctID := lacct.GetAccountID(cfg.Profile)
+	acctID := lconfig.GetAccountID(cfg.Profile)
 	awsCfg, err := awsConf.LoadDefaultConfig(ctx, awsConf.WithRegion(ssoRegion))
 	if err != nil {
 		return err
@@ -176,7 +175,7 @@ func loginAWS(ctx context.Context, awsCfg aws.Config, acctID string, cfg *OIDCLo
 
 	// set the new profile in account config
 	if cfg.NewProfile {
-		err = lacct.AddAccount(cfg.Profile, &lacct.Account{
+		err = lconfig.AddAccount(cfg.Profile, &lconfig.Account{
 			ID:      acctID,
 			Region:  awsCfg.Region,
 			Private: cfg.Private,
@@ -199,7 +198,7 @@ func getBrowser(cfg *OIDCLogin) browser.Browser {
 }
 
 func getURL(profile string) string {
-	url := lacct.GetAccountURL(profile)
+	url := lconfig.GetAccountURL(profile)
 	if url != "" {
 		return url
 	}
