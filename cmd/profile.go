@@ -14,13 +14,7 @@ import (
 // profileCmd represents the profile command
 var profileCmd = &cobra.Command{
 	Use:   "profile",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Profile management",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := config.ListProfiles(cmd.OutOrStdout())
 		if err != nil {
@@ -29,6 +23,16 @@ to quickly create a Cobra application.`,
 	},
 }
 
+// profileAddCmd represents the profile command
+var profileAddCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Profile management",
+	Run: func(cmd *cobra.Command, args []string) {
+		// SaveProfile(name string, cfg *ProfileConfig) error
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(profileCmd)
+	profileCmd.AddCommand(profileAddCmd)
 }
