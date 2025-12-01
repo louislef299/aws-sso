@@ -11,59 +11,46 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Describes an update to an Amazon EKS resource.
-//
-// When the status of the update is Successful , the update is complete. If an
-// update fails, the status is Failed , and an error detail explains the reason for
-// the failure.
-func (c *Client) DescribeUpdate(ctx context.Context, params *DescribeUpdateInput, optFns ...func(*Options)) (*DescribeUpdateOutput, error) {
+// Returns detailed information about a specific managed capability in your Amazon
+// EKS cluster, including its current status, configuration, health information,
+// and any issues that may be affecting its operation.
+func (c *Client) DescribeCapability(ctx context.Context, params *DescribeCapabilityInput, optFns ...func(*Options)) (*DescribeCapabilityOutput, error) {
 	if params == nil {
-		params = &DescribeUpdateInput{}
+		params = &DescribeCapabilityInput{}
 	}
 
-	result, metadata, err := c.invokeOperation(ctx, "DescribeUpdate", params, optFns, c.addOperationDescribeUpdateMiddlewares)
+	result, metadata, err := c.invokeOperation(ctx, "DescribeCapability", params, optFns, c.addOperationDescribeCapabilityMiddlewares)
 	if err != nil {
 		return nil, err
 	}
 
-	out := result.(*DescribeUpdateOutput)
+	out := result.(*DescribeCapabilityOutput)
 	out.ResultMetadata = metadata
 	return out, nil
 }
 
-// Describes an update request.
-type DescribeUpdateInput struct {
+type DescribeCapabilityInput struct {
 
-	// The name of the Amazon EKS cluster associated with the update.
+	// The name of the capability to describe.
 	//
 	// This member is required.
-	Name *string
-
-	// The ID of the update to describe.
-	//
-	// This member is required.
-	UpdateId *string
-
-	// The name of the add-on. The name must match one of the names returned by [ListAddons]
-	// ListAddons . This parameter is required if the update is an add-on update.
-	//
-	// [ListAddons]: https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html
-	AddonName *string
-
-	// The name of the capability for which you want to describe updates.
 	CapabilityName *string
 
-	// The name of the Amazon EKS node group associated with the update. This
-	// parameter is required if the update is a node group update.
-	NodegroupName *string
+	// The name of the Amazon EKS cluster that contains the capability you want to
+	// describe.
+	//
+	// This member is required.
+	ClusterName *string
 
 	noSmithyDocumentSerde
 }
 
-type DescribeUpdateOutput struct {
+type DescribeCapabilityOutput struct {
 
-	// The full description of the specified update.
-	Update *types.Update
+	// An object containing detailed information about the capability, including its
+	// name, ARN, type, status, version, configuration, health status, and timestamps
+	// for when it was created and last modified.
+	Capability *types.Capability
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -71,19 +58,19 @@ type DescribeUpdateOutput struct {
 	noSmithyDocumentSerde
 }
 
-func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, options Options) (err error) {
+func (c *Client) addOperationDescribeCapabilityMiddlewares(stack *middleware.Stack, options Options) (err error) {
 	if err := stack.Serialize.Add(&setOperationInputMiddleware{}, middleware.After); err != nil {
 		return err
 	}
-	err = stack.Serialize.Add(&awsRestjson1_serializeOpDescribeUpdate{}, middleware.After)
+	err = stack.Serialize.Add(&awsRestjson1_serializeOpDescribeCapability{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpDescribeUpdate{}, middleware.After)
+	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpDescribeCapability{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	if err := addProtocolFinalizerMiddlewares(stack, options, "DescribeUpdate"); err != nil {
+	if err := addProtocolFinalizerMiddlewares(stack, options, "DescribeCapability"); err != nil {
 		return fmt.Errorf("add protocol finalizers: %v", err)
 	}
 
@@ -138,10 +125,10 @@ func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, 
 	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
-	if err = addOpDescribeUpdateValidationMiddleware(stack); err != nil {
+	if err = addOpDescribeCapabilityValidationMiddleware(stack); err != nil {
 		return err
 	}
-	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeUpdate(options.Region), middleware.Before); err != nil {
+	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeCapability(options.Region), middleware.Before); err != nil {
 		return err
 	}
 	if err = addRecursionDetection(stack); err != nil {
@@ -171,10 +158,10 @@ func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, 
 	return nil
 }
 
-func newServiceMetadataMiddleware_opDescribeUpdate(region string) *awsmiddleware.RegisterServiceMetadata {
+func newServiceMetadataMiddleware_opDescribeCapability(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
 		Region:        region,
 		ServiceID:     ServiceID,
-		OperationName: "DescribeUpdate",
+		OperationName: "DescribeCapability",
 	}
 }

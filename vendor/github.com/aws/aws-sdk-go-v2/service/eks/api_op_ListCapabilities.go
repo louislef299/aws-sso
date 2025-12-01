@@ -6,76 +6,60 @@ import (
 	"context"
 	"fmt"
 	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
+	"github.com/aws/aws-sdk-go-v2/service/eks/types"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Lists the updates associated with an Amazon EKS resource in your Amazon Web
-// Services account, in the specified Amazon Web Services Region.
-func (c *Client) ListUpdates(ctx context.Context, params *ListUpdatesInput, optFns ...func(*Options)) (*ListUpdatesOutput, error) {
+// Lists all managed capabilities in your Amazon EKS cluster. You can use this
+// operation to get an overview of all capabilities and their current status.
+func (c *Client) ListCapabilities(ctx context.Context, params *ListCapabilitiesInput, optFns ...func(*Options)) (*ListCapabilitiesOutput, error) {
 	if params == nil {
-		params = &ListUpdatesInput{}
+		params = &ListCapabilitiesInput{}
 	}
 
-	result, metadata, err := c.invokeOperation(ctx, "ListUpdates", params, optFns, c.addOperationListUpdatesMiddlewares)
+	result, metadata, err := c.invokeOperation(ctx, "ListCapabilities", params, optFns, c.addOperationListCapabilitiesMiddlewares)
 	if err != nil {
 		return nil, err
 	}
 
-	out := result.(*ListUpdatesOutput)
+	out := result.(*ListCapabilitiesOutput)
 	out.ResultMetadata = metadata
 	return out, nil
 }
 
-type ListUpdatesInput struct {
+type ListCapabilitiesInput struct {
 
-	// The name of the Amazon EKS cluster to list updates for.
+	// The name of the Amazon EKS cluster for which you want to list capabilities.
 	//
 	// This member is required.
-	Name *string
+	ClusterName *string
 
-	// The names of the installed add-ons that have available updates.
-	AddonName *string
-
-	// The name of the capability for which you want to list updates.
-	CapabilityName *string
-
-	// The maximum number of results, returned in paginated output. You receive
-	// maxResults in a single page, along with a nextToken response element. You can
-	// see the remaining results of the initial request by sending another request with
-	// the returned nextToken value. This value can be between 1 and 100. If you don't
-	// use this parameter, 100 results and a nextToken value, if applicable, are
-	// returned.
+	// The maximum number of results to return in a single call. To retrieve the
+	// remaining results, make another call with the returned nextToken value. If you
+	// don't specify a value, the default is 100 results.
 	MaxResults *int32
 
 	// The nextToken value returned from a previous paginated request, where maxResults
 	// was used and the results exceeded the value of that parameter. Pagination
 	// continues from the end of the previous results that returned the nextToken
 	// value. This value is null when there are no more results to return.
-	//
-	// This token should be treated as an opaque identifier that is used only to
-	// retrieve the next items in a list and not for other programmatic purposes.
 	NextToken *string
-
-	// The name of the Amazon EKS managed node group to list updates for.
-	NodegroupName *string
 
 	noSmithyDocumentSerde
 }
 
-type ListUpdatesOutput struct {
+type ListCapabilitiesOutput struct {
 
-	// The nextToken value returned from a previous paginated request, where maxResults
-	// was used and the results exceeded the value of that parameter. Pagination
-	// continues from the end of the previous results that returned the nextToken
-	// value. This value is null when there are no more results to return.
-	//
-	// This token should be treated as an opaque identifier that is used only to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// A list of capability summary objects, each containing basic information about a
+	// capability including its name, ARN, type, status, version, and timestamps.
+	Capabilities []types.CapabilitySummary
+
+	// The nextToken value to include in a future ListCapabilities request. When the
+	// results of a ListCapabilities request exceed maxResults , you can use this value
+	// to retrieve the next page of results. This value is null when there are no more
+	// results to return.
 	NextToken *string
-
-	// A list of all the updates for the specified cluster and Region.
-	UpdateIds []string
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -83,19 +67,19 @@ type ListUpdatesOutput struct {
 	noSmithyDocumentSerde
 }
 
-func (c *Client) addOperationListUpdatesMiddlewares(stack *middleware.Stack, options Options) (err error) {
+func (c *Client) addOperationListCapabilitiesMiddlewares(stack *middleware.Stack, options Options) (err error) {
 	if err := stack.Serialize.Add(&setOperationInputMiddleware{}, middleware.After); err != nil {
 		return err
 	}
-	err = stack.Serialize.Add(&awsRestjson1_serializeOpListUpdates{}, middleware.After)
+	err = stack.Serialize.Add(&awsRestjson1_serializeOpListCapabilities{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpListUpdates{}, middleware.After)
+	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpListCapabilities{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	if err := addProtocolFinalizerMiddlewares(stack, options, "ListUpdates"); err != nil {
+	if err := addProtocolFinalizerMiddlewares(stack, options, "ListCapabilities"); err != nil {
 		return fmt.Errorf("add protocol finalizers: %v", err)
 	}
 
@@ -150,10 +134,10 @@ func (c *Client) addOperationListUpdatesMiddlewares(stack *middleware.Stack, opt
 	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
-	if err = addOpListUpdatesValidationMiddleware(stack); err != nil {
+	if err = addOpListCapabilitiesValidationMiddleware(stack); err != nil {
 		return err
 	}
-	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListUpdates(options.Region), middleware.Before); err != nil {
+	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opListCapabilities(options.Region), middleware.Before); err != nil {
 		return err
 	}
 	if err = addRecursionDetection(stack); err != nil {
@@ -183,14 +167,11 @@ func (c *Client) addOperationListUpdatesMiddlewares(stack *middleware.Stack, opt
 	return nil
 }
 
-// ListUpdatesPaginatorOptions is the paginator options for ListUpdates
-type ListUpdatesPaginatorOptions struct {
-	// The maximum number of results, returned in paginated output. You receive
-	// maxResults in a single page, along with a nextToken response element. You can
-	// see the remaining results of the initial request by sending another request with
-	// the returned nextToken value. This value can be between 1 and 100. If you don't
-	// use this parameter, 100 results and a nextToken value, if applicable, are
-	// returned.
+// ListCapabilitiesPaginatorOptions is the paginator options for ListCapabilities
+type ListCapabilitiesPaginatorOptions struct {
+	// The maximum number of results to return in a single call. To retrieve the
+	// remaining results, make another call with the returned nextToken value. If you
+	// don't specify a value, the default is 100 results.
 	Limit int32
 
 	// Set to true if pagination should stop if the service returns a pagination token
@@ -198,22 +179,22 @@ type ListUpdatesPaginatorOptions struct {
 	StopOnDuplicateToken bool
 }
 
-// ListUpdatesPaginator is a paginator for ListUpdates
-type ListUpdatesPaginator struct {
-	options   ListUpdatesPaginatorOptions
-	client    ListUpdatesAPIClient
-	params    *ListUpdatesInput
+// ListCapabilitiesPaginator is a paginator for ListCapabilities
+type ListCapabilitiesPaginator struct {
+	options   ListCapabilitiesPaginatorOptions
+	client    ListCapabilitiesAPIClient
+	params    *ListCapabilitiesInput
 	nextToken *string
 	firstPage bool
 }
 
-// NewListUpdatesPaginator returns a new ListUpdatesPaginator
-func NewListUpdatesPaginator(client ListUpdatesAPIClient, params *ListUpdatesInput, optFns ...func(*ListUpdatesPaginatorOptions)) *ListUpdatesPaginator {
+// NewListCapabilitiesPaginator returns a new ListCapabilitiesPaginator
+func NewListCapabilitiesPaginator(client ListCapabilitiesAPIClient, params *ListCapabilitiesInput, optFns ...func(*ListCapabilitiesPaginatorOptions)) *ListCapabilitiesPaginator {
 	if params == nil {
-		params = &ListUpdatesInput{}
+		params = &ListCapabilitiesInput{}
 	}
 
-	options := ListUpdatesPaginatorOptions{}
+	options := ListCapabilitiesPaginatorOptions{}
 	if params.MaxResults != nil {
 		options.Limit = *params.MaxResults
 	}
@@ -222,7 +203,7 @@ func NewListUpdatesPaginator(client ListUpdatesAPIClient, params *ListUpdatesInp
 		fn(&options)
 	}
 
-	return &ListUpdatesPaginator{
+	return &ListCapabilitiesPaginator{
 		options:   options,
 		client:    client,
 		params:    params,
@@ -232,12 +213,12 @@ func NewListUpdatesPaginator(client ListUpdatesAPIClient, params *ListUpdatesInp
 }
 
 // HasMorePages returns a boolean indicating whether more pages are available
-func (p *ListUpdatesPaginator) HasMorePages() bool {
+func (p *ListCapabilitiesPaginator) HasMorePages() bool {
 	return p.firstPage || (p.nextToken != nil && len(*p.nextToken) != 0)
 }
 
-// NextPage retrieves the next ListUpdates page.
-func (p *ListUpdatesPaginator) NextPage(ctx context.Context, optFns ...func(*Options)) (*ListUpdatesOutput, error) {
+// NextPage retrieves the next ListCapabilities page.
+func (p *ListCapabilitiesPaginator) NextPage(ctx context.Context, optFns ...func(*Options)) (*ListCapabilitiesOutput, error) {
 	if !p.HasMorePages() {
 		return nil, fmt.Errorf("no more pages available")
 	}
@@ -254,7 +235,7 @@ func (p *ListUpdatesPaginator) NextPage(ctx context.Context, optFns ...func(*Opt
 	optFns = append([]func(*Options){
 		addIsPaginatorUserAgent,
 	}, optFns...)
-	result, err := p.client.ListUpdates(ctx, &params, optFns...)
+	result, err := p.client.ListCapabilities(ctx, &params, optFns...)
 	if err != nil {
 		return nil, err
 	}
@@ -273,17 +254,18 @@ func (p *ListUpdatesPaginator) NextPage(ctx context.Context, optFns ...func(*Opt
 	return result, nil
 }
 
-// ListUpdatesAPIClient is a client that implements the ListUpdates operation.
-type ListUpdatesAPIClient interface {
-	ListUpdates(context.Context, *ListUpdatesInput, ...func(*Options)) (*ListUpdatesOutput, error)
+// ListCapabilitiesAPIClient is a client that implements the ListCapabilities
+// operation.
+type ListCapabilitiesAPIClient interface {
+	ListCapabilities(context.Context, *ListCapabilitiesInput, ...func(*Options)) (*ListCapabilitiesOutput, error)
 }
 
-var _ ListUpdatesAPIClient = (*Client)(nil)
+var _ ListCapabilitiesAPIClient = (*Client)(nil)
 
-func newServiceMetadataMiddleware_opListUpdates(region string) *awsmiddleware.RegisterServiceMetadata {
+func newServiceMetadataMiddleware_opListCapabilities(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
 		Region:        region,
 		ServiceID:     ServiceID,
-		OperationName: "ListUpdates",
+		OperationName: "ListCapabilities",
 	}
 }

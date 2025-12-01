@@ -11,59 +11,51 @@ import (
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
-// Describes an update to an Amazon EKS resource.
+// Deletes a managed capability from your Amazon EKS cluster. When you delete a
+// capability, Amazon EKS removes the capability infrastructure but retains all
+// resources that were managed by the capability.
 //
-// When the status of the update is Successful , the update is complete. If an
-// update fails, the status is Failed , and an error detail explains the reason for
-// the failure.
-func (c *Client) DescribeUpdate(ctx context.Context, params *DescribeUpdateInput, optFns ...func(*Options)) (*DescribeUpdateOutput, error) {
+// Before deleting a capability, you should delete all Kubernetes resources that
+// were created by the capability. After the capability is deleted, these resources
+// become difficult to manage because the controller that managed them is no longer
+// available. To delete resources before removing the capability, use kubectl
+// delete or remove them through your GitOps workflow.
+func (c *Client) DeleteCapability(ctx context.Context, params *DeleteCapabilityInput, optFns ...func(*Options)) (*DeleteCapabilityOutput, error) {
 	if params == nil {
-		params = &DescribeUpdateInput{}
+		params = &DeleteCapabilityInput{}
 	}
 
-	result, metadata, err := c.invokeOperation(ctx, "DescribeUpdate", params, optFns, c.addOperationDescribeUpdateMiddlewares)
+	result, metadata, err := c.invokeOperation(ctx, "DeleteCapability", params, optFns, c.addOperationDeleteCapabilityMiddlewares)
 	if err != nil {
 		return nil, err
 	}
 
-	out := result.(*DescribeUpdateOutput)
+	out := result.(*DeleteCapabilityOutput)
 	out.ResultMetadata = metadata
 	return out, nil
 }
 
-// Describes an update request.
-type DescribeUpdateInput struct {
+type DeleteCapabilityInput struct {
 
-	// The name of the Amazon EKS cluster associated with the update.
+	// The name of the capability to delete.
 	//
 	// This member is required.
-	Name *string
-
-	// The ID of the update to describe.
-	//
-	// This member is required.
-	UpdateId *string
-
-	// The name of the add-on. The name must match one of the names returned by [ListAddons]
-	// ListAddons . This parameter is required if the update is an add-on update.
-	//
-	// [ListAddons]: https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html
-	AddonName *string
-
-	// The name of the capability for which you want to describe updates.
 	CapabilityName *string
 
-	// The name of the Amazon EKS node group associated with the update. This
-	// parameter is required if the update is a node group update.
-	NodegroupName *string
+	// The name of the Amazon EKS cluster that contains the capability you want to
+	// delete.
+	//
+	// This member is required.
+	ClusterName *string
 
 	noSmithyDocumentSerde
 }
 
-type DescribeUpdateOutput struct {
+type DeleteCapabilityOutput struct {
 
-	// The full description of the specified update.
-	Update *types.Update
+	// An object containing information about the deleted capability, including its
+	// final status and configuration.
+	Capability *types.Capability
 
 	// Metadata pertaining to the operation's result.
 	ResultMetadata middleware.Metadata
@@ -71,19 +63,19 @@ type DescribeUpdateOutput struct {
 	noSmithyDocumentSerde
 }
 
-func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, options Options) (err error) {
+func (c *Client) addOperationDeleteCapabilityMiddlewares(stack *middleware.Stack, options Options) (err error) {
 	if err := stack.Serialize.Add(&setOperationInputMiddleware{}, middleware.After); err != nil {
 		return err
 	}
-	err = stack.Serialize.Add(&awsRestjson1_serializeOpDescribeUpdate{}, middleware.After)
+	err = stack.Serialize.Add(&awsRestjson1_serializeOpDeleteCapability{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpDescribeUpdate{}, middleware.After)
+	err = stack.Deserialize.Add(&awsRestjson1_deserializeOpDeleteCapability{}, middleware.After)
 	if err != nil {
 		return err
 	}
-	if err := addProtocolFinalizerMiddlewares(stack, options, "DescribeUpdate"); err != nil {
+	if err := addProtocolFinalizerMiddlewares(stack, options, "DeleteCapability"); err != nil {
 		return fmt.Errorf("add protocol finalizers: %v", err)
 	}
 
@@ -138,10 +130,10 @@ func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, 
 	if err = addCredentialSource(stack, options); err != nil {
 		return err
 	}
-	if err = addOpDescribeUpdateValidationMiddleware(stack); err != nil {
+	if err = addOpDeleteCapabilityValidationMiddleware(stack); err != nil {
 		return err
 	}
-	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDescribeUpdate(options.Region), middleware.Before); err != nil {
+	if err = stack.Initialize.Add(newServiceMetadataMiddleware_opDeleteCapability(options.Region), middleware.Before); err != nil {
 		return err
 	}
 	if err = addRecursionDetection(stack); err != nil {
@@ -171,10 +163,10 @@ func (c *Client) addOperationDescribeUpdateMiddlewares(stack *middleware.Stack, 
 	return nil
 }
 
-func newServiceMetadataMiddleware_opDescribeUpdate(region string) *awsmiddleware.RegisterServiceMetadata {
+func newServiceMetadataMiddleware_opDeleteCapability(region string) *awsmiddleware.RegisterServiceMetadata {
 	return &awsmiddleware.RegisterServiceMetadata{
 		Region:        region,
 		ServiceID:     ServiceID,
-		OperationName: "DescribeUpdate",
+		OperationName: "DeleteCapability",
 	}
 }
