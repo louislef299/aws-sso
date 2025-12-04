@@ -25,7 +25,7 @@ GO_LOCATIONS := "cmd internal pkg plugins main.go"
 
 # Run the go program with provided inputs
 run *INPUT:
-    @{{go}} run main.go {{INPUT}}
+    {{go}} run main.go {{INPUT}}
 
 alias b := build
 # Build local.dev version of aws-sso
