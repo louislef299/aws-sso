@@ -1,3 +1,8 @@
+[![GoDoc reference example](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/louislef299/aws-sso)
+[![Go Report Card](https://goreportcard.com/badge/github.com/louislef299/aws-sso)](https://goreportcard.com/report/github.com/louislef299/aws-sso)
+[![Releases](https://img.shields.io/github/release-pre/louislef299/aws-sso.svg)](https://github.com/louislef299/aws-sso/releases)
+[![Github all releases](https://img.shields.io/github/downloads/louislef299/aws-sso/total.svg)](https://github.com/louislef299/aws-sso/releases/)
+
 # aws-sso
 
 `aws-sso` streamlines local AWS authentication in an idiomatic way, allowing
