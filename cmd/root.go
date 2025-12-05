@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/louislef299/knot/internal/envs"
+	_ "github.com/louislef299/knot/internal/providers/aws/ecr"
+	_ "github.com/louislef299/knot/internal/providers/aws/eks"
+	_ "github.com/louislef299/knot/internal/providers/aws/oidc"
 	"github.com/louislef299/knot/pkg/dlogin"
 	los "github.com/louislef299/knot/pkg/os"
-	_ "github.com/louislef299/knot/plugins/aws/ecr"
-	_ "github.com/louislef299/knot/plugins/aws/eks"
-	_ "github.com/louislef299/knot/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

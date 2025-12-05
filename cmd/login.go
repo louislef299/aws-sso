@@ -11,16 +11,15 @@ import (
 	"sync"
 	"time"
 
-	lacct "github.com/louislef299/knot/internal/account"
+	lconfig "github.com/louislef299/knot/internal/config"
 	"github.com/louislef299/knot/internal/envs"
+	pecr "github.com/louislef299/knot/internal/providers/aws/ecr"
+	peks "github.com/louislef299/knot/internal/providers/aws/eks"
+	poidc "github.com/louislef299/knot/internal/providers/aws/oidc"
 	"github.com/louislef299/knot/internal/version"
 	laws "github.com/louislef299/knot/pkg/aws"
-	lconfig "github.com/louislef299/knot/pkg/config"
 	"github.com/louislef299/knot/pkg/dlogin"
 	los "github.com/louislef299/knot/pkg/os"
-	pecr "github.com/louislef299/knot/plugins/aws/ecr"
-	peks "github.com/louislef299/knot/plugins/aws/eks"
-	poidc "github.com/louislef299/knot/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -99,7 +98,7 @@ updates.`,
 		// if not a local profile, check for account information
 		if !lc {
 			if !private {
-				private = lacct.GetAccountPrivate(requestProfile)
+				private = lconfig.GetAccountPrivate(requestProfile)
 			}
 
 			locked := false
@@ -108,7 +107,7 @@ updates.`,
 			} else if l := getLockToken(); l != "" {
 				setToken(l)
 				locked = true
-			} else if t := lacct.GetAccountToken(requestProfile); t != "" {
+			} else if t := lconfig.GetAccountToken(requestProfile); t != "" {
 				setToken(t)
 			} else {
 				checkToken()

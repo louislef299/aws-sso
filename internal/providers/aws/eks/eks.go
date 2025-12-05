@@ -9,9 +9,9 @@ import (
 	"slices"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	lconfig "github.com/louislef299/knot/internal/config"
 	"github.com/louislef299/knot/internal/envs"
 	laws "github.com/louislef299/knot/pkg/aws"
-	lconfig "github.com/louislef299/knot/pkg/config"
 	"github.com/louislef299/knot/pkg/dlogin"
 	lk8s "github.com/louislef299/knot/pkg/kube"
 	"github.com/louislef299/knot/pkg/prompt"

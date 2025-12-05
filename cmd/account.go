@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	lacct "github.com/louislef299/knot/internal/account"
+	lacct "github.com/louislef299/knot/internal/config"
 	lenv "github.com/louislef299/knot/internal/envs"
 	lregion "github.com/louislef299/knot/internal/region"
 	"github.com/spf13/cobra"

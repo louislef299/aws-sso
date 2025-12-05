@@ -7,10 +7,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/louislef299/knot/internal/envs"
+	pecr "github.com/louislef299/knot/internal/providers/aws/ecr"
+	poidc "github.com/louislef299/knot/internal/providers/aws/oidc"
 	laws "github.com/louislef299/knot/pkg/aws"
 	"github.com/louislef299/knot/pkg/dlogin"
-	pecr "github.com/louislef299/knot/plugins/aws/ecr"
-	poidc "github.com/louislef299/knot/plugins/aws/oidc"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

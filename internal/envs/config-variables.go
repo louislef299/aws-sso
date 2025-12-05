@@ -30,4 +30,7 @@ const (
 	TOKEN_HEADER       = "token"
 	DEFAULT_TOKEN_NAME = "default"
 	TOKEN_LOCK         = "token.lock"
+
+	// Profile variables
+	PROFILE_HEADER = "profile"
 )
