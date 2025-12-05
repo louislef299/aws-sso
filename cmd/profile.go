@@ -11,10 +11,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// profileCmd represents the profile command
+// profileCmd represents the profiles command
 var profileCmd = &cobra.Command{
-	Use:   "profile",
-	Short: "Profile management",
+	Use:   "profiles",
+	Short: "List the profiles currently configured",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := config.ListProfiles(cmd.OutOrStdout())
 		if err != nil {
@@ -23,16 +23,6 @@ var profileCmd = &cobra.Command{
 	},
 }
 
-// profileAddCmd represents the profile command
-var profileAddCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Profile management",
-	Run: func(cmd *cobra.Command, args []string) {
-		// SaveProfile(name string, cfg *ProfileConfig) error
-	},
-}
-
 func init() {
 	rootCmd.AddCommand(profileCmd)
-	profileCmd.AddCommand(profileAddCmd)
 }
