@@ -25,7 +25,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/mod v0.32.0
 	gopkg.in/ini.v1 v1.67.1
-	k8s.io/cli-runtime v0.36.0-alpha.0
+	k8s.io/cli-runtime v0.36.0-alpha.1
 	k8s.io/client-go v0.36.0-alpha.1
 	k8s.io/utils v0.0.0-20260108192941-914a6e750570
 )
