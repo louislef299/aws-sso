@@ -23,7 +23,7 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/mod v0.32.0
+	golang.org/x/mod v0.33.0
 	gopkg.in/ini.v1 v1.67.1
 	k8s.io/cli-runtime v0.36.0-alpha.1
 	k8s.io/client-go v0.36.0-alpha.1
