@@ -56,24 +56,23 @@ type Error struct {
 	// that should also be caught by declarative validation.
 	CoveredByDeclarative bool
 
-	// DeclarativeNative is true when this error originates from a declarative-native validation.
-	// This field is used to distinguish errors that are exclusively declarative and lack an imperative counterpart.
-	DeclarativeNative bool
+	// FromImperative denotes these errors are originating from  the hand written validations.
+	FromImperative bool
 
 	// ValidationStabilityLevel denotes the validation stability level of the declarative validation from this error is returned. This should be used in the declarative validations only.
-	ValidationStabilityLevel validationStabilityLevel
+	ValidationStabilityLevel ValidationStabilityLevel
 }
 
-// ValidationLevel denotes the stability level of a validation.
-type validationStabilityLevel int
+// ValidationStabilityLevel denotes the stability level of a validation.
+type ValidationStabilityLevel int
 
 const (
-	unknown validationStabilityLevel = iota
+	stabilityLevelUnknown ValidationStabilityLevel = iota
 	stabilityLevelAlpha
 	stabilityLevelBeta
 )
 
-func (v validationStabilityLevel) String() string {
+func (v ValidationStabilityLevel) String() string {
 	switch v {
 	case stabilityLevelAlpha:
 		return "alpha"
@@ -85,6 +84,16 @@ func (v validationStabilityLevel) String() string {
 }
 
 var _ error = &Error{}
+
+// IsAlpha returns true if the error is an alpha validation error.
+func (e *Error) IsAlpha() bool {
+	return e.ValidationStabilityLevel == stabilityLevelAlpha
+}
+
+// IsBeta returns true if the error is a beta validation error.
+func (e *Error) IsBeta() bool {
+	return e.ValidationStabilityLevel == stabilityLevelBeta
+}
 
 // Error implements the error interface.
 func (e *Error) Error() string {
@@ -474,20 +483,6 @@ func (list ErrorList) ExtractCoveredByDeclarative() ErrorList {
 	return newList
 }
 
-// MarkDeclarativeNative marks the error as originating from a declarative-native validation.
-func (e *Error) MarkDeclarativeNative() *Error {
-	e.DeclarativeNative = true
-	return e
-}
-
-// MarkDeclarativeNative marks all errors in the list as originating from declarative-native validations.
-func (list ErrorList) MarkDeclarativeNative() ErrorList {
-	for _, err := range list {
-		err.DeclarativeNative = true
-	}
-	return list
-}
-
 // MarkAlpha marks the error as an alpha validation error.
 func (e *Error) MarkAlpha() *Error {
 	e.ValidationStabilityLevel = stabilityLevelAlpha
@@ -512,6 +507,18 @@ func (e *Error) MarkBeta() *Error {
 func (list ErrorList) MarkBeta() ErrorList {
 	for _, err := range list {
 		err.ValidationStabilityLevel = stabilityLevelBeta
+	}
+	return list
+}
+
+func (e *Error) MarkFromImperative() *Error {
+	e.FromImperative = true
+	return e
+}
+
+func (list ErrorList) MarkFromImperative() ErrorList {
+	for _, err := range list {
+		err.FromImperative = true
 	}
 	return list
 }
