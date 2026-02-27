@@ -20,7 +20,7 @@ jobs:
       id: go-setup
       with:
         go-version: 'stable'
-    - uses: goreleaser/goreleaser-action@v6
+    - uses: goreleaser/goreleaser-action@v7
       env:
         GOVERSION: ${{ steps.go-setup.outputs.go-version }}
       with:
