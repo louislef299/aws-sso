@@ -32,7 +32,7 @@ jobs:
       run: just build
     # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-the-dependency-graph
     - name: Run Trivy SBOM mode and submit results to Dependency Graph
-      uses: aquasecurity/trivy-action@0.34.0
+      uses: aquasecurity/trivy-action@0.34.1
       with:
         scan-type: 'rootfs'
         scan-ref: '.'
