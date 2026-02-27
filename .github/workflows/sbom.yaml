@@ -43,7 +43,7 @@ jobs:
         severity: 'CRITICAL,HIGH'
         scanners: vuln,secret
         github-pat: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: trivy-sbom-${{ github.sha }}
         path: dependency-results.sbom.json
