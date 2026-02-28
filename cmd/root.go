@@ -38,7 +38,7 @@ var rootCmd = &cobra.Command{
 	Short: "knot",
 	Long: `An AWS SSO helper CLI to streamline authentication.
 
-more information at: https://aws-sso.netlify.app/`,
+more information at: https://aws-sso.louislefebvre.net`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// Force parse flags manually before using viper-bound values
 		if err := cmd.Flags().Parse(os.Args[1:]); err != nil {

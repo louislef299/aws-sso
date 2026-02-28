@@ -13,7 +13,7 @@ makes AWS authentication easy and repeatable.
 
 For full documentation including installation, configuration, and usage
 instructions, visit:
-[https://aws-sso.netlify.app/](https://aws-sso.netlify.app/)
+[https://aws-sso.louislefebvre.net](https://aws-sso.louislefebvre.net)
 
 ## Quick Install
 
