@@ -15,7 +15,7 @@ the duration of vulnerability support going forth.
 
 ## Reporting a Vulnerability
 
-Report any vulnerabilities to louislefebvre1999@gmail.com with your GitHub 
+Report any vulnerabilities to l@louislefebvre.net with your GitHub 
 username and how you discovered the vulnerability. By reaching out to me, I
 will include your username in the pull request to review and expect you will
 be available to review.
