@@ -68,7 +68,7 @@ gpg --verify $BINPATH/aws-sso*.sig aws-sso
 
 Feel free to open up Issues or Feature Requests on GitHub.
 
-[Configure your system]: https://aws-sso.netlify.app/config/
+[Configure your system]: https://aws-sso.louislefebvre.net/config/
 [GnuPG]: https://www.gnupg.org/gph/en/manual/book1.html
 [homebrew]: https://brew.sh/
 [krew]: https://krew.sigs.k8s.io/
