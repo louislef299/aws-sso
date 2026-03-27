@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ecr v1.56.2
 	github.com/aws/aws-sdk-go-v2/service/eks v1.81.1
 	github.com/aws/aws-sdk-go-v2/service/sso v1.30.13
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.17
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.18
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.10
 	github.com/briandowns/spinner v1.23.2
 	github.com/docker/cli v29.3.1+incompatible
