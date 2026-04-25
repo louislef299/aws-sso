@@ -5,11 +5,11 @@ import (
 	"log"
 
 	"github.com/docker/cli/cli/config"
-	"github.com/docker/docker/registry"
+	"github.com/docker/cli/cli/config/credentials"
 )
 
 func Logout(registryname string) error {
-	registryname = registry.ConvertToHostname(registryname)
+	registryname = credentials.ConvertToHostname(registryname)
 	dcfg, err := config.Load(config.Dir())
 	if err != nil {
 		return fmt.Errorf("loading config file failed: %v", err)
