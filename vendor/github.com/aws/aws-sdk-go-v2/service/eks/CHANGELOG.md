@@ -1,3 +1,12 @@
+# v1.82.1 (2026-04-17)
+
+* **Dependency Update**: Bump smithy-go to 1.25.0 to support endpointBdd trait
+* **Dependency Update**: Updated to the latest SDK module versions
+
+# v1.82.0 (2026-04-07)
+
+* **Feature**: EKS MNG WarmPool feature to support ASG WarmPool feature.
+
 # v1.81.2 (2026-03-26)
 
 * **Bug Fix**: Fix a bug where a recorded clock skew could persist on the client even if the client and server clock ended up realigning.
