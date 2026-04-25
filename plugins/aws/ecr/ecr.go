@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ecr"
 	"github.com/docker/cli/cli/config"
-	"github.com/docker/docker/registry"
+	"github.com/docker/cli/cli/config/credentials"
 	lregion "github.com/louislef299/aws-sso/internal/region"
 	laws "github.com/louislef299/aws-sso/pkg/aws"
 	lconfig "github.com/louislef299/aws-sso/pkg/config"
@@ -89,7 +89,7 @@ func (a *ECRLogin) Logout(ctx context.Context, config any) error {
 }
 
 func DockerLogout(registryname string) error {
-	registryname = registry.ConvertToHostname(registryname)
+	registryname = credentials.ConvertToHostname(registryname)
 	dcfg, err := config.Load(config.Dir())
 	if err != nil {
 		return fmt.Errorf("loading config file failed: %v", err)

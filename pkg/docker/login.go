@@ -7,13 +7,13 @@ import (
 
 	"github.com/docker/cli/cli/config"
 	"github.com/docker/cli/cli/config/configfile"
+	"github.com/docker/cli/cli/config/credentials"
 	"github.com/docker/cli/cli/config/types"
-	"github.com/docker/docker/registry"
 )
 
 func Login(username, password, serverAddress string) error {
 	// strip excess headers
-	serverAddress = registry.ConvertToHostname(serverAddress)
+	serverAddress = credentials.ConvertToHostname(serverAddress)
 
 	// Get the auth config.
 	dcfg, authConfig, err := configureAWSAuth(username, password, serverAddress)
