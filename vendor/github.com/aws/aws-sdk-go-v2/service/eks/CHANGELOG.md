@@ -1,3 +1,7 @@
+# v1.83.0 (2026-04-30)
+
+* **Feature**: Vended logs update param for capability vended logs feature
+
 # v1.82.2 (2026-04-29)
 
 * **Dependency Update**: Update to smithy-go v1.25.1.
