@@ -16,8 +16,8 @@ github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.27 h1:9d8AoASQY9UwrOSmiJ
 github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.27/go.mod h1:x0rldpsnUQaQIs4Rh+Vwm9Z/0vI6BxadGtsgJfZFb8s=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.28 h1:eaS9vwQ5ym4Y9S6+G/K3d3lgZhxs9Sldcn/YS7cmdKY=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.28/go.mod h1:oTdbDr+BMs7gAYrNpD0LDTyqQfv6yOYgTDv46+xbwFY=
-github.com/aws/aws-sdk-go-v2/service/ecr v1.58.0 h1:AgcSdMlb2xv8LdnVa3SIdQbf4Yfvo5pVO7G1pFUu8go=
-github.com/aws/aws-sdk-go-v2/service/ecr v1.58.0/go.mod h1:rVIdQJfKZ3je75aE9AqnBB4Ezk4xldB9aFXXbf/fEeM=
+github.com/aws/aws-sdk-go-v2/service/ecr v1.58.2 h1:sSfN1WfNyYjV0CQC8moHP4uxgNXSUxDT0X2vXbcJSbc=
+github.com/aws/aws-sdk-go-v2/service/ecr v1.58.2/go.mod h1:CJsIIgsVqF1YRtS436i4RKrNFlo2LtQ7gORkdhKaj3k=
 github.com/aws/aws-sdk-go-v2/service/eks v1.84.4 h1:BfaCUmTbRZC+5iu/SfTJyjXBuhbC00KzyeykqcGHUys=
 github.com/aws/aws-sdk-go-v2/service/eks v1.84.4/go.mod h1:raZtvZdNsw1RibW7q23WWSjAaSRur2CYGqOTFVbMPHk=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.11 h1:rFSsqDfCMPAmG70JOsYqFZCHXkyatoGa1K4YEt/BggQ=
