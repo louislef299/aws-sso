@@ -20,7 +20,7 @@ jobs:
         check-latest: true
         cache-dependency-path: '**/go.sum'
     - name: Check out code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Restore Goreleaser Binaries from cache
       id: goreleaser-cache
       uses: actions/cache/restore@v5.0.5
